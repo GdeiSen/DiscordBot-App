@@ -15,7 +15,6 @@ client.commands = new Collection();
 client.prefix = PREFIX;
 client.queue = new Map();
 const cooldowns = new Collection();
-const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /**
  * Client Events
@@ -34,6 +33,7 @@ fs.readdir("./commands/", (err, files) => {
 
   let jsfile = files.filter(f => f.split(".").pop() === "js") 
   if(jsfile.length <= 0) {
+    message.channel.send("О господи что это")
        return console.log("[LOGS] Couldn't Find Commands!");
   }
 
