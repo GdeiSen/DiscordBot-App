@@ -54,11 +54,14 @@ client.on("message", async (message) => {
 
   if(message.author.bot || message.channel.type === "dm") return;
 
-  let prefix = PREFIX;
+  let prefix = "~";
   let messageArray = message.content.split(" ");
   let cmd = messageArray[0];
   let args = message.content.substring(message.content.indexOf(' ')+1);
   if(!message.content.startsWith(prefix)) return;
+  if(message.content != `~8ball.js ${args}`) return;
+  if(message.content != `~play.js ${args}`) return;
+  if(message.content != `~clear.js ${args}`) return;
   let commandfile = client.commands.get(cmd.slice(prefix.length)) || bot.commands.get(client.aliases.get(cmd.slice(prefix.length)))
   if(commandfile) commandfile.run(message, args);
 });
