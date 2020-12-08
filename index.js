@@ -22,7 +22,7 @@ const cooldowns = new Collection();
  */
 client.on("ready", () => {
   console.log(`${client.user.username} ready!`);
-  client.user.setActivity(`теперь я работаю всегда!`, { type: "LISTENING" });
+  client.user.setActivity(`в разработке`, { type: "LISTENING" });
 });
 client.on("warn", (info) => console.log(info));
 client.on("error", console.error);

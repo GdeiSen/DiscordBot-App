@@ -121,7 +121,7 @@ module.exports = {
           if (!canModifyQueue(member)) return;
           if (queue.playing) {
             queue.playing = !queue.playing;
-            queue.connection.dispatcher.pause(true);
+            queue.connection.dispatcher.pause();
             queue.textChannel.send(`${user} ⏸ поставил на паузу`)
             .then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
