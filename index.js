@@ -4,16 +4,17 @@
 const { Client, Collection } = require("discord.js");
 const { readdirSync } = require("fs");
 const { join } = require("path");
-const {PREFIX } = require("./util/EvobotUtil");
+const {TOKEN,PREFIX } = require("./util/EvobotUtil");
 
 const fs = require("fs");
 const { groupCollapsed } = require("console");
 const client = new Client({ disableMentions: "everyone" });
 client.commands = new Collection();
 client.aliases = new Collection();
-client.login(process.env.token);
+client.login(TOKEN);
 client.commands = new Collection();
 client.prefix = PREFIX;
+
 client.queue = new Map();
 const cooldowns = new Collection();
 
@@ -56,8 +57,14 @@ client.on("message", async (message) => {
   let cmd = messageArray[0];
   let args = message.content.substring(message.content.indexOf(' ')+1);
   if(!message.content.startsWith(prefix)) return;
-  if(message.content != `~clear ${args}` && message.content != `~play ${args}` && message.content != `~8ball ${args}`) return
-  let commandfile = client.commands.get(cmd.slice(prefix.length)) || bot.commands.get(client.aliases.get(cmd.slice(prefix.length)))
-  if(commandfile) commandfile.run(message, args);
+  if(message.content != `~clear ${args}` 
+  && message.content != `~play ${args}` 
+  && message.content != `~8ball ${args}` 
+  && message.content != `~mute ${args}`
+  && message.content != `~react_role` 
+  && message.content != `~unmute ${args}`
+  && message.content != `~loop`) return
+  let commandfile = client.commands.get(cmd.slice(prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(prefix.length)))
+  if(commandfile) commandfile.run(client, message, args);
   
 });

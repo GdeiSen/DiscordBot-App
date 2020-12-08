@@ -1,7 +1,14 @@
 const Discord = require("discord.js")
 
-module.exports.run = async (bot, message, args) => {
-    let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(x => x.user.username === args.slice(0).join(" ") || x.user.username === args[0])
+module.exports.run = async (bot,message, args) => {
+    let error_text = new Discord.MessageEmbed()
+            .setTitle('Ошибка')
+            .setDescription('**Возможно вы допустили ошибку в синтаксисе комманды**')
+            .setColor('RED')
+    try{
+    var member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(x => x.user.username === args.slice(0).join(" ") || x.user.username === args[0])
+    }
+    catch(error){message.channel.send(error_text);return}
     if (message.member.id === "614819288506695697"){
     if(!message.member.hasPermission(['ADMINISTRATOR'])) return;
     if(member.hasPermission(['ADMINISTRATOR']) && !message.member.hasPermission('ADMINISTRATOR')) return;

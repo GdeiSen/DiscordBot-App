@@ -1,25 +1,25 @@
 const Discord = require("discord.js")
 
-module.exports.run = async (message, args) =>{
+module.exports.run = async (bot, message, args) =>{
 
     let embed1 = new Discord.MessageEmbed()
             .setTitle(`Ошибка`)
-            .setDescription(`Вы забыли ввести число!`)
+            .setDescription(`**Вы забыли ввести число!**`)
             .setColor('RED')
     
     let embed2 = new Discord.MessageEmbed()
             .setTitle(`Ошибка`)
-            .setDescription(`Введен неверный вид числа`)
+            .setDescription(`**Введен неверный вид числа**`)
             .setColor('RED')
 
     let embed3 = new Discord.MessageEmbed()
             .setTitle(`Ошибка`)
-            .setDescription(`Введите число меньше 100`)
+            .setDescription(`**Введите число меньше 100**`)
             .setColor('RED')
 
     let embed4 = new Discord.MessageEmbed()
             .setTitle(`Ошибка`)
-            .setDescription(`Введите число больше чем ноль`)
+            .setDescription(`**Введите число больше чем ноль**`)
             .setColor('RED')
 
     const arggs = message.content.split(' ').slice(1); 

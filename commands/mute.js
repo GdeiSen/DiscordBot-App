@@ -1,8 +1,15 @@
 const Discord = require("discord.js")
 
+module.exports.run = async (bot,message, args) => {
+    let error_text = new Discord.MessageEmbed()
+            .setTitle('Ошибка')
+            .setDescription('**Возможно вы допустили ошибку в синтаксисе комманды**')
+            .setColor('RED')
 
-module.exports.run = async (message, args) => {
-    let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(x => x.user.username === args.slice(0).join(" ") || x.user.username === args[0])
+    try{
+    var member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(x => x.user.username === args.slice(0).join(" ") || x.user.username === args[0])
+    }
+    catch(error){message.channel.send(error_text);return}
     if (message.member.id === "614819288506695697"){
     if(!message.member.hasPermission(['ADMINISTRATOR']) && member.id === "614819288506695697") return;
     if(member.hasPermission(['ADMINISTRATOR']) && !message.member.hasPermission('ADMINISTRATOR')) return;
@@ -26,7 +33,7 @@ module.exports.run = async (message, args) => {
 else if(message.member.id != "614819288506695697"){
     let embed = new Discord.MessageEmbed()
     .setTitle('Ошибка')
-    .setDescription('**У вас нет прав на исполльзование этой комманды. Попросите дядю Гордея чтобы он дал тебе эти права**')
+    .setDescription('**У вас нет прав на исполльзование этой комманды**')
     .setColor('RED')
     message.channel.send(embed)
 }

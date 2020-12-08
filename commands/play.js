@@ -7,7 +7,7 @@ const https = require("https");
 const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID, DEFAULT_VOLUME } = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
-module.exports.run = async (message, args) => {
+module.exports.run = async (client,message, args) => {
     
     const { channel } = message.member.voice;
 

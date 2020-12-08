@@ -1,7 +1,6 @@
 const Discord = require("discord.js")
-const botconfig = require("../config.json");
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (client, message, args) => {
     let embed = new Discord.MessageEmbed()
     .setTitle('testing_reactions')
     .setDescription('testing_completed')
@@ -10,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
     msgEmbed.react('🧄')
 
 
-bot.on("messageReactionAdd",async (reaction, user)=>{
+client.on("messageReactionAdd",async (reaction, user)=>{
     if(reaction.message.partial) await reaction.message.fetch();
     if(reaction.partial) await reaction.fetch();
     if(user.bot) return;
@@ -21,7 +20,7 @@ bot.on("messageReactionAdd",async (reaction, user)=>{
         }
     }
 })
-bot.on("messageReactionRemove",async (reaction, user)=>{
+client.on("messageReactionRemove",async (reaction, user)=>{
     if(reaction.message.partial) await reaction.message.fetch();
     if(reaction.partial) await reaction.fetch();
     if(user.bot) return;
