@@ -49,9 +49,6 @@ fs.readdir("./commands/", (err, files) => {
 client.on("message", async (message) => {
   if (message.author.bot) return;
   if (!message.guild) return; 
-  const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(PREFIX)})\\s*`);
-  if (!prefixRegex.test(message.content)) return;
-
   if(message.author.bot || message.channel.type === "dm") return;
 
   let prefix = "~";
