@@ -7,6 +7,7 @@ const { join } = require("path");
 const {PREFIX } = require("./util/EvobotUtil");
 
 const fs = require("fs");
+const { groupCollapsed } = require("console");
 const client = new Client({ disableMentions: "everyone" });
 client.commands = new Collection();
 client.aliases = new Collection();
@@ -33,7 +34,6 @@ fs.readdir("./commands/", (err, files) => {
 
   let jsfile = files.filter(f => f.split(".").pop() === "js") 
   if(jsfile.length <= 0) {
-    message.channel.send("О господи что это")
        return console.log("[LOGS] Couldn't Find Commands!");
   }
 
@@ -56,9 +56,8 @@ client.on("message", async (message) => {
   let cmd = messageArray[0];
   let args = message.content.substring(message.content.indexOf(' ')+1);
   if(!message.content.startsWith(prefix)) return;
-  if(message.content != `~8ball.js ${args}`) return;
-  if(message.content != `~play.js ${args}`) return;
-  if(message.content != `~clear.js ${args}`) return;
+  if(message.content != `~clear ${args}` && message.content != `~play ${args}` && message.content != `~8ball ${args}`) return
   let commandfile = client.commands.get(cmd.slice(prefix.length)) || bot.commands.get(client.aliases.get(cmd.slice(prefix.length)))
   if(commandfile) commandfile.run(message, args);
+  
 });
