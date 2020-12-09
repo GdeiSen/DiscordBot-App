@@ -67,8 +67,7 @@ client.on("message", async (message) => {
   //&& message.content != `~pause`
   //) return
   let commandfile = client.commands.get(cmd.slice(prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(prefix.length)))
-  try{
+  
   if(commandfile) commandfile.run(client, message, args);
-}
-  catch(error){message.channel.send("**Ошибка в синтаксисе!**");return}
+
 });
