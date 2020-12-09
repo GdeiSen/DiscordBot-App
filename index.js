@@ -70,5 +70,5 @@ client.on("message", async (message) => {
   try{
   if(commandfile) commandfile.run(client, message, args);
 }
-  catch(error){message.channel.send("**Ошибка в синтаксисе**");return}
+  catch(error){return}
 });
