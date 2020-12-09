@@ -173,5 +173,5 @@ module.exports.config = {
   name: "play",
   cooldown: 3,
   aliases: ["p"],
-  description: "Plays audio from YouTube or Soundcloud",
+  description: "Проигрывает песни с YouTube и <SoundCloud(в разработке)>",
 }

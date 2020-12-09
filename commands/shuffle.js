@@ -20,7 +20,7 @@ module.exports.run = (bot, message, args) =>{
   };
   module.exports.config = {
     name: "shuffle",
-    description: "перемешивает очередь",
+    description: "Перемешивает очередь",
     usage: "~shuffle",
     accessableby: "Members",
     aliases: ['c', 'purge']

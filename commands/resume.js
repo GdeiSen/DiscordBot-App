@@ -19,7 +19,7 @@ module.exports.run = (bot, message, args) => {
   };
 module.exports.config = {
   name: "resume",
-  description: "продолжает воспроизведение трека",
+  description: "Продолжает воспроизведение трека",
   usage: "~resume",
   accessableby: "Members",
   aliases: ['c', 'purge']

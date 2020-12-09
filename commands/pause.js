@@ -19,7 +19,7 @@ module.exports.run = (bot, message, args)=>{
 }
 module.exports.config = {
   name: "pause",
-  description: "ставит на паузу возпроизведение",
+  description: "Ставит на паузу возпроизведение",
   usage: "~pause",
   accessableby: "Members",
   aliases: ['c', 'purge']

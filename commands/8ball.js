@@ -74,6 +74,7 @@ module.exports.run = async(message, args) => {
 module.exports.config = {
     name: "8ball",
     usage: "~8ball",
+    description: "Выводит твой приговор судьбы",
     accessableby: "Members",
     aliases: ['c', 'purge']
 }

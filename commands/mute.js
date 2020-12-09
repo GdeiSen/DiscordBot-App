@@ -2,7 +2,7 @@ const Discord = require("discord.js")
 
 module.exports.run = async (bot,message, args) => {
     let error_text = new Discord.MessageEmbed()
-            .setTitle('Ошибка')
+            .setTitle('oшибка')
             .setDescription('**Возможно вы допустили ошибку в синтаксисе комманды**')
             .setColor('RED')
 
@@ -40,8 +40,8 @@ else if(message.member.id != "614819288506695697"){
 }
 module.exports.config = {
     name: "mute",
-    description: "",
-    usage: "?mute",
+    description: "Выдает роль психопата, не имеющий доступа к функциям сервера",
+    usage: "~mute",
     accessableby: "Members",
     aliases: []
 }

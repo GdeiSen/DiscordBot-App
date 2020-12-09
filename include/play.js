@@ -1,7 +1,6 @@
 const ytdl = require("erit-ytdl");
 const scdl = require("soundcloud-downloader").default;
 const { play } = require("../include/play");
-const Discord = require("discord.js");
 const { canModifyQueue, STAY_TIME } = require("../util/EvobotUtil");
 
 module.exports = {

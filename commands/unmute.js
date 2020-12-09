@@ -2,7 +2,7 @@ const Discord = require("discord.js")
 
 module.exports.run = async (bot,message, args) => {
     let error_text = new Discord.MessageEmbed()
-            .setTitle('Ошибка')
+            .setTitle('ошибка')
             .setDescription('**Возможно вы допустили ошибку в синтаксисе комманды**')
             .setColor('RED')
     try{
@@ -27,7 +27,7 @@ module.exports.run = async (bot,message, args) => {
 }
 else if(message.member.id != "614819288506695697"){
     let embed = new Discord.MessageEmbed()
-            .setTitle('Ошибка')
+            .setTitle('ошибка')
             .setDescription('**У вас нет прав на исполльзование этой комманды.**')
             .setColor('RED')
             message.channel.send(embed)
@@ -35,7 +35,7 @@ else if(message.member.id != "614819288506695697"){
 }
 module.exports.config = {
     name: "unmute",
-    description: "",
+    description: "Снимает блокировку с участника сервера",
     usage: "?unmute",
     accessableby: "Members",
     aliases: []

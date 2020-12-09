@@ -34,7 +34,7 @@ client.on("messageReactionRemove",async (reaction, user)=>{
 }
 module.exports.config = {
     name: "react_role",
-    description: "",
+    description: "Тестовая комманда для выдачи роли по нажатию на реакцию",
     usage: "~react_role",
     accessableby: "Members",
     aliases: ['c', 'purge']

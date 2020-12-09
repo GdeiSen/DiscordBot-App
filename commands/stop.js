@@ -16,7 +16,7 @@ module.exports.run = (bot, message, args) => {
   };
   module.exports.config = {
     name: "stop",
-    description: "останавливает воспроизведение",
+    description: "Останавливает воспроизведение",
     usage: "~stop",
     accessableby: "Members",
     aliases: ['c', 'purge']

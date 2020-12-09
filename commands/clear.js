@@ -43,21 +43,21 @@ module.exports.run = async (bot, message, args) =>{
         if (num === 2){
         let embed = new Discord.MessageEmbed()
             .setTitle(`Удаление`)
-            .setDescription(`Удалено ${num - 1} сообщение`)
+            .setDescription(`**Удалено ${num - 1} сообщение**`)
             .setColor('GREEN')
         message.channel.send(embed)
         .then (message => message.delete({ timeout : 2000 }))}
         else if (num === 3 || num === 4 || num === 5){
             let embed = new Discord.MessageEmbed()
             .setTitle(`Удаление`)
-            .setDescription(`Удалено ${num - 1} сообщения`)
+            .setDescription(`**Удалено ${num - 1} сообщения**`)
             .setColor('GREEN')
             message.channel.send(embed)
             .then (message => message.delete({ timeout : 2000 }))}
         else if (num > 2){
         let embed = new Discord.MessageEmbed()
             .setTitle(`Удаление`)
-            .setDescription(`Удалено ${num - 1} сообщений`)
+            .setDescription(`**Удалено ${num - 1} сообщений**`)
             .setColor('GREEN')
         message.channel.send(embed)
         .then (message => message.delete({ timeout : 2000 }))}
@@ -70,7 +70,7 @@ delete_messages(); // Вызов асинхронной функции
 
 module.exports.config = {
     name: "clear",
-    description: "clears message",
+    description: "Удаляет заданное количество сообщений",
     usage: "~claer",
     accessableby: "Members",
     aliases: ['c', 'purge']

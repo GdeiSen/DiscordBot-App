@@ -1,17 +1,27 @@
-const Discord = require("discord.js")
-const botconfig = require("../config.json");
+const { MessageEmbed } = require("discord.js");
 
-module.exports.run = async (bot, message, args) => {
-    let embed1 = new Discord.MessageEmbed()
-    .setTitle('хэй хэй погоди я еще не готов')
-    .setDescription('В процессе разработки!')
-    .setColor('RED')
-    message.channel.send(embed1)
-}
+module.exports.run = (client,message,args) =>{
+    let commands = message.client.commands.array();
+    let helpEmbed = new MessageEmbed()
+      .setTitle(`${message.client.user.username} Help`)
+      .setDescription("Полный список комманд")
+      .setColor("#F8AA2A");
 
-module.exports.config = {
+    message.client.commands.forEach((cmd) => {
+      helpEmbed.addField(
+        `**${message.client.prefix}${cmd.config.name}**`,
+        `${cmd.config.description}`,
+        true
+      );
+    });
+
+    helpEmbed.setTimestamp();
+
+    return message.channel.send(helpEmbed).catch(console.error);
+  };
+  module.exports.config = {
     name: "help",
-    description: "giving commands info",
+    description: "Выводит описание комманд",
     usage: "~help",
     accessableby: "Members",
     aliases: ['c', 'purge']

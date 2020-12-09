@@ -16,7 +16,7 @@ module.exports.run =(bot, message, args) => {
   };
   module.exports.config = {
     name: "skip",
-    description: "пропускает трек",
+    description: "Пропускает трек",
     usage: "~skip",
     accessableby: "Members",
     aliases: ['c', 'purge']

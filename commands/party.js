@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.config = {
     name: "party",
-    description: "party",
+    description: "Высылает гиф сообщение танцуещего медведя",
     usage: "~party",
     accessableby: "Members",
     aliases: ['c', 'purge']

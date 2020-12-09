@@ -1,5 +1,5 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
-
+const Discord = require("discord.js");
 module.exports.run = (bot, message, args) => {
 
   var embed1 = new Discord.MessageEmbed()
@@ -27,19 +27,19 @@ module.exports.run = (bot, message, args) => {
     if (!canModifyQueue(message.member))
       return message.reply(embed2).catch(console.error);
 
-    if (!args[0]) return message.reply(`🔊 Громкость: **${queue.volume}%**`).catch(console.error);
-    if (isNaN(args[0])) return message.reply(embed3).catch(console.error);
-    if (Number(args[0]) > 100 || Number(args[0]) < 0 )
+    if (!args) return message.reply(`🔊 Громкость: **${queue.volume}%**`).catch(console.error);
+    if (isNaN(args)) return message.reply(embed3).catch(console.error);
+    if (Number(args) > 100 || Number(args[0]) < 0 )
       return message.reply(embed4).catch(console.error);
 
-    queue.volume = args[0];
-    queue.connection.dispatcher.setVolumeLogarithmic(args[0] / 100);
+    queue.volume = args;
+    queue.connection.dispatcher.setVolumeLogarithmic(args / 100);
 
-    return queue.textChannel.send(`Громкость выставлена на: **${args[0]}%**`).catch(console.error);
+    return queue.textChannel.send(`Громкость выставлена на: **${args}%**`).catch(console.error);
   };
   module.exports.config = {
     name: "volume",
-    description: "выставляет значение громкости",
+    description: "Выставляет значение громкости",
     usage: "~volume args",
     accessableby: "Members",
     aliases: ['c', 'purge']
