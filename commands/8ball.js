@@ -1,6 +1,6 @@
 const Discord = require("discord.js")
 
-module.exports.run = async(message, args) => {
+module.exports.run = async(bot,message, args) => {
     var arggs = args;
     let random = Math.floor(Math.random() * 20) + 1;
     if (random === 1) {
