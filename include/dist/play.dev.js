@@ -228,7 +228,7 @@ module.exports = {
 
                   if (queue.volume <= 0) {
                     queue.volume = 30;
-                    queue.connection.dispatcher.setVolumeLogarithmic(100 / 30);
+                    queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
                     queue.textChannel.send("".concat(user, " \uD83D\uDD0A \u0432\u043A\u043B\u044E\u0447\u0438\u043B \u0437\u0432\u0443\u043A")).then(function (queue) {
                       return queue["delete"]({
                         timeout: 1500

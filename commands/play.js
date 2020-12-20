@@ -74,16 +74,16 @@ module.exports.run = async (client,message, args) => {
 
     // Start the playlist if playlist url was provided
     if (!videoPattern.test(args[0]) && playlistPattern.test(args[0])) {
-      return message.client.commands.get("playlist").run(message, args);
+      return message.client.commands.get("playlist").run(bot,message, args);
     } else if (scdl.isValidUrl(url) && url.includes("/sets/")) {
-      return message.client.commands.get("playlist").run(message, args);
+      return message.client.commands.get("playlist").run(bot,message, args);
     }
 
     if (mobileScRegex.test(url)) {
       try {
         https.get(url, function (res) {
           if (res.statusCode == "302") {
-            return message.client.commands.get("play").run(message, [res.headers.location]);
+            return message.client.commands.get("play").run(bot, message, [res.headers.location]);
           } else {
             return message.reply(embed5).catch(console.error);
           }
