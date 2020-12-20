@@ -165,7 +165,7 @@ module.exports.run = async (client,message, args) => {
       console.error(error);
       message.client.queue.delete(message.guild.id);
       await channel.leave();
-      return message.channel.send(embed6`: ${error}`).catch(console.error);
+      return message.channel.send(` ${error}`).catch(console.error);
     }
   }
 
