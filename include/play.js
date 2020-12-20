@@ -138,7 +138,7 @@ module.exports = {
           if (!canModifyQueue(member)) return;
           if (queue.volume <= 0) {
             queue.volume = 30;
-            queue.connection.dispatcher.setVolumeLogarithmic(30 / 30);
+            queue.connection.dispatcher.setVolumeLogarithmic(100 / 30);
             queue.textChannel.send(`${user} 🔊 включил звук`)
             .then (queue => queue.delete({ timeout : 1500 }));;
           } else {
