@@ -73,5 +73,5 @@ module.exports.config = {
     description: "Удаляет заданное количество сообщений",
     usage: "~claer",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['c', 'cl']
 }

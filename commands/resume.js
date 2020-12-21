@@ -22,5 +22,5 @@ module.exports.config = {
   description: "Продолжает воспроизведение трека",
   usage: "~resume",
   accessableby: "Members",
-  aliases: ['c', 'purge']
+  aliases: ['res']
 }

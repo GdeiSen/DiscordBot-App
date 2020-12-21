@@ -76,5 +76,5 @@ module.exports.config = {
     usage: "~8ball",
     description: "Выводит твой приговор судьбы",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['8', '8b', 'b']
 }

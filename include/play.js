@@ -81,7 +81,7 @@ module.exports = {
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
 
     try {
-      queue.textChannel.send(`**СЕЙЧАС ИГРАЕТ**`);
+      queue.textChannel.send(`🎶**СЕЙЧАС ИГРАЕТ**`);
       var playingMessage = await queue.textChannel.send(`${song.url}`)
       await playingMessage.react("⏭");
       await playingMessage.react("⏯");

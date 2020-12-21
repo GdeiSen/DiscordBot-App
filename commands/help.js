@@ -24,5 +24,5 @@ module.exports.run = (client,message,args) =>{
     description: "Выводит описание комманд",
     usage: "~help",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['h', 'hlp']
 }

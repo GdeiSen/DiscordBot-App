@@ -22,6 +22,6 @@ module.exports.config = {
   description: "Ставит на паузу возпроизведение",
   usage: "~pause",
   accessableby: "Members",
-  aliases: ['c', 'purge']
+  aliases: ['p', 'pau']
 }
 

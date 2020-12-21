@@ -42,5 +42,5 @@ module.exports.run = (bot, message, args) => {
     description: "Выставляет значение громкости",
     usage: "~volume args",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['vol']
   }

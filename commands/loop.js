@@ -20,6 +20,6 @@ module.exports.run = (bot,message,args) =>{
 module.exports.config = {
   name: "loop",
   cooldown: 3,
-  aliases: ["p"],
+  aliases: ['l'],
   description: "Опция включения повторения трека",
 }

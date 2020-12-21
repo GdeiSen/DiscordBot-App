@@ -41,5 +41,5 @@ const queue = message.client.queue.get(message.guild.id);
     description: "Пропускает трек на определённый",
     usage: "~skipto args",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['skpt']
   }

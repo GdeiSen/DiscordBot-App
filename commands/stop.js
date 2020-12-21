@@ -19,5 +19,5 @@ module.exports.run = (bot, message, args) => {
     description: "Останавливает воспроизведение",
     usage: "~stop",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['stp']
   }

@@ -3,11 +3,11 @@ const { play } = require("../include/play");
 const YouTubeAPI = require("simple-youtube-api");
 const scdl = require("soundcloud-downloader").default;
 const Discord = require("discord.js");
-const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID, MAX_PLAYLIST_SIZE } = require("../util/EvobotUtil");
+const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID, MAX_PLAYLIST_SIZE, DEFAULT_VOLUME} = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
 
-module.exports.run = async (bot,message,args)=>{
+module.exports.run = async (message,args)=>{
   var embed1 = new Discord.MessageEmbed()
     .setTitle('ошибка')
     .setDescription('Для начала нужно быть в голосовом канале!')
@@ -40,7 +40,7 @@ module.exports.run = async (bot,message,args)=>{
 
     let embed7 = new Discord.MessageEmbed()
     .setTitle('использование')
-    .setDescription(`${message.client.prefix} play <YouTube URL | Video Name | Soundcloud URL>`)
+    .setDescription(`~ play <YouTube URL | Video Name | Soundcloud URL>`)
     .setColor('ORANGE')
 
     let embed8 = new Discord.MessageEmbed()
@@ -68,8 +68,8 @@ module.exports.run = async (bot,message,args)=>{
 
     const search = args;
     const pattern = /^.*(youtu.be\/|list=)([^#\&\?]*).*/gi;
-    const url = args[0];
-    const urlValid = pattern.test(args[0]);
+    const url = args;
+    const urlValid = pattern.test(args);
 
     const queueConstruct = {
       textChannel: message.channel,
@@ -77,7 +77,7 @@ module.exports.run = async (bot,message,args)=>{
       connection: null,
       songs: [],
       loop: false,
-      volume: 100,
+      volume: DEFAULT_VOLUME || 100,
       playing: true
     };
 
@@ -157,5 +157,5 @@ module.exports.run = async (bot,message,args)=>{
     description: "выполняет проигрывание плейлиста",
     usage: "~playlist",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['pl']
 }

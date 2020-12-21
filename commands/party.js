@@ -10,5 +10,5 @@ module.exports.config = {
     description: "Высылает гиф сообщение танцуещего медведя",
     usage: "~party",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['prty', 'pa']
 }

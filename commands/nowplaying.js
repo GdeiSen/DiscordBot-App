@@ -1,18 +1,24 @@
 const createBar = require("string-progressbar");
 const { MessageEmbed } = require("discord.js");
 
-module.exports = (bot,message,args)=>{
+module.exports.run = (bot,message,args)=>{
     const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply("There is nothing playing.").catch(console.error);
+
+    var embed1 = new MessageEmbed()
+    .setTitle('ошибка')
+    .setDescription('**Ничего не воспроизводится**')
+    .setColor('RED')
+
+    if (!queue) return message.reply(embed1).catch(console.error);
 
     const song = queue.songs[0];
     const seek = (queue.connection.dispatcher.streamTime - queue.connection.dispatcher.pausedTime) / 1000;
     const left = song.duration - seek;
 
     let nowPlaying = new MessageEmbed()
-      .setTitle("Now playing")
+      .setTitle("сейчас играет")
       .setDescription(`${song.title}\n${song.url}`)
-      .setColor("#F8AA2A")
+      .setColor('GREEN')
       .setAuthor(message.client.user.username);
 
     if (song.duration > 0) {
@@ -35,5 +41,5 @@ module.exports = (bot,message,args)=>{
     description: "отображает текущее воспроизведение",
     usage: "~nowplaying",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['now', 'n', 'np']
 }

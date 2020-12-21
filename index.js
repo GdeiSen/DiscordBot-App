@@ -57,15 +57,6 @@ client.on("message", async (message) => {
   let cmd = messageArray[0];
   let args = message.content.substring(message.content.indexOf(' ')+1);
   if(!message.content.startsWith(prefix)) return;
-  //if(message.content != `~clear ${args}` 
-  //&& message.content != `~play ${args}` 
-  //&& message.content != `~8ball ${args}` 
-  //&& message.content != `~mute ${args}`
-  //&& message.content != `~react_role` 
-  //&& message.content != `~unmute ${args}`
-  //&& message.content != `~loop`
-  //&& message.content != `~pause`
-  //) return
 
   let error_text = new Discord.MessageEmbed()
   .setTitle('Критическая ошибка')
@@ -73,8 +64,9 @@ client.on("message", async (message) => {
   .setColor('RED')
 
   let commandfile = client.commands.get(cmd.slice(prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(prefix.length)))
-  try{
+  //try{
   if(commandfile) commandfile.run(client, message, args);
 }
-  catch(error){message.channel.send(error_text);return}
-});
+  //catch(error){message.channel.send(error_text);return}
+//}
+);

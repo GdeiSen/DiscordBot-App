@@ -23,5 +23,5 @@ module.exports.config = {
     description: "отображает текущее время и дату бота",
     usage: "~time",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['uptime']
 }

@@ -14,5 +14,5 @@ module.exports.config = {
     description: "Тестовая комманда для проверки работоспособности бота",
     usage: "~test",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: []
 }

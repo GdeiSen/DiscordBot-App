@@ -64,19 +64,19 @@ module.exports.run = async (client,message, args) => {
     if (!permissions.has("SPEAK"))
       return message.reply(embed4);
 
-    const search = args;
-    const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
-    const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
-    const scRegex = /^https?:\/\/(soundcloud\.com)\/(.*)$/;
-    const mobileScRegex = /^https?:\/\/(soundcloud\.app\.goo\.gl)\/(.*)$/;
-    const url = args[0];
-    const urlValid = videoPattern.test(args[0]);
+      const search = args;
+      const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
+      const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
+      const scRegex = /^https?:\/\/(soundcloud\.com)\/(.*)$/;
+      const mobileScRegex = /^https?:\/\/(soundcloud\.app\.goo\.gl)\/(.*)$/;
+      const url = args[0];
+      const urlValid = videoPattern.test(args);
 
     // Start the playlist if playlist url was provided
-    if (!videoPattern.test(args[0]) && playlistPattern.test(args[0])) {
-      return message.client.commands.get("playlist").run(bot,message, args);
+    if (!videoPattern.test(args) && playlistPattern.test(args)) {
+      return message.client.commands.get("playlist").run(message, args);
     } else if (scdl.isValidUrl(url) && url.includes("/sets/")) {
-      return message.client.commands.get("playlist").run(bot,message, args);
+      return message.client.commands.get("playlist").run(message, args);
     }
 
     if (mobileScRegex.test(url)) {
@@ -172,6 +172,6 @@ module.exports.run = async (client,message, args) => {
 module.exports.config = {
   name: "play",
   cooldown: 3,
-  aliases: ["p"],
+  aliases: ['p'],
   description: "Проигрывает песни с YouTube и <SoundCloud(в разработке)>",
 }

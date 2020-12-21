@@ -23,5 +23,5 @@ module.exports.run = (bot, message, args) =>{
     description: "Перемешивает очередь",
     usage: "~shuffle",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['sh']
   }

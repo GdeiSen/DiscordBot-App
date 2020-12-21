@@ -19,5 +19,5 @@ module.exports.run =(bot, message, args) => {
     description: "Пропускает трек",
     usage: "~skip",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['sk']
   }

@@ -27,5 +27,5 @@ module.exports.run = (bot,message, args) => {
     description: "удаляет трек из очереди",
     usage: "~remove args",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: []
   }

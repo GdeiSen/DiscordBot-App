@@ -15,5 +15,5 @@ module.exports.config = {
     description: "отображает текущий ping",
     usage: "~ping",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['pg']
 }

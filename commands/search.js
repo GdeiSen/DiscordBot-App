@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const Discord = require("discord.js");
 const YouTubeAPI = require("simple-youtube-api");
 const { YOUTUBE_API_KEY } = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
@@ -23,7 +24,7 @@ module.exports.run = async (bot,message,args) => {
     if (!message.member.voice.channel)
       return message.reply(embed1).catch(console.error);
 
-    const search = args.join(" ");
+    const search = args;
 
     let resultsEmbed = new MessageEmbed()
       .setTitle(`введите номер трека для проигрывания`)
@@ -55,7 +56,7 @@ module.exports.run = async (bot,message,args) => {
         }
       } else {
         const choice = resultsEmbed.fields[parseInt(response.first()) - 1].name;
-        message.client.commands.get("play").execute(bot, message, [choice]);
+        message.client.commands.get("play").run(bot, message, [choice]);
       }
 
       message.channel.activeCollector = false;
@@ -72,5 +73,5 @@ module.exports.run = async (bot,message,args) => {
     description: "выполняет поиск трека и проигрывает его",
     usage: "~search",
     accessableby: "Members",
-    aliases: ['c', 'purge']
+    aliases: ['s']
 }

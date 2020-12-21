@@ -43,5 +43,5 @@ module.exports.config = {
     description: "Выдает роль психопата, не имеющий доступа к функциям сервера",
     usage: "~mute",
     accessableby: "Members",
-    aliases: []
+    aliases: ['mut']
 }
