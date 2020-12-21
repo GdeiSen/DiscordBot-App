@@ -11,7 +11,7 @@ const { groupCollapsed } = require("console");
 const client = new Client({ disableMentions: "everyone" });
 client.commands = new Collection();
 client.aliases = new Collection();
-client.login(TOKEN);
+client.login(process.env.token);
 client.commands = new Collection();
 client.prefix = PREFIX;
 
@@ -64,9 +64,9 @@ client.on("message", async (message) => {
   .setColor('RED')
 
   let commandfile = client.commands.get(cmd.slice(prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(prefix.length)))
-  //try{
+  try{
   if(commandfile) commandfile.run(client, message, args);
 }
-  //catch(error){message.channel.send(error_text);return}
-//}
+  catch(error){message.channel.send(error_text);return}
+}
 );
