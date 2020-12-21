@@ -3,7 +3,7 @@ exports.canModifyQueue = (member) => {
   const botChannel = member.guild.voice.channelID;
 
   if (channelID !== botChannel) {
-    member.send("You need to join the voice channel first!").catch(console.error);
+    member.send("Для начала нужно быть в голосовом канале").catch(console.error);
     return;
   }
 

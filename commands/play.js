@@ -7,7 +7,7 @@ const https = require("https");
 const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID, DEFAULT_VOLUME } = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
-module.exports.run = async (client,message, args) => {
+module.exports.run = async (bot,message, args) => {
     
     const { channel } = message.member.voice;
 
@@ -69,14 +69,14 @@ module.exports.run = async (client,message, args) => {
       const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
       const scRegex = /^https?:\/\/(soundcloud\.com)\/(.*)$/;
       const mobileScRegex = /^https?:\/\/(soundcloud\.app\.goo\.gl)\/(.*)$/;
-      const url = args[0];
+      const url = args;
       const urlValid = videoPattern.test(args);
 
     // Start the playlist if playlist url was provided
     if (!videoPattern.test(args) && playlistPattern.test(args)) {
-      return message.client.commands.get("playlist").run(message, args);
+      return message.client.commands.get("playlist").run(bot,message, args);
     } else if (scdl.isValidUrl(url) && url.includes("/sets/")) {
-      return message.client.commands.get("playlist").run(message, args);
+      return message.client.commands.get("playlist").run(bot,message, args);
     }
 
     if (mobileScRegex.test(url)) {

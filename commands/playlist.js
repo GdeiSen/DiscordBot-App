@@ -7,7 +7,7 @@ const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID, MAX_PLAYLIST_SIZE, DEFAULT_VOLUME
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
 
-module.exports.run = async (message,args)=>{
+module.exports.run = async (bot,message,args)=>{
   var embed1 = new Discord.MessageEmbed()
     .setTitle('ошибка')
     .setDescription('Для начала нужно быть в голосовом канале!')
@@ -44,9 +44,8 @@ module.exports.run = async (message,args)=>{
     .setColor('ORANGE')
 
     let embed8 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('Вы превысили лимит треков')
-    .setColor('RED')
+    .setTitle('')
+    .setDescription('...')
 
     const { channel } = message.member.voice;
     const serverQueue = message.client.queue.get(message.guild.id);
@@ -87,7 +86,7 @@ module.exports.run = async (message,args)=>{
     if (urlValid) {
       try {
         playlist = await youtube.getPlaylist(url, { part: "snippet" });
-        videos = await playlist.getVideos(MAX_PLAYLIST_SIZE || 20, { part: "snippet" });
+        videos = await playlist.getVideos(MAX_PLAYLIST_SIZE || 30, { part: "snippet" });
       } catch (error) {
         console.error(error);
         return message.reply(embed5).catch(console.error);
@@ -106,7 +105,7 @@ module.exports.run = async (message,args)=>{
       try {
         const results = await youtube.searchPlaylists(search, 1, { part: "snippet" });
         playlist = results[0];
-        videos = await playlist.getVideos(MAX_PLAYLIST_SIZE || 20, { part: "snippet" });
+        videos = await playlist.getVideos(MAX_PLAYLIST_SIZE || 30, { part: "snippet" });
       } catch (error) {
         console.error(error);
         return message.reply(error.message).catch(console.error);
@@ -129,7 +128,6 @@ module.exports.run = async (message,args)=>{
       .setDescription(songs.map((song, index) => `${index + 1}. ${song.title}`))
       .setURL(playlist.url)
       .setColor("#F8AA2A")
-      .setTimestamp();
 
     if (playlistEmbed.description.length >= 2048)
       playlistEmbed.description =
