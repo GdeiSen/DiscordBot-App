@@ -93,7 +93,7 @@ module.exports.run = function _callee(bot, message, args) {
           return _context.abrupt("return", message.client.commands.get("playlist").run(bot, message, args));
 
         case 30:
-          if (!(scdl.isValidUrl(url) && url.includes("/sets/"))) {
+          if (!url.includes("/sets/")) {
             _context.next = 32;
             break;
           }
