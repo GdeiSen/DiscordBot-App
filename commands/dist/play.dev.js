@@ -15,7 +15,6 @@ var https = require("https");
 
 var _require2 = require("../util/EvobotUtil"),
     YOUTUBE_API_KEY = _require2.YOUTUBE_API_KEY,
-    SOUNDCLOUD_CLIENT_ID = _require2.SOUNDCLOUD_CLIENT_ID,
     DEFAULT_VOLUME = _require2.DEFAULT_VOLUME;
 
 var youtube = new YouTubeAPI(YOUTUBE_API_KEY);

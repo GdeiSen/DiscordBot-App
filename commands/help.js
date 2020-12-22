@@ -10,7 +10,7 @@ module.exports.run = (client,message,args) =>{
     message.client.commands.forEach((cmd) => {
       helpEmbed.addField(
         `**${message.client.prefix}${cmd.config.name}**`,
-        `\`${cmd.config.description}\``,
+        `${cmd.config.description}`,
         true
       );
     });

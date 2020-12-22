@@ -13,7 +13,7 @@ var _require2 = require("../util/EvobotUtil"),
 
 module.exports = {
   play: function play(song, message) {
-    var _require3, SOUNDCLOUD_CLIENT_ID, config, PRUNING, queue, stream, streamType, dispatcher, playingMessage, filter, collector;
+    var _require3, SOUNDCLOUD_CLIENT_ID, config, PRUNING, queue, stream, streamType, dispatcher, addedEmbed, playingMessage, filter, collector;
 
     return regeneratorRuntime.async(function play$(_context) {
       while (1) {
@@ -102,10 +102,10 @@ module.exports = {
               module.exports.play(queue.songs[0], message);
             });
             dispatcher.setVolumeLogarithmic(queue.volume / 100);
-            _context.prev = 25;
-            queue.textChannel.send("\uD83C\uDFB6**\u0421\u0415\u0419\u0427\u0410\u0421 \u0418\u0413\u0420\u0410\u0415\u0422**\uD83C\uDFB6");
+            addedEmbed = new MessageEmbed().setColor('GREEN').setTitle(":musical_note: ".concat(video.title)).addField("\u0411\u044B\u043B\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u044C ", "\u042D\u0442\u043E\u0442 \u0442\u0440\u0435\u043A #".concat(message.guild.musicData.queue.length, " \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438")).setThumbnail(video.thumbnails.high.url).setURL(video.url);
+            _context.prev = 26;
             _context.next = 29;
-            return regeneratorRuntime.awrap(queue.textChannel.send("".concat(song.url)));
+            return regeneratorRuntime.awrap(queue.textChannel.send(addedEmbed));
 
           case 29:
             playingMessage = _context.sent;
@@ -142,7 +142,7 @@ module.exports = {
 
           case 46:
             _context.prev = 46;
-            _context.t1 = _context["catch"](25);
+            _context.t1 = _context["catch"](26);
             console.error(_context.t1);
 
           case 49:
@@ -295,6 +295,6 @@ module.exports = {
             return _context.stop();
         }
       }
-    }, null, null, [[10, 17], [25, 46]]);
+    }, null, null, [[10, 17], [26, 46]]);
   }
 };

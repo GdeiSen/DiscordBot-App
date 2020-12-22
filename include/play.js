@@ -72,10 +72,17 @@ module.exports = {
         module.exports.play(queue.songs[0], message);
       });
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
-
+    const addedEmbed = new MessageEmbed()
+    .setColor('GREEN')
+    .setTitle(`:musical_note: ${video.title}`)
+    .addField(
+      `Было добавлено в очередь `,
+      `Этот трек #${message.guild.musicData.queue.length} в очереди`
+    )
+    .setThumbnail(video.thumbnails.high.url)
+    .setURL(video.url);
     try {
-      queue.textChannel.send(`🎶**СЕЙЧАС ИГРАЕТ**🎶`);
-      var playingMessage = await queue.textChannel.send(`${song.url}`)
+      var playingMessage = await queue.textChannel.send(addedEmbed)
       await playingMessage.react("⏭");
       await playingMessage.react("⏯");
       await playingMessage.react("🔇");
