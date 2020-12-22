@@ -7,6 +7,8 @@ var scdl = require("soundcloud-downloader")["default"];
 var _require = require("../include/play"),
     play = _require.play;
 
+var Discord = require("discord.js");
+
 var _require2 = require("../util/EvobotUtil"),
     canModifyQueue = _require2.canModifyQueue,
     STAY_TIME = _require2.STAY_TIME;
@@ -102,7 +104,7 @@ module.exports = {
               module.exports.play(queue.songs[0], message);
             });
             dispatcher.setVolumeLogarithmic(queue.volume / 100);
-            addedEmbed = new MessageEmbed().setColor('GREEN').setTitle(":musical_note: ".concat(video.title)).addField("\u0411\u044B\u043B\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u044C ", "\u042D\u0442\u043E\u0442 \u0442\u0440\u0435\u043A #".concat(message.guild.musicData.queue.length, " \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438")).setThumbnail(video.thumbnails.high.url).setURL(video.url);
+            addedEmbed = new Discord.MessageEmbed().setColor('GREEN').setTitle(":musical_note: ".concat(video.title)).addField("\u0411\u044B\u043B\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u044C ", "\u042D\u0442\u043E\u0442 \u0442\u0440\u0435\u043A #".concat(message.guild.musicData.queue.length, " \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438")).setThumbnail(video.thumbnails.high.url).setURL(video.url);
             _context.prev = 26;
             _context.next = 29;
             return regeneratorRuntime.awrap(queue.textChannel.send(addedEmbed));

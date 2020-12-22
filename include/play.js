@@ -1,6 +1,7 @@
 const ytdl = require("erit-ytdl");
 const scdl = require("soundcloud-downloader").default;
 const { play } = require("../include/play");
+const Discord = require("discord.js");
 const { canModifyQueue, STAY_TIME } = require("../util/EvobotUtil");
 
 module.exports = {
@@ -72,7 +73,7 @@ module.exports = {
         module.exports.play(queue.songs[0], message);
       });
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
-    const addedEmbed = new MessageEmbed()
+    const addedEmbed = new Discord.MessageEmbed()
     .setColor('GREEN')
     .setTitle(`:musical_note: ${video.title}`)
     .addField(
