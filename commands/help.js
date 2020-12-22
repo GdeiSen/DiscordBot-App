@@ -14,7 +14,6 @@ module.exports.run = (client,message,args) =>{
         true
       );
     });
-
     helpEmbed.setTimestamp();
 
     return message.channel.send(helpEmbed).catch(console.error);
