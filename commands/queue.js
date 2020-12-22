@@ -80,7 +80,7 @@ function generateQueueEmbed(message, queue) {
       .setTitle("Очередь\n")
       .setThumbnail(message.guild.iconURL())
       .setColor('GREEN')
-      .setDescription(`**сейчас играет - [${queue[0].title}](${queue[0].url})**\n\n${info}`)
+      .setDescription(`**сейчас играет - [${queue[0].title}](${queue[0].url})**\n\n${info}\nиспользуйте кнопки для перемещения по страницам`)
       .setTimestamp();
     embeds.push(embed);
   }

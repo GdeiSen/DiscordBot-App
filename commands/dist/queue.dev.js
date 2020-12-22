@@ -130,7 +130,7 @@ function generateQueueEmbed(message, queue) {
     var info = current.map(function (track) {
       return "".concat(++j, " - [").concat(track.title, "](").concat(track.url, ")");
     }).join("\n");
-    var embed = new MessageEmbed().setTitle("Очередь\n").setThumbnail(message.guild.iconURL()).setColor('GREEN').setDescription("**\u0441\u0435\u0439\u0447\u0430\u0441 \u0438\u0433\u0440\u0430\u0435\u0442 - [".concat(queue[0].title, "](").concat(queue[0].url, ")**\n\n").concat(info)).setTimestamp();
+    var embed = new MessageEmbed().setTitle("Очередь\n").setThumbnail(message.guild.iconURL()).setColor('GREEN').setDescription("**\u0441\u0435\u0439\u0447\u0430\u0441 \u0438\u0433\u0440\u0430\u0435\u0442 - [".concat(queue[0].title, "](").concat(queue[0].url, ")**\n\n").concat(info, "\n\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0438 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u043C\u0435\u0449\u0435\u043D\u0438\u044F \u043F\u043E \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430\u043C")).setTimestamp();
     embeds.push(embed);
   };
 
