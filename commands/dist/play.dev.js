@@ -86,21 +86,13 @@ module.exports.run = function _callee(bot, message, args) {
           urlValid = videoPattern.test(args); // Start the playlist if playlist url was provided
 
           if (!(!videoPattern.test(args) && playlistPattern.test(args))) {
-            _context.next = 30;
+            _context.next = 28;
             break;
           }
 
           return _context.abrupt("return", message.client.commands.get("playlist").run(bot, message, args));
 
-        case 30:
-          if (!url.includes("/sets/")) {
-            _context.next = 32;
-            break;
-          }
-
-          return _context.abrupt("return", message.client.commands.get("playlist").run(bot, message, args));
-
-        case 32:
+        case 28:
           queueConstruct = {
             textChannel: message.channel,
             channel: channel,
@@ -114,103 +106,103 @@ module.exports.run = function _callee(bot, message, args) {
           song = null;
 
           if (!urlValid) {
-            _context.next = 49;
+            _context.next = 45;
             break;
           }
 
-          _context.prev = 36;
-          _context.next = 39;
+          _context.prev = 32;
+          _context.next = 35;
           return regeneratorRuntime.awrap(ytdl.getInfo(url));
 
-        case 39:
+        case 35:
           songInfo = _context.sent;
           song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
             duration: songInfo.videoDetails.lengthSeconds
           };
-          _context.next = 47;
+          _context.next = 43;
           break;
 
-        case 43:
-          _context.prev = 43;
-          _context.t0 = _context["catch"](36);
+        case 39:
+          _context.prev = 39;
+          _context.t0 = _context["catch"](32);
           console.error(_context.t0);
           return _context.abrupt("return", message.reply(_context.t0.message)["catch"](console.error));
 
-        case 47:
-          _context.next = 63;
+        case 43:
+          _context.next = 59;
           break;
 
-        case 49:
-          _context.prev = 49;
-          _context.next = 52;
+        case 45:
+          _context.prev = 45;
+          _context.next = 48;
           return regeneratorRuntime.awrap(youtube.searchVideos(search, 1));
 
-        case 52:
+        case 48:
           results = _context.sent;
-          _context.next = 55;
+          _context.next = 51;
           return regeneratorRuntime.awrap(ytdl.getInfo(results[0].url));
 
-        case 55:
+        case 51:
           songInfo = _context.sent;
           song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
             duration: songInfo.videoDetails.lengthSeconds
           };
-          _context.next = 63;
+          _context.next = 59;
           break;
 
-        case 59:
-          _context.prev = 59;
-          _context.t1 = _context["catch"](49);
+        case 55:
+          _context.prev = 55;
+          _context.t1 = _context["catch"](45);
           console.error(_context.t1);
           return _context.abrupt("return", message.reply(_context.t1.message)["catch"](console.error));
 
-        case 63:
+        case 59:
           if (!serverQueue) {
-            _context.next = 66;
+            _context.next = 62;
             break;
           }
 
           serverQueue.songs.push(song);
           return _context.abrupt("return", serverQueue.textChannel.send("\u2705 **".concat(song.title, "** \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0434\u043E\u0431\u0430\u0432\u0438\u043B ").concat(message.author))["catch"](console.error));
 
-        case 66:
+        case 62:
           queueConstruct.songs.push(song);
           message.client.queue.set(message.guild.id, queueConstruct);
-          _context.prev = 68;
-          _context.next = 71;
+          _context.prev = 64;
+          _context.next = 67;
           return regeneratorRuntime.awrap(channel.join());
 
-        case 71:
+        case 67:
           queueConstruct.connection = _context.sent;
-          _context.next = 74;
+          _context.next = 70;
           return regeneratorRuntime.awrap(queueConstruct.connection.voice.setSelfDeaf(true));
 
-        case 74:
+        case 70:
           play(queueConstruct.songs[0], message);
-          _context.next = 84;
+          _context.next = 80;
           break;
 
-        case 77:
-          _context.prev = 77;
-          _context.t2 = _context["catch"](68);
+        case 73:
+          _context.prev = 73;
+          _context.t2 = _context["catch"](64);
           console.error(_context.t2);
           message.client.queue["delete"](message.guild.id);
-          _context.next = 83;
+          _context.next = 79;
           return regeneratorRuntime.awrap(channel.leave());
 
-        case 83:
+        case 79:
           return _context.abrupt("return", message.channel.send(" ".concat(_context.t2))["catch"](console.error));
 
-        case 84:
+        case 80:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[36, 43], [49, 59], [68, 77]]);
+  }, null, null, [[32, 39], [45, 55], [64, 73]]);
 };
 
 module.exports.config = {

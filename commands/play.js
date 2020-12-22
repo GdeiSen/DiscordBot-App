@@ -73,8 +73,6 @@ module.exports.run = async (bot,message, args) => {
     // Start the playlist if playlist url was provided
     if (!videoPattern.test(args) && playlistPattern.test(args)) {
       return message.client.commands.get("playlist").run(bot,message, args);
-    } else if (url.includes("/sets/")) {
-      return message.client.commands.get("playlist").run(bot,message, args);
     }
 
     const queueConstruct = {
