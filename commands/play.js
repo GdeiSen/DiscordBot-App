@@ -77,22 +77,6 @@ module.exports.run = async (bot,message, args) => {
       return message.client.commands.get("playlist").run(bot,message, args);
     }
 
-    if (mobileScRegex.test(url)) {
-      try {
-        https.get(url, function (res) {
-          if (res.statusCode == "302") {
-            return message.client.commands.get("play").run(bot, message, [res.headers.location]);
-          } else {
-            return message.reply(embed5).catch(console.error);
-          }
-        });
-      } catch (error) {
-        console.error(error);
-        return message.reply(error.message).catch(console.error);
-      }
-      return message.reply(embed6).catch(console.error);
-    }
-
     const queueConstruct = {
       textChannel: message.channel,
       channel,

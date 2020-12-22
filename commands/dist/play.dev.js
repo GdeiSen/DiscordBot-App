@@ -101,32 +101,6 @@ module.exports.run = function _callee(bot, message, args) {
           return _context.abrupt("return", message.client.commands.get("playlist").run(bot, message, args));
 
         case 32:
-          if (!mobileScRegex.test(url)) {
-            _context.next = 42;
-            break;
-          }
-
-          _context.prev = 33;
-          https.get(url, function (res) {
-            if (res.statusCode == "302") {
-              return message.client.commands.get("play").run(bot, message, [res.headers.location]);
-            } else {
-              return message.reply(embed5)["catch"](console.error);
-            }
-          });
-          _context.next = 41;
-          break;
-
-        case 37:
-          _context.prev = 37;
-          _context.t0 = _context["catch"](33);
-          console.error(_context.t0);
-          return _context.abrupt("return", message.reply(_context.t0.message)["catch"](console.error));
-
-        case 41:
-          return _context.abrupt("return", message.reply(embed6)["catch"](console.error));
-
-        case 42:
           queueConstruct = {
             textChannel: message.channel,
             channel: channel,
@@ -140,103 +114,103 @@ module.exports.run = function _callee(bot, message, args) {
           song = null;
 
           if (!urlValid) {
-            _context.next = 59;
+            _context.next = 49;
             break;
           }
 
-          _context.prev = 46;
-          _context.next = 49;
+          _context.prev = 36;
+          _context.next = 39;
           return regeneratorRuntime.awrap(ytdl.getInfo(url));
 
-        case 49:
+        case 39:
           songInfo = _context.sent;
           song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
             duration: songInfo.videoDetails.lengthSeconds
           };
-          _context.next = 57;
+          _context.next = 47;
           break;
 
-        case 53:
-          _context.prev = 53;
-          _context.t1 = _context["catch"](46);
-          console.error(_context.t1);
-          return _context.abrupt("return", message.reply(_context.t1.message)["catch"](console.error));
+        case 43:
+          _context.prev = 43;
+          _context.t0 = _context["catch"](36);
+          console.error(_context.t0);
+          return _context.abrupt("return", message.reply(_context.t0.message)["catch"](console.error));
 
-        case 57:
-          _context.next = 73;
+        case 47:
+          _context.next = 63;
+          break;
+
+        case 49:
+          _context.prev = 49;
+          _context.next = 52;
+          return regeneratorRuntime.awrap(youtube.searchVideos(search, 1));
+
+        case 52:
+          results = _context.sent;
+          _context.next = 55;
+          return regeneratorRuntime.awrap(ytdl.getInfo(results[0].url));
+
+        case 55:
+          songInfo = _context.sent;
+          song = {
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
+            duration: songInfo.videoDetails.lengthSeconds
+          };
+          _context.next = 63;
           break;
 
         case 59:
           _context.prev = 59;
-          _context.next = 62;
-          return regeneratorRuntime.awrap(youtube.searchVideos(search, 1));
+          _context.t1 = _context["catch"](49);
+          console.error(_context.t1);
+          return _context.abrupt("return", message.reply(_context.t1.message)["catch"](console.error));
 
-        case 62:
-          results = _context.sent;
-          _context.next = 65;
-          return regeneratorRuntime.awrap(ytdl.getInfo(results[0].url));
-
-        case 65:
-          songInfo = _context.sent;
-          song = {
-            title: songInfo.videoDetails.title,
-            url: songInfo.videoDetails.video_url,
-            duration: songInfo.videoDetails.lengthSeconds
-          };
-          _context.next = 73;
-          break;
-
-        case 69:
-          _context.prev = 69;
-          _context.t2 = _context["catch"](59);
-          console.error(_context.t2);
-          return _context.abrupt("return", message.reply(_context.t2.message)["catch"](console.error));
-
-        case 73:
+        case 63:
           if (!serverQueue) {
-            _context.next = 76;
+            _context.next = 66;
             break;
           }
 
           serverQueue.songs.push(song);
           return _context.abrupt("return", serverQueue.textChannel.send("\u2705 **".concat(song.title, "** \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0434\u043E\u0431\u0430\u0432\u0438\u043B ").concat(message.author))["catch"](console.error));
 
-        case 76:
+        case 66:
           queueConstruct.songs.push(song);
           message.client.queue.set(message.guild.id, queueConstruct);
-          _context.prev = 78;
-          _context.next = 81;
+          _context.prev = 68;
+          _context.next = 71;
           return regeneratorRuntime.awrap(channel.join());
 
-        case 81:
+        case 71:
           queueConstruct.connection = _context.sent;
-          _context.next = 84;
+          _context.next = 74;
           return regeneratorRuntime.awrap(queueConstruct.connection.voice.setSelfDeaf(true));
 
-        case 84:
+        case 74:
           play(queueConstruct.songs[0], message);
-          _context.next = 94;
+          _context.next = 84;
           break;
 
-        case 87:
-          _context.prev = 87;
-          _context.t3 = _context["catch"](78);
-          console.error(_context.t3);
+        case 77:
+          _context.prev = 77;
+          _context.t2 = _context["catch"](68);
+          console.error(_context.t2);
           message.client.queue["delete"](message.guild.id);
-          _context.next = 93;
+          _context.next = 83;
           return regeneratorRuntime.awrap(channel.leave());
 
-        case 93:
-          return _context.abrupt("return", message.channel.send(" ".concat(_context.t3))["catch"](console.error));
+        case 83:
+          return _context.abrupt("return", message.channel.send(" ".concat(_context.t2))["catch"](console.error));
 
-        case 94:
+        case 84:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[33, 37], [46, 53], [59, 69], [78, 87]]);
+  }, null, null, [[36, 43], [49, 59], [68, 77]]);
 };
 
 module.exports.config = {
