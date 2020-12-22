@@ -155,7 +155,7 @@ module.exports.run = function _callee(bot, message, args) {
           message.channel.activeCollector = false;
           resultsMessage["delete"]()["catch"](console.error);
           response.first()["delete"]()["catch"](console.error);
-          _context.next = 67;
+          _context.next = 66;
           break;
 
         case 61:
@@ -164,9 +164,8 @@ module.exports.run = function _callee(bot, message, args) {
           console.error(_context.t1);
           message.channel.activeCollector = false;
           message.reply(_context.t1.message)["catch"](console.error);
-          return _context.abrupt("return");
 
-        case 67:
+        case 66:
         case "end":
           return _context.stop();
       }

@@ -66,7 +66,6 @@ module.exports.run = async (bot,message,args) => {
       console.error(error);
       message.channel.activeCollector = false;
       message.reply(error.message).catch(console.error);
-      return;
     }
   };
   module.exports.config = {

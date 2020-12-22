@@ -20,8 +20,8 @@ var _require2 = require("../util/EvobotUtil"),
 
 var youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
-module.exports.run = function _callee(client, message, args) {
-  var channel, embed1, embed2, embed3, embed4, embed5, embed6, embed7, serverQueue, permissions, search, videoPattern, playlistPattern, scRegex, mobileScRegex, url, urlValid, queueConstruct, songInfo, song, trackInfo, results;
+module.exports.run = function _callee(bot, message, args) {
+  var channel, embed1, embed2, embed3, embed4, embed5, embed6, embed7, serverQueue, permissions, search, videoPattern, playlistPattern, url, urlValid, queueConstruct, songInfo, song, results;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -33,7 +33,7 @@ module.exports.run = function _callee(client, message, args) {
           embed4 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется у меня недостаточно прав для проигрывания музыки!').setColor('RED');
           embed5 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('К сожалению ничего не нашлось!').setColor('RED');
           embed6 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется что-то пошло не так!').setColor('RED');
-          embed7 = new Discord.MessageEmbed().setTitle('использование').setDescription("".concat(message.client.prefix, " play <YouTube URL | Video Name | Soundcloud URL>")).setColor('ORANGE');
+          embed7 = new Discord.MessageEmbed().setTitle('использование').setDescription("".concat(message.client.prefix, " play <YouTube URL | Video Name>")).setColor('ORANGE');
           serverQueue = message.client.queue.get(message.guild.id);
           message["delete"]();
 
@@ -82,53 +82,51 @@ module.exports.run = function _callee(client, message, args) {
           search = args;
           videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
           playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
-          scRegex = /^https?:\/\/(soundcloud\.com)\/(.*)$/;
-          mobileScRegex = /^https?:\/\/(soundcloud\.app\.goo\.gl)\/(.*)$/;
-          url = args[0];
-          urlValid = videoPattern.test(args[0]); // Start the playlist if playlist url was provided
+          url = args;
+          urlValid = videoPattern.test(args); // Start the playlist if playlist url was provided
 
-          if (!(!videoPattern.test(args[0]) && playlistPattern.test(args[0]))) {
+          if (!(!videoPattern.test(args) && playlistPattern.test(args))) {
+            _context.next = 30;
+            break;
+          }
+
+          return _context.abrupt("return", message.client.commands.get("playlist").run(bot, message, args));
+
+        case 30:
+          if (!(scdl.isValidUrl(url) && url.includes("/sets/"))) {
             _context.next = 32;
             break;
           }
 
-          return _context.abrupt("return", message.client.commands.get("playlist").run(message, args));
+          return _context.abrupt("return", message.client.commands.get("playlist").run(bot, message, args));
 
         case 32:
-          if (!(scdl.isValidUrl(url) && url.includes("/sets/"))) {
-            _context.next = 34;
-            break;
-          }
-
-          return _context.abrupt("return", message.client.commands.get("playlist").run(message, args));
-
-        case 34:
           if (!mobileScRegex.test(url)) {
-            _context.next = 44;
+            _context.next = 42;
             break;
           }
 
-          _context.prev = 35;
+          _context.prev = 33;
           https.get(url, function (res) {
             if (res.statusCode == "302") {
-              return message.client.commands.get("play").run(message, [res.headers.location]);
+              return message.client.commands.get("play").run(bot, message, [res.headers.location]);
             } else {
               return message.reply(embed5)["catch"](console.error);
             }
           });
-          _context.next = 43;
+          _context.next = 41;
           break;
 
-        case 39:
-          _context.prev = 39;
-          _context.t0 = _context["catch"](35);
+        case 37:
+          _context.prev = 37;
+          _context.t0 = _context["catch"](33);
           console.error(_context.t0);
           return _context.abrupt("return", message.reply(_context.t0.message)["catch"](console.error));
 
-        case 43:
+        case 41:
           return _context.abrupt("return", message.reply(embed6)["catch"](console.error));
 
-        case 44:
+        case 42:
           queueConstruct = {
             textChannel: message.channel,
             channel: channel,
@@ -142,138 +140,108 @@ module.exports.run = function _callee(client, message, args) {
           song = null;
 
           if (!urlValid) {
-            _context.next = 61;
+            _context.next = 59;
             break;
           }
 
-          _context.prev = 48;
-          _context.next = 51;
+          _context.prev = 46;
+          _context.next = 49;
           return regeneratorRuntime.awrap(ytdl.getInfo(url));
 
-        case 51:
+        case 49:
           songInfo = _context.sent;
           song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
             duration: songInfo.videoDetails.lengthSeconds
           };
-          _context.next = 59;
+          _context.next = 57;
           break;
 
-        case 55:
-          _context.prev = 55;
-          _context.t1 = _context["catch"](48);
+        case 53:
+          _context.prev = 53;
+          _context.t1 = _context["catch"](46);
           console.error(_context.t1);
           return _context.abrupt("return", message.reply(_context.t1.message)["catch"](console.error));
 
-        case 59:
-          _context.next = 89;
+        case 57:
+          _context.next = 73;
           break;
 
-        case 61:
-          if (!scRegex.test(url)) {
-            _context.next = 75;
-            break;
-          }
+        case 59:
+          _context.prev = 59;
+          _context.next = 62;
+          return regeneratorRuntime.awrap(youtube.searchVideos(search, 1));
 
-          _context.prev = 62;
+        case 62:
+          results = _context.sent;
           _context.next = 65;
-          return regeneratorRuntime.awrap(scdl.getInfo(url, SOUNDCLOUD_CLIENT_ID));
+          return regeneratorRuntime.awrap(ytdl.getInfo(results[0].url));
 
         case 65:
-          trackInfo = _context.sent;
+          songInfo = _context.sent;
           song = {
-            title: trackInfo.title,
-            url: trackInfo.permalink_url,
-            duration: Math.ceil(trackInfo.duration / 1000)
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
+            duration: songInfo.videoDetails.lengthSeconds
           };
           _context.next = 73;
           break;
 
         case 69:
           _context.prev = 69;
-          _context.t2 = _context["catch"](62);
+          _context.t2 = _context["catch"](59);
           console.error(_context.t2);
           return _context.abrupt("return", message.reply(_context.t2.message)["catch"](console.error));
 
         case 73:
-          _context.next = 89;
-          break;
-
-        case 75:
-          _context.prev = 75;
-          _context.next = 78;
-          return regeneratorRuntime.awrap(youtube.searchVideos(search, 1));
-
-        case 78:
-          results = _context.sent;
-          _context.next = 81;
-          return regeneratorRuntime.awrap(ytdl.getInfo(results[0].url));
-
-        case 81:
-          songInfo = _context.sent;
-          song = {
-            title: songInfo.videoDetails.title,
-            url: songInfo.videoDetails.video_url,
-            duration: songInfo.videoDetails.lengthSeconds
-          };
-          _context.next = 89;
-          break;
-
-        case 85:
-          _context.prev = 85;
-          _context.t3 = _context["catch"](75);
-          console.error(_context.t3);
-          return _context.abrupt("return", message.reply(_context.t3.message)["catch"](console.error));
-
-        case 89:
           if (!serverQueue) {
-            _context.next = 92;
+            _context.next = 76;
             break;
           }
 
           serverQueue.songs.push(song);
           return _context.abrupt("return", serverQueue.textChannel.send("\u2705 **".concat(song.title, "** \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0434\u043E\u0431\u0430\u0432\u0438\u043B ").concat(message.author))["catch"](console.error));
 
-        case 92:
+        case 76:
           queueConstruct.songs.push(song);
           message.client.queue.set(message.guild.id, queueConstruct);
-          _context.prev = 94;
-          _context.next = 97;
+          _context.prev = 78;
+          _context.next = 81;
           return regeneratorRuntime.awrap(channel.join());
 
-        case 97:
+        case 81:
           queueConstruct.connection = _context.sent;
-          _context.next = 100;
+          _context.next = 84;
           return regeneratorRuntime.awrap(queueConstruct.connection.voice.setSelfDeaf(true));
 
-        case 100:
+        case 84:
           play(queueConstruct.songs[0], message);
-          _context.next = 110;
+          _context.next = 94;
           break;
 
-        case 103:
-          _context.prev = 103;
-          _context.t4 = _context["catch"](94);
-          console.error(_context.t4);
+        case 87:
+          _context.prev = 87;
+          _context.t3 = _context["catch"](78);
+          console.error(_context.t3);
           message.client.queue["delete"](message.guild.id);
-          _context.next = 109;
+          _context.next = 93;
           return regeneratorRuntime.awrap(channel.leave());
 
-        case 109:
-          return _context.abrupt("return", message.channel.send(" ".concat(_context.t4))["catch"](console.error));
+        case 93:
+          return _context.abrupt("return", message.channel.send(" ".concat(_context.t3))["catch"](console.error));
 
-        case 110:
+        case 94:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[35, 39], [48, 55], [62, 69], [75, 85], [94, 103]]);
+  }, null, null, [[33, 37], [46, 53], [59, 69], [78, 87]]);
 };
 
 module.exports.config = {
   name: "play",
   cooldown: 3,
-  aliases: ["p"],
-  description: "Проигрывает песни с YouTube и <SoundCloud(в разработке)>"
+  aliases: ['p'],
+  description: "Проигрывает песни"
 };

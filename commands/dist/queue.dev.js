@@ -130,7 +130,7 @@ function generateQueueEmbed(message, queue) {
     var info = current.map(function (track) {
       return "".concat(++j, " - [").concat(track.title, "](").concat(track.url, ")");
     }).join("\n");
-    var embed = new MessageEmbed().setTitle("Song Queue\n").setThumbnail(message.guild.iconURL()).setColor('GREEN').setDescription("**\u0441\u0435\u0439\u0447\u0430\u0441 \u0438\u0433\u0440\u0430\u0435\u0442 - [".concat(queue[0].title, "](").concat(queue[0].url, ")**\n\n").concat(info)).setTimestamp();
+    var embed = new MessageEmbed().setTitle("Очередь\n").setThumbnail(message.guild.iconURL()).setColor('GREEN').setDescription("**\u0441\u0435\u0439\u0447\u0430\u0441 \u0438\u0433\u0440\u0430\u0435\u0442 - [".concat(queue[0].title, "](").concat(queue[0].url, ")**\n\n").concat(info)).setTimestamp();
     embeds.push(embed);
   };
 

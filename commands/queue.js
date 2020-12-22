@@ -77,7 +77,7 @@ function generateQueueEmbed(message, queue) {
     const info = current.map((track) => `${++j} - [${track.title}](${track.url})`).join("\n");
 
     const embed = new MessageEmbed()
-      .setTitle("Song Queue\n")
+      .setTitle("Очередь\n")
       .setThumbnail(message.guild.iconURL())
       .setColor('GREEN')
       .setDescription(`**сейчас играет - [${queue[0].title}](${queue[0].url})**\n\n${info}`)

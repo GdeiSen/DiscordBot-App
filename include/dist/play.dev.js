@@ -48,7 +48,7 @@ module.exports = {
             _context.prev = 10;
 
             if (!song.url.includes("youtube.com")) {
-              _context.next = 17;
+              _context.next = 15;
               break;
             }
 
@@ -59,51 +59,24 @@ module.exports = {
 
           case 14:
             stream = _context.sent;
-            _context.next = 30;
+
+          case 15:
+            _context.next = 22;
             break;
 
           case 17:
-            if (!song.url.includes("soundcloud.com")) {
-              _context.next = 30;
-              break;
-            }
-
-            _context.prev = 18;
-            _context.next = 21;
-            return regeneratorRuntime.awrap(scdl.downloadFormat(song.url, scdl.FORMATS.OPUS, SOUNDCLOUD_CLIENT_ID));
-
-          case 21:
-            stream = _context.sent;
-            _context.next = 30;
-            break;
-
-          case 24:
-            _context.prev = 24;
-            _context.t0 = _context["catch"](18);
-            _context.next = 28;
-            return regeneratorRuntime.awrap(scdl.downloadFormat(song.url, scdl.FORMATS.MP3, SOUNDCLOUD_CLIENT_ID));
-
-          case 28:
-            stream = _context.sent;
-            streamType = "unknown";
-
-          case 30:
-            _context.next = 37;
-            break;
-
-          case 32:
-            _context.prev = 32;
-            _context.t1 = _context["catch"](10);
+            _context.prev = 17;
+            _context.t0 = _context["catch"](10);
 
             if (queue) {
               queue.songs.shift();
               module.exports.play(queue.songs[0], message);
             }
 
-            console.error(_context.t1);
-            return _context.abrupt("return", message.channel.send("Error: ".concat(_context.t1.message ? _context.t1.message : _context.t1)));
+            console.error(_context.t0);
+            return _context.abrupt("return", message.channel.send("Error: ".concat(_context.t0.message ? _context.t0.message : _context.t0)));
 
-          case 37:
+          case 22:
             queue.connection.on("disconnect", function () {
               return message.client.queue["delete"](message.guild.id);
             });
@@ -129,50 +102,50 @@ module.exports = {
               module.exports.play(queue.songs[0], message);
             });
             dispatcher.setVolumeLogarithmic(queue.volume / 100);
-            _context.prev = 40;
-            queue.textChannel.send("**\u0421\u0415\u0419\u0427\u0410\u0421 \u0418\u0413\u0420\u0410\u0415\u0422**");
-            _context.next = 44;
+            _context.prev = 25;
+            queue.textChannel.send("\uD83C\uDFB6**\u0421\u0415\u0419\u0427\u0410\u0421 \u0418\u0413\u0420\u0410\u0415\u0422**\uD83C\uDFB6");
+            _context.next = 29;
             return regeneratorRuntime.awrap(queue.textChannel.send("".concat(song.url)));
 
-          case 44:
+          case 29:
             playingMessage = _context.sent;
-            _context.next = 47;
+            _context.next = 32;
             return regeneratorRuntime.awrap(playingMessage.react("⏭"));
 
-          case 47:
-            _context.next = 49;
+          case 32:
+            _context.next = 34;
             return regeneratorRuntime.awrap(playingMessage.react("⏯"));
 
-          case 49:
-            _context.next = 51;
+          case 34:
+            _context.next = 36;
             return regeneratorRuntime.awrap(playingMessage.react("🔇"));
 
-          case 51:
-            _context.next = 53;
+          case 36:
+            _context.next = 38;
             return regeneratorRuntime.awrap(playingMessage.react("🔉"));
 
-          case 53:
-            _context.next = 55;
+          case 38:
+            _context.next = 40;
             return regeneratorRuntime.awrap(playingMessage.react("🔊"));
 
-          case 55:
-            _context.next = 57;
+          case 40:
+            _context.next = 42;
             return regeneratorRuntime.awrap(playingMessage.react("🔁"));
 
-          case 57:
-            _context.next = 59;
+          case 42:
+            _context.next = 44;
             return regeneratorRuntime.awrap(playingMessage.react("⏹"));
 
-          case 59:
-            _context.next = 64;
+          case 44:
+            _context.next = 49;
             break;
 
-          case 61:
-            _context.prev = 61;
-            _context.t2 = _context["catch"](40);
-            console.error(_context.t2);
+          case 46:
+            _context.prev = 46;
+            _context.t1 = _context["catch"](25);
+            console.error(_context.t1);
 
-          case 64:
+          case 49:
             filter = function filter(reaction, user) {
               return user.id !== message.client.user.id;
             };
@@ -317,11 +290,11 @@ module.exports = {
               }
             });
 
-          case 68:
+          case 53:
           case "end":
             return _context.stop();
         }
       }
-    }, null, null, [[10, 32], [18, 24], [40, 61]]);
+    }, null, null, [[10, 17], [25, 46]]);
   }
 };

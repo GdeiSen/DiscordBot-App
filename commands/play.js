@@ -44,7 +44,7 @@ module.exports.run = async (bot,message, args) => {
 
     let embed7 = new Discord.MessageEmbed()
     .setTitle('использование')
-    .setDescription(`${message.client.prefix} play <YouTube URL | Video Name | Soundcloud URL>`)
+    .setDescription(`${message.client.prefix} play <YouTube URL | Video Name>`)
     .setColor('ORANGE')
 
     const serverQueue = message.client.queue.get(message.guild.id);
@@ -67,8 +67,6 @@ module.exports.run = async (bot,message, args) => {
       const search = args;
       const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
       const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
-      const scRegex = /^https?:\/\/(soundcloud\.com)\/(.*)$/;
-      const mobileScRegex = /^https?:\/\/(soundcloud\.app\.goo\.gl)\/(.*)$/;
       const url = args;
       const urlValid = videoPattern.test(args);
 
@@ -120,18 +118,6 @@ module.exports.run = async (bot,message, args) => {
         console.error(error);
         return message.reply(error.message).catch(console.error);
       }
-    } else if (scRegex.test(url)) {
-      try {
-        const trackInfo = await scdl.getInfo(url, SOUNDCLOUD_CLIENT_ID);
-        song = {
-          title: trackInfo.title,
-          url: trackInfo.permalink_url,
-          duration: Math.ceil(trackInfo.duration / 1000)
-        };
-      } catch (error) {
-        console.error(error);
-        return message.reply(error.message).catch(console.error);
-      }
     } else {
       try {
         const results = await youtube.searchVideos(search, 1);
@@ -173,5 +159,5 @@ module.exports.config = {
   name: "play",
   cooldown: 3,
   aliases: ['p'],
-  description: "Проигрывает песни с YouTube и <SoundCloud(в разработке)>",
+  description: "Проигрывает песни",
 }
