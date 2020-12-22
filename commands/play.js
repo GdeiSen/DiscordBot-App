@@ -67,7 +67,7 @@ module.exports.run = async (bot,message, args) => {
       const search = args;
       const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
       const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
-      const url = args;
+      const url = args[0];
       const urlValid = videoPattern.test(args);
 
     // Start the playlist if playlist url was provided

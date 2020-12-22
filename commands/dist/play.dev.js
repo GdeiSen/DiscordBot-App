@@ -82,7 +82,7 @@ module.exports.run = function _callee(bot, message, args) {
           search = args;
           videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
           playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
-          url = args;
+          url = args[0];
           urlValid = videoPattern.test(args); // Start the playlist if playlist url was provided
 
           if (!(!videoPattern.test(args) && playlistPattern.test(args))) {
