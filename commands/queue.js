@@ -1,12 +1,13 @@
 const { MessageEmbed } = require("discord.js");
 
+
 module.exports.run = async(bot,message,args)=> {
-    var embed1 = new Discord.MessageEmbed()
+    var embed1 = new MessageEmbed()
     .setTitle('ошибка')
     .setDescription('**Ничего не воспроизводится**')
     .setColor('RED')
 
-    let embed4 = new Discord.MessageEmbed()
+    let embed4 = new MessageEmbed()
     .setTitle('ошибка')
     .setDescription('Кажется у меня недостаточно прав для проигрывания музыки!')
     .setColor('RED')
@@ -85,4 +86,12 @@ function generateQueueEmbed(message, queue) {
   }
 
   return embeds;
+}
+
+module.exports.config = {
+  name: "queue",
+  usage: "~queue",
+  description: "Выводит состояние цекущей очереди",
+  accessableby: "Members",
+  aliases: ['q']
 }

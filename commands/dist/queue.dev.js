@@ -9,8 +9,8 @@ module.exports.run = function _callee2(bot, message, args) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Ничего не воспроизводится**').setColor('RED');
-          embed4 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется у меня недостаточно прав для проигрывания музыки!').setColor('RED');
+          embed1 = new MessageEmbed().setTitle('ошибка').setDescription('**Ничего не воспроизводится**').setColor('RED');
+          embed4 = new MessageEmbed().setTitle('ошибка').setDescription('Кажется у меня недостаточно прав для проигрывания музыки!').setColor('RED');
           permissions = message.channel.permissionsFor(message.client.user);
 
           if (permissions.has(["MANAGE_MESSAGES", "ADD_REACTIONS"])) {
@@ -140,3 +140,11 @@ function generateQueueEmbed(message, queue) {
 
   return embeds;
 }
+
+module.exports.config = {
+  name: "queue",
+  usage: "~queue",
+  description: "Выводит состояние цекущей очереди",
+  accessableby: "Members",
+  aliases: ['q']
+};
