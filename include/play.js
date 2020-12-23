@@ -1,12 +1,11 @@
 const ytdl = require("erit-ytdl");
-const scdl = require("soundcloud-downloader").default;
 const { play } = require("../include/play");
 const Discord = require("discord.js");
 const { canModifyQueue, STAY_TIME } = require("../util/EvobotUtil");
-
+var youtubeThumbnail = require('youtube-thumbnail');
 module.exports = {
   async play(song, message) {
-    const { SOUNDCLOUD_CLIENT_ID } = require("../util/EvobotUtil");
+
 
     let config;
 
@@ -25,7 +24,7 @@ module.exports = {
         if (queue.connection.dispatcher && message.guild.me.voice.channel) return;
         queue.channel.leave();
       }, STAY_TIME * 1000);
-      queue.textChannel.send("Кажется музыка закончилась!")
+      queue.textChannel.send("❌ Очередь закончилась")
       
       .catch(console.error);
       return message.client.queue.delete(message.guild.id);
@@ -73,15 +72,18 @@ module.exports = {
         module.exports.play(queue.songs[0], message);
       });
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
+    const seek = (queue.connection.dispatcher.streamTime - queue.connection.dispatcher.pausedTime) / 1000;
+    const left = song.duration - seek;
+      //Этот трек #${queue.songs.length} в очереди
     const addedEmbed = new Discord.MessageEmbed()
     .setColor('GREEN')
-    .setTitle(`:musical_note: ${video.title}`)
-    .addField(
-      `Было добавлено в очередь `,
-      `Этот трек #${message.guild.musicData.queue.length} в очереди`
-    )
-    .setThumbnail(video.thumbnails.high.url)
-    .setURL(video.url);
+    .setTitle(`:musical_note: Сейчас играет :musical_note:\n ${song.title} `)
+    .addField('продолжительность:', new Date(left * 1000).toISOString().substr(11, 8))
+    .setThumbnail(song.thumbnails)
+    .setURL(song.url);
+    //youtubeThumbnail(song.url).default.url
+    
+
     try {
       var playingMessage = await queue.textChannel.send(addedEmbed)
       await playingMessage.react("⏭");
@@ -121,7 +123,7 @@ module.exports = {
           if (!canModifyQueue(member)) return;
           if (queue.playing) {
             queue.playing = !queue.playing;
-            queue.connection.dispatcher.pause();
+            queue.connection.dispatcher.pause(true);
             queue.textChannel.send(`${user} ⏸ поставил на паузу`)
             .then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);

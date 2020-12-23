@@ -43,10 +43,6 @@ module.exports.run = async (bot,message,args)=>{
     .setDescription(`~ play <YouTube URL | Video Name | Soundcloud URL>`)
     .setColor('ORANGE')
 
-    let embed8 = new Discord.MessageEmbed()
-    .setTitle('')
-    .setDescription('...')
-
     const { channel } = message.member.voice;
     const serverQueue = message.client.queue.get(message.guild.id);
 

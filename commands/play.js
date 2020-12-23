@@ -4,6 +4,7 @@ const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const scdl = require("soundcloud-downloader").default;
 const https = require("https");
+const youthumb = require('youtube-thumbnails');
 const { YOUTUBE_API_KEY,  DEFAULT_VOLUME } = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
@@ -94,7 +95,8 @@ module.exports.run = async (bot,message, args) => {
         song = {
           title: songInfo.videoDetails.title,
           url: songInfo.videoDetails.video_url,
-          duration: songInfo.videoDetails.lengthSeconds
+          duration: songInfo.videoDetails.lengthSeconds,
+          thumbnails: songInfo.videoDetails.thumbnails[4].url
         };
       } catch (error) {
         console.error(error);
@@ -107,14 +109,15 @@ module.exports.run = async (bot,message, args) => {
         song = {
           title: songInfo.videoDetails.title,
           url: songInfo.videoDetails.video_url,
-          duration: songInfo.videoDetails.lengthSeconds
+          duration: songInfo.videoDetails.lengthSeconds,
+          thumbnails: songInfo.videoDetails.thumbnails[4].url
         };
       } catch (error) {
         console.error(error);
         return message.reply(error.message).catch(console.error);
       }
     }
-
+    console.log(song.thumbnails);
     if (serverQueue) {
       serverQueue.songs.push(song);
       return serverQueue.textChannel

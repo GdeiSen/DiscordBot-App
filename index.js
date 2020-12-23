@@ -11,7 +11,7 @@ const { groupCollapsed } = require("console");
 const client = new Client({ disableMentions: "everyone" });
 client.commands = new Collection();
 client.aliases = new Collection();
-client.login(process.env.token);
+client.login('NzgwMDA1NDU3OTkzNTMxMzky.X7oysA.Q6aDTTXWaKuGkLYjm1bXe58OjdU');
 client.commands = new Collection();
 client.prefix = PREFIX;
 
