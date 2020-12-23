@@ -74,7 +74,7 @@ module.exports = {
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
     const seek = (queue.connection.dispatcher.streamTime - queue.connection.dispatcher.pausedTime) / 1000;
     const left = song.duration - seek;
-      //Этот трек #${queue.songs.length} в очереди
+      
     const addedEmbed = new Discord.MessageEmbed()
     .setColor('GREEN')
     .setTitle(`:musical_note: Сейчас играет :musical_note:\n ${song.title} `)
