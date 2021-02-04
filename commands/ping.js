@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args) => {
 
     let embed = new Discord.MessageEmbed()
     .setTitle('пинг')
-    .setDescription(`📈 средний пинг данного региона: ${Math.round(message.client.ws.ping)} ms`)
+    .setDescription(`📈 **средний пинг данного региона: ${Math.round(message.client.ws.ping)} ms**`)
     .setColor('GREEN')
     message.channel.send(embed);
 }

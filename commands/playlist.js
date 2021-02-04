@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { queue } = require("../include/queue");
 const { play } = require("../include/play");
 const YouTubeAPI = require("simple-youtube-api");
 const scdl = require("soundcloud-downloader").default;
@@ -10,32 +10,32 @@ const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 module.exports.run = async (bot,message,args)=>{
   var embed1 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Для начала нужно быть в голосовом канале!')
+    .setDescription('**Для начала нужно быть в голосовом канале!**')
     .setColor('RED')
 
     var embed2 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Вы должны быть в одинаковым канале с ботом!')
+    .setDescription('**Вы должны быть в одинаковым канале с ботом!**')
     .setColor('RED')
 
     let embed3 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Кажется у меня недостаточно прав для присоединения к вашему каналу!')
+    .setDescription('**Кажется у меня недостаточно прав для присоединения к вашему каналу!**')
     .setColor('RED')
 
     let embed4 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Кажется у меня недостаточно прав для проигрывания музыки!')
+    .setDescription('**Кажется у меня недостаточно прав для проигрывания музыки!**')
     .setColor('RED')
 
     let embed5 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('К сожалению ничего не нашлось!')
+    .setDescription('**К сожалению ничего не нашлось!**')
     .setColor('RED')
 
     let embed6 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Кажется что-то пошло не так!')
+    .setDescription('**Кажется что-то пошло не так!**')
     .setColor('RED')
 
     let embed7 = new Discord.MessageEmbed()
@@ -93,6 +93,7 @@ module.exports.run = async (bot,message,args)=>{
         playlist = await scdl.getSetInfo(args[0], SOUNDCLOUD_CLIENT_ID);
         videos = playlist.tracks.map((track) => ({
           title: track.title,
+          thumbnails: track.thumbnails[3].url,//songInfo.videoDetails.thumbnails[3].url
           url: track.permalink_url,
           duration: track.duration / 1000
         }));
@@ -119,25 +120,20 @@ module.exports.run = async (bot,message,args)=>{
     serverQueue ? serverQueue.songs.push(...newSongs) : queueConstruct.songs.push(...newSongs);
     const songs = serverQueue ? serverQueue.songs : queueConstruct.songs;
 
-    let playlistEmbed = new MessageEmbed()
-      .setTitle(`${playlist.title}`)
-      .setDescription(songs.map((song, index) => `${index + 1}. ${song.title}`))
-      .setURL(playlist.url)
-      .setColor("#F8AA2A")
+    
 
-    if (playlistEmbed.description.length >= 2048)
-      playlistEmbed.description =
-        playlistEmbed.description.substr(0, 2007) + "\nПлейлист был превышен...";
+    
 
-    message.channel.send(`${message.author} Заказал плейлист`, playlistEmbed);
+    message.channel.send(`${message.author} Заказал плейлист`);
+    
 
     if (!serverQueue) {
       message.client.queue.set(message.guild.id, queueConstruct);
-
+    
       try {
         queueConstruct.connection = await channel.join();
         await queueConstruct.connection.voice.setSelfDeaf(true);
-        play(queueConstruct.songs[0], message);
+        play(queueConstruct.songs[0], message, args);
       } catch (error) {
         console.error(error);
         message.client.queue.delete(message.guild.id);
@@ -145,6 +141,7 @@ module.exports.run = async (bot,message,args)=>{
         return message.channel.send(embed2).catch(console.error);
       }
     }
+    queue(bot,message,args);
   };
   module.exports.config = {
     name: "playlist",

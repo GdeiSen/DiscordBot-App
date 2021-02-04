@@ -2,9 +2,6 @@ const { play } = require("../include/play");
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
-const scdl = require("soundcloud-downloader").default;
-const https = require("https");
-const youthumb = require('youtube-thumbnails');
 const { YOUTUBE_API_KEY,  DEFAULT_VOLUME } = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
@@ -15,32 +12,31 @@ module.exports.run = async (bot,message, args) => {
 
     var embed1 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Для начала нужно быть в голосовом канале!')
+    .setDescription('**Для начала нужно быть в голосовом канале!**')
     .setColor('RED')
 
     var embed2 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Вы должны быть в одинаковым канале с ботом!')
+    .setDescription('**Вы должны быть в одинаковым канале с ботом!**')
     .setColor('RED')
 
     let embed3 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Кажется у меня недостаточно прав для присоединения к вашему каналу!')
+    .setDescription('**Кажется у меня недостаточно прав для присоединения к вашему каналу!**')
     .setColor('RED')
 
     let embed4 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Кажется у меня недостаточно прав для проигрывания музыки!')
+    .setDescription('**Кажется у меня недостаточно прав для проигрывания музыки!**')
     .setColor('RED')
 
     let embed5 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('К сожалению ничего не нашлось!')
+    .setDescription('**К сожалению ничего не нашлось!**')
     .setColor('RED')
 
     let embed6 = new Discord.MessageEmbed()
     .setTitle('ошибка')
-    .setDescription('Кажется что-то пошло не так!')
+    .setDescription('**Кажется что-то пошло не так!**')
     .setColor('RED')
 
     let embed7 = new Discord.MessageEmbed()
@@ -96,11 +92,11 @@ module.exports.run = async (bot,message, args) => {
           title: songInfo.videoDetails.title,
           url: songInfo.videoDetails.video_url,
           duration: songInfo.videoDetails.lengthSeconds,
-          thumbnails: songInfo.videoDetails.thumbnails[4].url
+          thumbnails: songInfo.videoDetails.thumbnails[3].url,
         };
       } catch (error) {
         console.error(error);
-        return message.reply(error.message).catch(console.error);
+        return message.reply(embed6).catch(console.error);
       }
     } else {
       try {
@@ -110,11 +106,11 @@ module.exports.run = async (bot,message, args) => {
           title: songInfo.videoDetails.title,
           url: songInfo.videoDetails.video_url,
           duration: songInfo.videoDetails.lengthSeconds,
-          thumbnails: songInfo.videoDetails.thumbnails[4].url
+          thumbnails: songInfo.videoDetails.thumbnails[4].url,
         };
       } catch (error) {
         console.error(error);
-        return message.reply(error.message).catch(console.error);
+        return message.reply(embed5).catch(console.error);
       }
     }
     console.log(song.thumbnails);
@@ -131,7 +127,7 @@ module.exports.run = async (bot,message, args) => {
     try {
       queueConstruct.connection = await channel.join();
       await queueConstruct.connection.voice.setSelfDeaf(true);
-      play(queueConstruct.songs[0], message);
+      play(queueConstruct.songs[0], message, args);
     } catch (error) {
       console.error(error);
       message.client.queue.delete(message.guild.id);

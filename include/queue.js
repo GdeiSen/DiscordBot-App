@@ -1,7 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 
 
-module.exports.run = async(bot,message,args)=> {
+module.exports = {
+    async queue(bot,message,args){
     var embed1 = new MessageEmbed()
     .setTitle('ошибка')
     .setDescription('**Ничего не воспроизводится**')
@@ -63,7 +64,7 @@ module.exports.run = async(bot,message,args)=> {
       }
     });
   }
-;
+};
 
 function generateQueueEmbed(message, queue) {
   let embeds = [];
@@ -77,7 +78,7 @@ function generateQueueEmbed(message, queue) {
     const info = current.map((track) => `${++j} - [${track.title}](${track.url})`).join("\n");
 
     const embed = new MessageEmbed()
-      .setTitle("Очередь\n")
+      .setTitle("Плейлист\n")
       .setThumbnail(message.guild.iconURL())
       .setColor('GREEN')
       .setDescription(`**сейчас играет - [${queue[0].title}](${queue[0].url})**\n\n${info}\nиспользуйте кнопки для перемещения по страницам`)
@@ -86,12 +87,4 @@ function generateQueueEmbed(message, queue) {
   }
 
   return embeds;
-}
-
-module.exports.config = {
-  name: "queue",
-  usage: "~queue",
-  description: "Выводит состояние цекущей очереди",
-  accessableby: "Members",
-  aliases: ['q']
 }

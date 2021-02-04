@@ -1,10 +1,9 @@
 const ytdl = require("erit-ytdl");
-const { play } = require("../include/play");
+const ytdl_style = require("ytdl-core");
 const Discord = require("discord.js");
 const { canModifyQueue, STAY_TIME } = require("../util/EvobotUtil");
-var youtubeThumbnail = require('youtube-thumbnail');
 module.exports = {
-  async play(song, message) {
+  async play(song, message, args) {
 
 
     let config;
@@ -72,16 +71,24 @@ module.exports = {
         module.exports.play(queue.songs[0], message);
       });
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
-    const seek = (queue.connection.dispatcher.streamTime - queue.connection.dispatcher.pausedTime) / 1000;
-    const left = song.duration - seek;
+    const url = args;
+    songInfo = await ytdl_style.getInfo(song.url);
+    song = {
+      title: songInfo.videoDetails.title,
+      url: songInfo.videoDetails.video_url,
+      duration: songInfo.videoDetails.lengthSeconds,
+      thumbnails: songInfo.videoDetails.thumbnails[3].url,
       
+    };
+    
     const addedEmbed = new Discord.MessageEmbed()
     .setColor('GREEN')
     .setTitle(`:musical_note: Сейчас играет :musical_note:\n ${song.title} `)
-    .addField('продолжительность:', new Date(left * 1000).toISOString().substr(11, 8))
+    .addField(`Продолжительность: `,new Date(song.duration * 1000).toISOString().substr(11, 8))
+
     .setThumbnail(song.thumbnails)
     .setURL(song.url);
-    //youtubeThumbnail(song.url).default.url
+  
     
 
     try {

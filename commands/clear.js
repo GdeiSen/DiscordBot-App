@@ -42,21 +42,20 @@ module.exports.run = async (bot, message, args) =>{
         message.channel.bulkDelete(messages)
         if (num === 2){
         let embed = new Discord.MessageEmbed()
-            .setTitle(`Удаление`)
+            
             .setDescription(`**Удалено ${num - 1} сообщение**`)
             .setColor('GREEN')
         message.channel.send(embed)
         .then (message => message.delete({ timeout : 2000 }))}
         else if (num === 3 || num === 4 || num === 5){
             let embed = new Discord.MessageEmbed()
-            .setTitle(`Удаление`)
+            
             .setDescription(`**Удалено ${num - 1} сообщения**`)
             .setColor('GREEN')
             message.channel.send(embed)
             .then (message => message.delete({ timeout : 2000 }))}
         else if (num > 2){
         let embed = new Discord.MessageEmbed()
-            .setTitle(`Удаление`)
             .setDescription(`**Удалено ${num - 1} сообщений**`)
             .setColor('GREEN')
         message.channel.send(embed)
