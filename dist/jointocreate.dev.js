@@ -123,8 +123,9 @@ module.exports = function (client) {
             _context2.next = 3;
             return regeneratorRuntime.awrap(user.guild.channels.create("\u043A\u043E\u043C\u043D\u0430\u0442\u0430 ".concat(user.member.user.username), {
               type: 'voice',
-              parent: '815581800369356811' //user.channel.parent.id, //or set it as a category id
-
+              parent: '815581800369356811',
+              //user.channel.parent.id, //or set it as a category id
+              userLimit: '2'
             }).then(function _callee(vc) {
               return regeneratorRuntime.async(function _callee$(_context) {
                 while (1) {

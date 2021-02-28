@@ -111,7 +111,9 @@ module.exports = function (client) {
       //user.member.user.send("This can be used to message the member that a new room was created")
       await user.guild.channels.create(`комната ${user.member.user.username}`, {
         type: 'voice',
-        parent: '815581800369356811'//user.channel.parent.id, //or set it as a category id
+        parent: '815581800369356811',//user.channel.parent.id, //or set it as a category id
+        userLimit: '2'
+        
       }).then(async vc => {
         //move user to the new channel
         user.setChannel(vc);
