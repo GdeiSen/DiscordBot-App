@@ -8,15 +8,13 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-var _require = require("discord.js"),
-    MessageEmbed = _require.MessageEmbed;
+var _require = require("../include/queue"),
+    queue = _require.queue;
 
 var _require2 = require("../include/play"),
     play = _require2.play;
 
-var YouTubeAPI = require("simple-youtube-api");
-
-var scdl = require("soundcloud-downloader")["default"];
+var YouTubeAPI = require("youtube-api");
 
 var Discord = require("discord.js");
 
@@ -31,17 +29,17 @@ var youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 module.exports.run = function _callee(bot, message, args) {
   var _serverQueue$songs, _queueConstruct$songs;
 
-  var embed1, embed2, embed3, embed4, embed5, embed6, embed7, channel, serverQueue, permissions, search, pattern, url, urlValid, queueConstruct, playlist, videos, results, newSongs, songs, playlistEmbed;
+  var embed1, embed2, embed3, embed4, embed5, embed6, embed7, channel, serverQueue, permissions, search, pattern, url, urlValid, queueConstruct, playlist, videos, results, newSongs, songs;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Для начала нужно быть в голосовом канале!').setColor('RED');
-          embed2 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Вы должны быть в одинаковым канале с ботом!').setColor('RED');
-          embed3 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется у меня недостаточно прав для присоединения к вашему каналу!').setColor('RED');
-          embed4 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется у меня недостаточно прав для проигрывания музыки!').setColor('RED');
-          embed5 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('К сожалению ничего не нашлось!').setColor('RED');
-          embed6 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется что-то пошло не так!').setColor('RED');
+          embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Для начала нужно быть в голосовом канале!**').setColor('RED');
+          embed2 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Вы должны быть в одинаковым канале с ботом!**').setColor('RED');
+          embed3 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется у меня недостаточно прав для присоединения к вашему каналу!**').setColor('RED');
+          embed4 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется у меня недостаточно прав для проигрывания музыки!**').setColor('RED');
+          embed5 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**К сожалению ничего не нашлось!**').setColor('RED');
+          embed6 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется что-то пошло не так!**').setColor('RED');
           embed7 = new Discord.MessageEmbed().setTitle('использование').setDescription("~ play <YouTube URL | Video Name | Soundcloud URL>").setColor('ORANGE');
           channel = message.member.voice.channel;
           serverQueue = message.client.queue.get(message.guild.id);
@@ -157,6 +155,8 @@ module.exports.run = function _callee(bot, message, args) {
           videos = playlist.tracks.map(function (track) {
             return {
               title: track.title,
+              thumbnails: track.thumbnails[3].url,
+              //songInfo.videoDetails.thumbnails[3].url
               url: track.permalink_url,
               duration: track.duration / 1000
             };
@@ -202,49 +202,48 @@ module.exports.run = function _callee(bot, message, args) {
           });
           serverQueue ? (_serverQueue$songs = serverQueue.songs).push.apply(_serverQueue$songs, _toConsumableArray(newSongs)) : (_queueConstruct$songs = queueConstruct.songs).push.apply(_queueConstruct$songs, _toConsumableArray(newSongs));
           songs = serverQueue ? serverQueue.songs : queueConstruct.songs;
-          playlistEmbed = new MessageEmbed().setTitle("".concat(playlist.title)).setDescription(songs.map(function (song, index) {
-            return "".concat(index + 1, ". ").concat(song.title);
-          })).setURL(playlist.url).setColor("#F8AA2A");
-          if (playlistEmbed.description.length >= 2048) playlistEmbed.description = playlistEmbed.description.substr(0, 2007) + "\nПлейлист был превышен...";
-          message.channel.send("".concat(message.author, " \u0417\u0430\u043A\u0430\u0437\u0430\u043B \u043F\u043B\u0435\u0439\u043B\u0438\u0441\u0442"), playlistEmbed);
+          message.channel.send("".concat(message.author, " \u0417\u0430\u043A\u0430\u0437\u0430\u043B \u043F\u043B\u0435\u0439\u043B\u0438\u0441\u0442"));
 
           if (serverQueue) {
-            _context.next = 90;
+            _context.next = 88;
             break;
           }
 
           message.client.queue.set(message.guild.id, queueConstruct);
-          _context.prev = 74;
-          _context.next = 77;
+          _context.prev = 72;
+          _context.next = 75;
           return regeneratorRuntime.awrap(channel.join());
 
-        case 77:
+        case 75:
           queueConstruct.connection = _context.sent;
-          _context.next = 80;
+          _context.next = 78;
           return regeneratorRuntime.awrap(queueConstruct.connection.voice.setSelfDeaf(true));
 
-        case 80:
-          play(queueConstruct.songs[0], message);
-          _context.next = 90;
+        case 78:
+          play(queueConstruct.songs[0], message, args);
+          _context.next = 88;
           break;
 
-        case 83:
-          _context.prev = 83;
-          _context.t2 = _context["catch"](74);
+        case 81:
+          _context.prev = 81;
+          _context.t2 = _context["catch"](72);
           console.error(_context.t2);
           message.client.queue["delete"](message.guild.id);
-          _context.next = 89;
+          _context.next = 87;
           return regeneratorRuntime.awrap(channel.leave());
 
-        case 89:
+        case 87:
           return _context.abrupt("return", message.channel.send(embed2)["catch"](console.error));
 
-        case 90:
+        case 88:
+          queue(bot, message, args);
+
+        case 89:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[28, 37], [52, 62], [74, 83]]);
+  }, null, null, [[28, 37], [52, 62], [72, 81]]);
 };
 
 module.exports.config = {

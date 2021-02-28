@@ -174,8 +174,8 @@ module.exports = {
         case "🔊":
           reaction.users.remove(user).catch(console.error);
           if (!canModifyQueue(member) || queue.volume == 100) return;
-          if (queue.volume + 10 >= 100) queue.volume = 100;
-          else queue.volume = queue.volume + 10;
+          if (Number(queue.volume) + 10 >= 100) queue.volume = 100;
+          else queue.volume = Number(queue.volume) + 10;
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
           queue.textChannel
             .send(`${user} 🔊 увеличил громкость к ${queue.volume}%`)

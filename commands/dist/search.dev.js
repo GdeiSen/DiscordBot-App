@@ -5,7 +5,7 @@ var _require = require("discord.js"),
 
 var Discord = require("discord.js");
 
-var YouTubeAPI = require("simple-youtube-api");
+var YouTubeAPI = require("youtube-api");
 
 var _require2 = require("../util/EvobotUtil"),
     YOUTUBE_API_KEY = _require2.YOUTUBE_API_KEY;

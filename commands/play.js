@@ -64,7 +64,7 @@ module.exports.run = async (bot,message, args) => {
       const search = args;
       const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
       const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
-      const url = args[0];
+      const url = args;
       const urlValid = videoPattern.test(args);
 
     // Start the playlist if playlist url was provided
@@ -109,7 +109,7 @@ module.exports.run = async (bot,message, args) => {
           thumbnails: songInfo.videoDetails.thumbnails[4].url,
         };
       } catch (error) {
-        console.error(error);
+        
         return message.reply(embed5).catch(console.error);
       }
     }

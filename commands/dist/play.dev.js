@@ -7,11 +7,7 @@ var Discord = require("discord.js");
 
 var ytdl = require("ytdl-core");
 
-var YouTubeAPI = require("simple-youtube-api");
-
-var scdl = require("soundcloud-downloader")["default"];
-
-var https = require("https");
+var YouTubeAPI = require("youtube-api");
 
 var _require2 = require("../util/EvobotUtil"),
     YOUTUBE_API_KEY = _require2.YOUTUBE_API_KEY,
@@ -26,12 +22,12 @@ module.exports.run = function _callee(bot, message, args) {
       switch (_context.prev = _context.next) {
         case 0:
           channel = message.member.voice.channel;
-          embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Для начала нужно быть в голосовом канале!').setColor('RED');
-          embed2 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Вы должны быть в одинаковым канале с ботом!').setColor('RED');
-          embed3 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется у меня недостаточно прав для присоединения к вашему каналу!').setColor('RED');
-          embed4 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется у меня недостаточно прав для проигрывания музыки!').setColor('RED');
-          embed5 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('К сожалению ничего не нашлось!').setColor('RED');
-          embed6 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('Кажется что-то пошло не так!').setColor('RED');
+          embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Для начала нужно быть в голосовом канале!**').setColor('RED');
+          embed2 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Вы должны быть в одинаковым канале с ботом!**').setColor('RED');
+          embed3 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется у меня недостаточно прав для присоединения к вашему каналу!**').setColor('RED');
+          embed4 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется у меня недостаточно прав для проигрывания музыки!**').setColor('RED');
+          embed5 = new Discord.MessageEmbed().setDescription('**К сожалению ничего не нашлось!**').setColor('RED');
+          embed6 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется что-то пошло не так!**').setColor('RED');
           embed7 = new Discord.MessageEmbed().setTitle('использование').setDescription("".concat(message.client.prefix, " play <YouTube URL | Video Name>")).setColor('ORANGE');
           serverQueue = message.client.queue.get(message.guild.id);
           message["delete"]();
@@ -81,7 +77,7 @@ module.exports.run = function _callee(bot, message, args) {
           search = args;
           videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
           playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
-          url = args[0];
+          url = args;
           urlValid = videoPattern.test(args); // Start the playlist if playlist url was provided
 
           if (!(!videoPattern.test(args) && playlistPattern.test(args))) {
@@ -118,7 +114,8 @@ module.exports.run = function _callee(bot, message, args) {
           song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
-            duration: songInfo.videoDetails.lengthSeconds
+            duration: songInfo.videoDetails.lengthSeconds,
+            thumbnails: songInfo.videoDetails.thumbnails[3].url
           };
           _context.next = 43;
           break;
@@ -127,10 +124,10 @@ module.exports.run = function _callee(bot, message, args) {
           _context.prev = 39;
           _context.t0 = _context["catch"](32);
           console.error(_context.t0);
-          return _context.abrupt("return", message.reply(_context.t0.message)["catch"](console.error));
+          return _context.abrupt("return", message.reply(embed6)["catch"](console.error));
 
         case 43:
-          _context.next = 59;
+          _context.next = 58;
           break;
 
         case 45:
@@ -148,18 +145,20 @@ module.exports.run = function _callee(bot, message, args) {
           song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
-            duration: songInfo.videoDetails.lengthSeconds
+            duration: songInfo.videoDetails.lengthSeconds,
+            thumbnails: songInfo.videoDetails.thumbnails[4].url
           };
-          _context.next = 59;
+          _context.next = 58;
           break;
 
         case 55:
           _context.prev = 55;
           _context.t1 = _context["catch"](45);
-          console.error(_context.t1);
-          return _context.abrupt("return", message.reply(_context.t1.message)["catch"](console.error));
+          return _context.abrupt("return", message.reply(embed5)["catch"](console.error));
 
-        case 59:
+        case 58:
+          console.log(song.thumbnails);
+
           if (!serverQueue) {
             _context.next = 62;
             break;
@@ -181,7 +180,7 @@ module.exports.run = function _callee(bot, message, args) {
           return regeneratorRuntime.awrap(queueConstruct.connection.voice.setSelfDeaf(true));
 
         case 70:
-          play(queueConstruct.songs[0], message);
+          play(queueConstruct.songs[0], message, args);
           _context.next = 80;
           break;
 

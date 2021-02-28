@@ -24,6 +24,8 @@ const cooldowns = new Collection();
 client.on("ready", () => {
   console.log(`${client.user.username} ready!`);
   client.user.setActivity(`~help и ~play`, { type: "LISTENING" });
+  const jointocreate = require("./jointocreate");
+  jointocreate(client);
 });
 client.on("warn", (info) => console.log(info));
 client.on("error", console.error);

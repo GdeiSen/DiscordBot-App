@@ -1,7 +1,6 @@
 const { queue } = require("../include/queue");
 const { play } = require("../include/play");
 const YouTubeAPI = require("simple-youtube-api");
-const scdl = require("soundcloud-downloader").default;
 const Discord = require("discord.js");
 const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID, MAX_PLAYLIST_SIZE, DEFAULT_VOLUME} = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
@@ -86,17 +85,6 @@ module.exports.run = async (bot,message,args)=>{
       } catch (error) {
         console.error(error);
         return message.reply(embed5).catch(console.error);
-      }
-    } else if (scdl.isValidUrl(args[0])) {
-      if (args[0].includes("/sets/")) {
-        message.channel.send("⌛ поиск плейлиста");
-        playlist = await scdl.getSetInfo(args[0], SOUNDCLOUD_CLIENT_ID);
-        videos = playlist.tracks.map((track) => ({
-          title: track.title,
-          thumbnails: track.thumbnails[3].url,//songInfo.videoDetails.thumbnails[3].url
-          url: track.permalink_url,
-          duration: track.duration / 1000
-        }));
       }
     } else {
       try {

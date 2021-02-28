@@ -28,8 +28,8 @@ module.exports.run = (bot, message, args) => {
       return message.reply(embed2).catch(console.error);
 
     if (!args) return message.reply(`🔊 Громкость: **${queue.volume}%**`).catch(console.error);
-    if (isNaN(args)) return message.reply(embed3).catch(console.error);
-    if (Number(args) > 100 || Number(args[0]) < 0 )
+    if (isNaN(args)) return message.reply(`🔊 Громкость: **${queue.volume}%**`).catch(console.error);
+    if (Number(args) > 100 || Number(args) < 0 )
       return message.reply(embed4).catch(console.error);
 
     queue.volume = args;
