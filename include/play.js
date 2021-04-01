@@ -129,15 +129,15 @@ module.exports = {
           reaction.users.remove(user).catch(console.error);
           if (!canModifyQueue(member)) return;
           if (queue.playing) {
-            queue.playing = !queue.playing;
-            queue.connection.dispatcher.pause();
+            queue.playing = false;
+            queue.connection.dispatcher.pause(true);
             queue.textChannel.send(`${user} ⏸ поставил на паузу`)
             //.then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
             break;
           } else {
-            queue.playing = !queue.playing;
-            queue.connection.dispatcher.resume();
+            queue.playing = true;
+            queue.connection.dispatcher.resume(true);
             queue.textChannel.send(`${user} ▶ продолжил возпроизведение`)
             //.then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
