@@ -199,6 +199,7 @@ module.exports = {
                         timeout: 1500
                       });
                     })["catch"](console.error);
+                    break;
                   }
 
                   break;

@@ -140,6 +140,7 @@ module.exports = {
             queue.textChannel.send(`${user} ▶ продолжил возпроизведение`)
             .then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
+            break;
           }
           break;
 
