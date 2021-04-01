@@ -7,22 +7,13 @@ var _require = require("discord.js"),
     Client = _require.Client,
     Collection = _require.Collection;
 
-var _require2 = require("fs"),
-    readdirSync = _require2.readdirSync;
-
-var _require3 = require("path"),
-    join = _require3.join;
-
-var _require4 = require("./util/EvobotUtil"),
-    TOKEN = _require4.TOKEN,
-    PREFIX = _require4.PREFIX;
+var _require2 = require("./util/EvobotUtil"),
+    TOKEN = _require2.TOKEN,
+    PREFIX = _require2.PREFIX;
 
 var Discord = require("discord.js");
 
 var fs = require("fs");
-
-var _require5 = require("console"),
-    groupCollapsed = _require5.groupCollapsed;
 
 var client = new Client({
   disableMentions: "everyone"
@@ -33,7 +24,6 @@ client.login('NzgwMDA1NDU3OTkzNTMxMzky.X7oysA.Q6aDTTXWaKuGkLYjm1bXe58OjdU');
 client.commands = new Collection();
 client.prefix = PREFIX;
 client.queue = new Map();
-var cooldowns = new Collection();
 /**
  * Client Events
  */
@@ -43,6 +33,10 @@ client.on("ready", function () {
   client.user.setActivity("~help \u0438 ~play", {
     type: "LISTENING"
   });
+
+  var jointocreate = require("./jointocreate");
+
+  jointocreate(client);
 });
 client.on("warn", function (info) {
   return console.log(info);

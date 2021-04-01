@@ -4,12 +4,10 @@ const lyricsFinder = require("lyrics-finder");
 module.exports.run = async (bot, message, args) => {
     const queue = message.client.queue.get(message.guild.id);
     
-    if (!queue) return message.channel.send('ничего не играет').catch(console.error);
-
     let lyrics = null;
     const title = queue.songs[0].title;
     console.log(args);
-    if (args != '~lyr' && args) {lyrics = await lyricsFinder(args);
+    if (args != '~lyr','~lyrics' && args) {lyrics = await lyricsFinder(args);
         if (!lyrics) lyrics = ("Текст не был найден!");
     }
     else{

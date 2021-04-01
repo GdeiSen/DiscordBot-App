@@ -1,4 +1,4 @@
-const ytdl = require("erit-ytdl");
+const ytdl = require("ytdl-core-discord");
 const ytdl_style = require("ytdl-core");
 const Discord = require("discord.js");
 const { canModifyQueue, STAY_TIME } = require("../util/EvobotUtil");

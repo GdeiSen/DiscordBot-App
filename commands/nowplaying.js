@@ -2,7 +2,7 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports.run = (bot,message,args)=>{
-    /*const queue = message.client.queue.get(message.guild.id);
+    const queue = message.client.queue.get(message.guild.id);
 
     var embed1 = new MessageEmbed()
     .setTitle('ошибка')
@@ -34,7 +34,7 @@ module.exports.run = (bot,message,args)=>{
       nowPlaying.setFooter("Time Remaining: " + new Date(left * 1000).toISOString().substr(11, 8));
     }
 
-    return message.channel.send(nowPlaying);*/
+    return message.channel.send(nowPlaying);
   };
   module.exports.config = {
     name: "nowplaying",

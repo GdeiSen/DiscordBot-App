@@ -1,19 +1,18 @@
 "use strict";
 
-var ytdl = require("erit-ytdl");
+var ytdl = require("ytdl-core-discord");
 
-var _require = require("../include/play"),
-    play = _require.play;
+var ytdl_style = require("ytdl-core");
 
 var Discord = require("discord.js");
 
-var _require2 = require("../util/EvobotUtil"),
-    canModifyQueue = _require2.canModifyQueue,
-    STAY_TIME = _require2.STAY_TIME;
+var _require = require("../util/EvobotUtil"),
+    canModifyQueue = _require.canModifyQueue,
+    STAY_TIME = _require.STAY_TIME;
 
 module.exports = {
-  play: function play(song, message) {
-    var config, PRUNING, queue, stream, streamType, dispatcher, embed, addedEmbed, playingMessage, filter, collector;
+  play: function play(song, message, args) {
+    var config, PRUNING, queue, stream, streamType, dispatcher, url, addedEmbed, playingMessage, filter, collector;
     return regeneratorRuntime.async(function play$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -36,7 +35,7 @@ module.exports = {
               if (queue.connection.dispatcher && message.guild.me.voice.channel) return;
               queue.channel.leave();
             }, STAY_TIME * 1000);
-            queue.textChannel.send("Кажется музыка закончилась!")["catch"](console.error);
+            queue.textChannel.send("❌ Очередь закончилась")["catch"](console.error);
             return _context.abrupt("return", message.client.queue["delete"](message.guild.id));
 
           case 7:
@@ -99,62 +98,62 @@ module.exports = {
               module.exports.play(queue.songs[0], message);
             });
             dispatcher.setVolumeLogarithmic(queue.volume / 100);
-            embed = {
-              color: 3447003,
-              author: {
-                name: song.username,
-                icon_url: song.avatar // eslint-disable-line camelcase
+            url = args;
+            _context.next = 27;
+            return regeneratorRuntime.awrap(ytdl_style.getInfo(song.url));
 
-              },
-              image: {
-                url: song.thumbnail
-              }
+          case 27:
+            songInfo = _context.sent;
+            song = {
+              title: songInfo.videoDetails.title,
+              url: songInfo.videoDetails.video_url,
+              duration: songInfo.videoDetails.lengthSeconds,
+              thumbnails: songInfo.videoDetails.thumbnails[3].url
             };
-            message.channel.send(embed);
-            addedEmbed = new Discord.MessageEmbed().setColor('GREEN').setTitle(":musical_note: ".concat(song.title)).addField("\u0411\u044B\u043B\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u044C ", "\u042D\u0442\u043E\u0442 \u0442\u0440\u0435\u043A #".concat(queue.songs.length, " \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438")).setImage(song.thumbnail).setURL(song.url);
-            _context.prev = 27;
-            _context.next = 30;
+            addedEmbed = new Discord.MessageEmbed().setColor('GREEN').setTitle(":musical_note: \u0421\u0435\u0439\u0447\u0430\u0441 \u0438\u0433\u0440\u0430\u0435\u0442 :musical_note:\n ".concat(song.title, " ")).addField("\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C: ", new Date(song.duration * 1000).toISOString().substr(11, 8)).setThumbnail(song.thumbnails).setURL(song.url);
+            _context.prev = 30;
+            _context.next = 33;
             return regeneratorRuntime.awrap(queue.textChannel.send(addedEmbed));
 
-          case 30:
+          case 33:
             playingMessage = _context.sent;
-            _context.next = 33;
+            _context.next = 36;
             return regeneratorRuntime.awrap(playingMessage.react("⏭"));
 
-          case 33:
-            _context.next = 35;
+          case 36:
+            _context.next = 38;
             return regeneratorRuntime.awrap(playingMessage.react("⏯"));
 
-          case 35:
-            _context.next = 37;
+          case 38:
+            _context.next = 40;
             return regeneratorRuntime.awrap(playingMessage.react("🔇"));
 
-          case 37:
-            _context.next = 39;
+          case 40:
+            _context.next = 42;
             return regeneratorRuntime.awrap(playingMessage.react("🔉"));
 
-          case 39:
-            _context.next = 41;
+          case 42:
+            _context.next = 44;
             return regeneratorRuntime.awrap(playingMessage.react("🔊"));
 
-          case 41:
-            _context.next = 43;
+          case 44:
+            _context.next = 46;
             return regeneratorRuntime.awrap(playingMessage.react("🔁"));
 
-          case 43:
-            _context.next = 45;
+          case 46:
+            _context.next = 48;
             return regeneratorRuntime.awrap(playingMessage.react("⏹"));
 
-          case 45:
-            _context.next = 50;
+          case 48:
+            _context.next = 53;
             break;
 
-          case 47:
-            _context.prev = 47;
-            _context.t1 = _context["catch"](27);
+          case 50:
+            _context.prev = 50;
+            _context.t1 = _context["catch"](30);
             console.error(_context.t1);
 
-          case 50:
+          case 53:
             filter = function filter(reaction, user) {
               return user.id !== message.client.user.id;
             };
@@ -186,7 +185,7 @@ module.exports = {
 
                   if (queue.playing) {
                     queue.playing = !queue.playing;
-                    queue.connection.dispatcher.pause();
+                    queue.connection.dispatcher.pause(true);
                     queue.textChannel.send("".concat(user, " \u23F8 \u043F\u043E\u0441\u0442\u0430\u0432\u0438\u043B \u043D\u0430 \u043F\u0430\u0443\u0437\u0443")).then(function (queue) {
                       return queue["delete"]({
                         timeout: 1500
@@ -244,7 +243,7 @@ module.exports = {
                 case "🔊":
                   reaction.users.remove(user)["catch"](console.error);
                   if (!canModifyQueue(member) || queue.volume == 100) return;
-                  if (queue.volume + 10 >= 100) queue.volume = 100;else queue.volume = queue.volume + 10;
+                  if (Number(queue.volume) + 10 >= 100) queue.volume = 100;else queue.volume = Number(queue.volume) + 10;
                   queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
                   queue.textChannel.send("".concat(user, " \uD83D\uDD0A \u0443\u0432\u0435\u043B\u0438\u0447\u0438\u043B \u0433\u0440\u043E\u043C\u043A\u043E\u0441\u0442\u044C \u043A ").concat(queue.volume, "%")).then(function (queue) {
                     return queue["delete"]({
@@ -299,11 +298,11 @@ module.exports = {
               }
             });
 
-          case 54:
+          case 57:
           case "end":
             return _context.stop();
         }
       }
-    }, null, null, [[9, 16], [27, 47]]);
+    }, null, null, [[9, 16], [30, 50]]);
   }
 };

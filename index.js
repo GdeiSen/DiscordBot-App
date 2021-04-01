@@ -2,21 +2,16 @@
  * Module Imports
  */
 const { Client, Collection } = require("discord.js");
-const { readdirSync } = require("fs");
-const { join } = require("path");
 const {TOKEN,PREFIX } = require("./util/EvobotUtil");
 const Discord = require("discord.js");
 const fs = require("fs");
-const { groupCollapsed } = require("console");
 const client = new Client({ disableMentions: "everyone" });
 client.commands = new Collection();
 client.aliases = new Collection();
 client.login('NzgwMDA1NDU3OTkzNTMxMzky.X7oysA.Q6aDTTXWaKuGkLYjm1bXe58OjdU');
 client.commands = new Collection();
 client.prefix = PREFIX;
-
 client.queue = new Map();
-const cooldowns = new Collection();
 
 /**
  * Client Events
