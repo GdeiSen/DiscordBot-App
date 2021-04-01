@@ -186,24 +186,16 @@ module.exports = {
                   if (queue.playing) {
                     queue.playing = !queue.playing;
                     queue.connection.dispatcher.pause();
-                    queue.textChannel.send("".concat(user, " \u23F8 \u043F\u043E\u0441\u0442\u0430\u0432\u0438\u043B \u043D\u0430 \u043F\u0430\u0443\u0437\u0443")).then(function (queue) {
-                      return queue["delete"]({
-                        timeout: 1500
-                      });
-                    })["catch"](console.error);
+                    queue.textChannel.send("".concat(user, " \u23F8 \u043F\u043E\u0441\u0442\u0430\u0432\u0438\u043B \u043D\u0430 \u043F\u0430\u0443\u0437\u0443")) //.then (queue => queue.delete({ timeout : 1500 }))
+                    ["catch"](console.error);
                     break;
                   } else {
                     queue.playing = !queue.playing;
                     queue.connection.dispatcher.resume();
-                    queue.textChannel.send("".concat(user, " \u25B6 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043B \u0432\u043E\u0437\u043F\u0440\u043E\u0438\u0437\u0432\u0435\u0434\u0435\u043D\u0438\u0435")).then(function (queue) {
-                      return queue["delete"]({
-                        timeout: 1500
-                      });
-                    })["catch"](console.error);
+                    queue.textChannel.send("".concat(user, " \u25B6 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043B \u0432\u043E\u0437\u043F\u0440\u043E\u0438\u0437\u0432\u0435\u0434\u0435\u043D\u0438\u0435")) //.then (queue => queue.delete({ timeout : 1500 }))
+                    ["catch"](console.error);
                     break;
                   }
-
-                  break;
 
                 case "🔇":
                   reaction.users.remove(user)["catch"](console.error);

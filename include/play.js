@@ -132,18 +132,18 @@ module.exports = {
             queue.playing = !queue.playing;
             queue.connection.dispatcher.pause();
             queue.textChannel.send(`${user} ⏸ поставил на паузу`)
-            .then (queue => queue.delete({ timeout : 1500 }))
+            //.then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
             break;
           } else {
             queue.playing = !queue.playing;
             queue.connection.dispatcher.resume();
             queue.textChannel.send(`${user} ▶ продолжил возпроизведение`)
-            .then (queue => queue.delete({ timeout : 1500 }))
+            //.then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
             break;
           }
-          break;
+          
 
         case "🔇":
           reaction.users.remove(user).catch(console.error);
