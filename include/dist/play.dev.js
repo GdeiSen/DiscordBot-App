@@ -193,7 +193,7 @@ module.exports = {
                     })["catch"](console.error);
                   } else {
                     queue.playing = !queue.playing;
-                    queue.connection.dispatcher.resume();
+                    queue.connection.dispatcher.resume(true);
                     queue.textChannel.send("".concat(user, " \u25B6 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043B \u0432\u043E\u0437\u043F\u0440\u043E\u0438\u0437\u0432\u0435\u0434\u0435\u043D\u0438\u0435")).then(function (queue) {
                       return queue["delete"]({
                         timeout: 1500

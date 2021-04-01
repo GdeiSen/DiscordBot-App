@@ -136,7 +136,7 @@ module.exports = {
             .catch(console.error);
           } else {
             queue.playing = !queue.playing;
-            queue.connection.dispatcher.resume();
+            queue.connection.dispatcher.resume(true);
             queue.textChannel.send(`${user} ▶ продолжил возпроизведение`)
             .then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
