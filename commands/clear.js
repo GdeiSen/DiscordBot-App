@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) =>{
 
     let embed3 = new Discord.MessageEmbed()
             .setTitle(`Ошибка`)
-            .setDescription(`**Введите число меньше 100**`)
+            .setDescription(`**Введите число меньше 25**`)
             .setColor('RED')
 
     let embed4 = new Discord.MessageEmbed()
@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args) =>{
     .then (message => message.delete({ timeout : 5000 }));
     if (isNaN(amount)) return message.channel.send(embed2)
     .then (message => message.delete({ timeout : 5000 }));
-    if (amount > 100) return message.channel.send(embed3)
+    if (amount > 26) return message.channel.send(embed3)
     .then (message => message.delete({ timeout : 5000 })); 
     if (amount < 1) return message.channel.send(embed4)
     .then (message => message.delete({ timeout : 5000 })); 

@@ -2,11 +2,11 @@ const Discord = require("discord.js")
 
 module.exports.run = async (client, message, args) => {
     let embed = new Discord.MessageEmbed()
-    .setTitle('testing_reactions')
-    .setDescription('testing_completed')
-    .setColor('GREEN')
+    .setTitle('Присоединение к NoGamingWeeks отряду')
+    .setDescription('Нажмите на ok чтобы вступить и еще раз, чтобы сдаться\nИ не забывайте об осознанном выборе и решении')
+    .setColor('RED')
     let msgEmbed = await message.channel.send(embed)
-    msgEmbed.react('🧄')
+    msgEmbed.react('🆗')
 
 
 client.on("messageReactionAdd",async (reaction, user)=>{
@@ -14,9 +14,9 @@ client.on("messageReactionAdd",async (reaction, user)=>{
     if(reaction.partial) await reaction.fetch();
     if(user.bot) return;
     if(!reaction.message.guild) return;
-    if(reaction.message.channel.id === "780818320512253952") {
-        if (reaction.emoji.name === '🧄'){
-            await reaction.message.guild.members.cache.get(user.id).roles.add("781954585341460522")
+    if(reaction.message.channel.id === "780086468944199709") {
+        if (reaction.emoji.name === '🆗'){
+            await reaction.message.guild.members.cache.get(user.id).roles.add("827289516095701033")
         }
     }
 })
@@ -25,9 +25,9 @@ client.on("messageReactionRemove",async (reaction, user)=>{
     if(reaction.partial) await reaction.fetch();
     if(user.bot) return;
     if(!reaction.message.guild) return;
-    if(reaction.message.channel.id === "780818320512253952") {
-        if (reaction.emoji.name === '🧄'){
-            await reaction.message.guild.members.cache.get(user.id).roles.remove("781954585341460522")
+    if(reaction.message.channel.id === "780086468944199709") {
+        if (reaction.emoji.name === '🆗'){
+            await reaction.message.guild.members.cache.get(user.id).roles.remove("827289516095701033")
         }
     }
 })
