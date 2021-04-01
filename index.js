@@ -24,7 +24,28 @@ client.on("ready", () => {
 });
 client.on("warn", (info) => console.log(info));
 client.on("error", console.error);
-
+client.on("messageReactionAdd",async (reaction, user)=>{
+  if(reaction.message.partial) await reaction.message.fetch();
+  if(reaction.partial) await reaction.fetch();
+  if(user.bot) return;
+  if(!reaction.message.guild) return;
+  if(reaction.message.channel.id === "780086468944199709") {
+      if (reaction.emoji.name === '🆗'){
+          await reaction.message.guild.members.cache.get(user.id).roles.add("827289516095701033")
+      }
+  }
+})
+client.on("messageReactionRemove",async (reaction, user)=>{
+  if(reaction.message.partial) await reaction.message.fetch();
+  if(reaction.partial) await reaction.fetch();
+  if(user.bot) return;
+  if(!reaction.message.guild) return;
+  if(reaction.message.channel.id === "780086468944199709") {
+      if (reaction.emoji.name === '🆗'){
+          await reaction.message.guild.members.cache.get(user.id).roles.remove("827289516095701033")
+      }
+  }
+})
 
 fs.readdir("./commands/", (err, files) => {
 
