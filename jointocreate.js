@@ -31,7 +31,7 @@ module.exports = function (client) {
 //log that the module is loaded
     console.log(` :: ⬜️ Module: ${description.name} | Loaded version ${description.version} from ("${description.filename}")`)
 //voice state update event to check joining/leaving channels
-    client.on("voiceStateUpdate", (oldState, newState) => {
+  client.on("voiceStateUpdate", (oldState, newState) =>  {try{
   // SET CHANNEL NAME STRING
   //IGNORE BUT DONT DELETE!
   let oldparentname = "unknown"
@@ -103,7 +103,7 @@ module.exports = function (client) {
       }
       }
     }
-}
+}}catch{console.log('system error (unknown channel type)')};
   })
     async function jointocreatechannel(user) {
       //log it 
@@ -132,4 +132,4 @@ module.exports = function (client) {
         ]);
       })
     }
-}
+} 
