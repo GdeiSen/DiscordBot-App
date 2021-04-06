@@ -34,9 +34,13 @@ client.on("ready", function () {
     type: "LISTENING"
   });
 
-  var jointocreate = require("./jointocreate");
+  try {
+    var jointocreate = require("./jointocreate");
 
-  jointocreate(client);
+    jointocreate(client);
+  } catch (_unused) {
+    console.log('Error');
+  }
 });
 client.on("warn", function (info) {
   return console.log(info);

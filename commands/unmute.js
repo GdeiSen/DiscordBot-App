@@ -35,7 +35,7 @@ else if(message.member.id != "614819288506695697"){
 }
 module.exports.config = {
     name: "unmute",
-    description: "Снимает блокировку с участника сервера",
+    description: "Снимает блокировку с участника сервера (blocked!)",
     usage: "?unmute",
     accessableby: "Members",
     aliases: []

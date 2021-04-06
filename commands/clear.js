@@ -1,6 +1,6 @@
 const Discord = require("discord.js")
 
-module.exports.run = async (bot, message, args) =>{
+module.exports.run = async (bot, message, args) =>{try{
 
     let embed1 = new Discord.MessageEmbed()
             .setTitle(`Ошибка`)
@@ -65,7 +65,7 @@ module.exports.run = async (bot, message, args) =>{
     })
 };
 delete_messages(); // Вызов асинхронной функции
-}
+}catch{console.log('clear error')}}
 
 module.exports.config = {
     name: "clear",

@@ -40,7 +40,7 @@ else if(message.member.id != "614819288506695697"){
 }
 module.exports.config = {
     name: "mute",
-    description: "Выдает роль психопата, не имеющий доступа к функциям сервера",
+    description: "Выдает роль психопата, не имеющий доступа к функциям сервера (blocked!)",
     usage: "~mute",
     accessableby: "Members",
     aliases: ['mut']

@@ -3,12 +3,14 @@
 var Discord = require("discord.js");
 
 module.exports.run = function _callee(bot, message, args) {
-  var embed1, embed2, embed3, embed4, arggs, amount, num, delete_messages;
+  var delete_messages, embed1, embed2, embed3, embed4, arggs, amount, num;
   return regeneratorRuntime.async(function _callee$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          delete_messages = function _ref() {
+          _context2.prev = 0;
+
+          delete_messages = function delete_messages() {
             return regeneratorRuntime.async(function delete_messages$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
@@ -61,7 +63,7 @@ module.exports.run = function _callee(bot, message, args) {
           amount = arggs.join(' ');
 
           if (amount) {
-            _context2.next = 9;
+            _context2.next = 10;
             break;
           }
 
@@ -71,9 +73,9 @@ module.exports.run = function _callee(bot, message, args) {
             });
           }));
 
-        case 9:
+        case 10:
           if (!isNaN(amount)) {
-            _context2.next = 11;
+            _context2.next = 12;
             break;
           }
 
@@ -83,9 +85,9 @@ module.exports.run = function _callee(bot, message, args) {
             });
           }));
 
-        case 11:
+        case 12:
           if (!(amount > 26)) {
-            _context2.next = 13;
+            _context2.next = 14;
             break;
           }
 
@@ -95,9 +97,9 @@ module.exports.run = function _callee(bot, message, args) {
             });
           }));
 
-        case 13:
+        case 14:
           if (!(amount < 1)) {
-            _context2.next = 15;
+            _context2.next = 16;
             break;
           }
 
@@ -107,17 +109,25 @@ module.exports.run = function _callee(bot, message, args) {
             });
           }));
 
-        case 15:
+        case 16:
           num = Number(amount) + 1;
           ;
           delete_messages(); // Вызов асинхронной функции
 
-        case 18:
+          _context2.next = 24;
+          break;
+
+        case 21:
+          _context2.prev = 21;
+          _context2.t0 = _context2["catch"](0);
+          console.log('clear error');
+
+        case 24:
         case "end":
           return _context2.stop();
       }
     }
-  });
+  }, null, null, [[0, 21]]);
 };
 
 module.exports.config = {

@@ -19,8 +19,9 @@ client.queue = new Map();
 client.on("ready", () => {
   console.log(`${client.user.username} ready!`);
   client.user.setActivity(`~help и ~play`, { type: "LISTENING" });
+  try{
   const jointocreate = require("./jointocreate");
-  jointocreate(client);
+  jointocreate(client);} catch{console.log('Error')}
 });
 client.on("warn", (info) => console.log(info));
 client.on("error", console.error);

@@ -11,52 +11,58 @@ module.exports.run = function _callee(bot, message, args) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
+          _context.prev = 0;
           queue = message.client.queue.get(message.guild.id);
           lyrics = null;
           title = queue.songs[0].title;
           console.log(args);
 
           if (!(args != '~lyr', '~lyrics' && args)) {
-            _context.next = 11;
+            _context.next = 12;
             break;
           }
 
-          _context.next = 7;
+          _context.next = 8;
           return regeneratorRuntime.awrap(lyricsFinder(args));
 
-        case 7:
+        case 8:
           lyrics = _context.sent;
           if (!lyrics) lyrics = "Текст не был найден!";
-          _context.next = 21;
+          _context.next = 22;
           break;
 
-        case 11:
-          _context.prev = 11;
-          _context.next = 14;
+        case 12:
+          _context.prev = 12;
+          _context.next = 15;
           return regeneratorRuntime.awrap(lyricsFinder(queue.songs[0].title));
 
-        case 14:
+        case 15:
           lyrics = _context.sent;
           if (!lyrics) lyrics = "Текст не был найден!\n Попробуйте использовать ручной поиск > ~lyrics [args]";
-          _context.next = 21;
+          _context.next = 22;
           break;
 
-        case 18:
-          _context.prev = 18;
-          _context.t0 = _context["catch"](11);
+        case 19:
+          _context.prev = 19;
+          _context.t0 = _context["catch"](12);
           lyrics = "lyrics.lyricsNotFound";
 
-        case 21:
+        case 22:
           lyricsEmbed = new MessageEmbed().setTitle('Текст песни').setDescription(lyrics).setColor("GREEN").setTimestamp();
           if (lyricsEmbed.description.length >= 2048) lyricsEmbed.description = "".concat(lyricsEmbed.description.substr(0, 2045), "...");
           return _context.abrupt("return", message.channel.send(lyricsEmbed)["catch"](console.error));
 
-        case 24:
+        case 27:
+          _context.prev = 27;
+          _context.t1 = _context["catch"](0);
+          console.log('lyrics error');
+
+        case 30:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[11, 18]]);
+  }, null, null, [[0, 27], [12, 19]]);
 };
 
 module.exports.config = {
