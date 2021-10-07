@@ -78,8 +78,9 @@ module.exports.run = function _callee(bot, message, args) {
 
 module.exports.config = {
   name: "mute",
-  description: "Выдает роль психопата, не имеющий доступа к функциям сервера (blocked!)",
+  description: "Gives the role of a psychopath who does not have access to the server functions (blocked!)",
   usage: "~mute",
   accessableby: "Members",
-  aliases: ['mut']
+  aliases: ['mut'],
+  category: "test"
 };

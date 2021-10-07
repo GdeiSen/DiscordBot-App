@@ -1,25 +1,43 @@
-const { canModifyQueue } = require("../util/EvobotUtil");
-const Discord = require("discord.js")
-module.exports.run = (bot,message,args) =>{
-  var embed1 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Ничего не воспроизводится**')
-    .setColor('RED')
-
-    const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply(embed1).catch(console.error);
-    if (!canModifyQueue(message.member)) return;
-
-    // toggle from false to true and reverse
-    queue.loop = !queue.loop;
-    return queue.textChannel.send(`Повторение трека ${queue.loop ? "**включено**" : "**выключено**"}`).catch(console.error);
-  }
-;
-
+const embedGenerator = require("../include/embedGenerator");
+const { RepeatMode } = require('discord-music-player');
+const { accesTester } = require("../include/accesTester.js");
+module.exports.run = async (client, message, args) => {
+  const tester = new accesTester(message, args);
+  await tester.testAdioWArgsAcces().then(
+    async (result) => {
+      let guildQueue = await client.player.getQueue(message.guild.id);
+      if(guildQueue.songloop == 0 || guildQueue.songloop == undefined){
+        guildQueue.queueLoop = 0;
+        guildQueue.songloop = 1;
+        guildQueue.setRepeatMode(RepeatMode.SONG);
+        message.channel
+        .send(
+          `${embedGenerator.run('direct.music.loop.info_01')} ${embedGenerator.run('direct.music.loop.info_02')}`
+        )
+        .catch(console.error);
+      }
+      else{
+        guildQueue.queueLoop = 0;
+        guildQueue.songloop = 0;
+        guildQueue.setRepeatMode(RepeatMode.DISABLED);
+        message.channel
+        .send(
+          `${embedGenerator.run('direct.music.loop.info_01')} ${embedGenerator.run('direct.music.loop.info_03')}`
+        )
+        .catch(console.error);
+      }
+    },
+    (error) => {
+      message.channel.send({ embeds: [error] });
+      return 0;
+    }
+  );
+};
 
 module.exports.config = {
   name: "loop",
   cooldown: 3,
-  aliases: ['l'],
-  description: "Опция включения повторения трека",
-}
+  aliases: ["l"],
+  description: "Option to enable track repetition",
+  category: "music",
+};

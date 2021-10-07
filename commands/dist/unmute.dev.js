@@ -74,8 +74,9 @@ module.exports.run = function _callee(bot, message, args) {
 
 module.exports.config = {
   name: "unmute",
-  description: "Снимает блокировку с участника сервера (blocked!)",
+  description: "Removes the lock from the server participant (blocked!)",
   usage: "?unmute",
   accessableby: "Members",
-  aliases: []
+  aliases: [],
+  category: "test"
 };

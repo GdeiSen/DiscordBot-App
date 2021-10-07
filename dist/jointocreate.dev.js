@@ -37,7 +37,7 @@ module.exports = function (client) {
     }, 10000);
   }); //log that the module is loaded
 
-  console.log(" :: \u2B1C\uFE0F Module: ".concat(description.name, " | Loaded version ").concat(description.version, " from (\"").concat(description.filename, "\")")); //voice state update event to check joining/leaving channels
+  console.log("\u2B1C Join To Create Function Is Enable"); //voice state update event to check joining/leaving channels
 
   client.on("voiceStateUpdate", function (oldState, newState) {
     try {

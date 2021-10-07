@@ -1,12 +1,11 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
 const Discord = require("discord.js");
+const embedGenerator = require("../include/embedGenerator")
 module.exports.run = (bot, message, args) =>{
-  var embed1 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Ничего не воспроизводится**')
-  .setColor('RED')
+    let embed1 = embedGenerator.run('warnings.error_03');
+
     const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.channel.send(embed1).catch(console.error);
+    if (!queue) return message.channel.send({embeds:[embed1]}).catch(console.error);
     if (!canModifyQueue(message.member)) return;
 
     let songs = queue.songs;
@@ -16,12 +15,13 @@ module.exports.run = (bot, message, args) =>{
     }
     queue.songs = songs;
     message.client.queue.set(message.guild.id, queue);
-    queue.textChannel.send(`${message.author} 🔀 перемешал очередь`).catch(console.error);
+    queue.textChannel.send({content: `${embedGenerator.run('direct.music.shuffle.info_01')}`}).catch(console.error);
   };
   module.exports.config = {
     name: "shuffle",
-    description: "Перемешивает очередь",
+    description: "Shuffles the queue",
     usage: "~shuffle",
     accessableby: "Members",
-    aliases: ['sh']
+    aliases: ['sh'],
+    category: "music"
   }

@@ -2,6 +2,8 @@
 
 var Discord = require("discord.js");
 
+text = require("../text_packs/en.json");
+
 module.exports.run = function _callee(bot, message, args) {
   var arggs, random, messagec, embed;
   return regeneratorRuntime.async(function _callee$(_context) {
@@ -12,48 +14,48 @@ module.exports.run = function _callee(bot, message, args) {
           random = Math.floor(Math.random() * 20) + 1;
 
           if (random === 1) {
-            messagec = "Определенно да!";
+            messagec = text.entertainmet.ball.info_01;
           } else if (random === 20) {
-            messagec = "Никаких сомнений";
+            messagec = text.entertainmet.ball.info_02;
           } else if (random === 2) {
-            messagec = "Предрешено";
+            messagec = text.entertainmet.ball.info_03;
           } else if (random === 19) {
-            messagec = "Можешь быть уверен в этом";
+            messagec = text.entertainmet.ball.info_04;
           } else if (random === 3) {
-            messagec = "Бесспорно";
+            messagec = text.entertainmet.ball.info_05;
           } else if (random === 18) {
-            messagec = "Мне кажется - да?";
+            messagec = text.entertainmet.ball.info_06;
           } else if (random === 4) {
-            messagec = "Вероятнее всего";
+            messagec = text.entertainmet.ball.info_07;
           } else if (random === 17) {
-            messagec = "Хорошие перспективы";
+            messagec = text.entertainmet.ball.info_08;
           } else if (random === 5) {
-            messagec = "Занки говорят - да";
+            messagec = text.entertainmet.ball.info_09;
           } else if (random === 16) {
-            messagec = "Наверное да";
+            messagec = text.entertainmet.ball.info_10;
           } else if (random === 6) {
-            messagec = "Пока не ясно, попробуй снова";
+            messagec = text.entertainmet.ball.info_11;
           } else if (random === 15) {
-            messagec = "Спроси позже";
+            messagec = text.entertainmet.ball.info_12;
           } else if (random === 7) {
-            messagec = "Лучше не рассказывать";
+            messagec = text.entertainmet.ball.info_13;
           } else if (random === 14) {
-            messagec = "Сейчас нельзя предсказать";
+            messagec = text.entertainmet.ball.info_14;
           } else if (random === 8) {
-            messagec = "Сконцетрируйся и спроси опять";
+            messagec = text.entertainmet.ball.info_15;
           } else if (random === 13) {
-            messagec = "Даже не думай";
+            messagec = text.entertainmet.ball.info_16;
           } else if (random === 9) {
-            messagec = "Мой ответ - Нет";
+            messagec = text.entertainmet.ball.info_17;
           } else if (random === 12) {
-            messagec = "По моим данным - Нет";
+            messagec = text.entertainmet.ball.info_1;
           } else if (random === 10) {
-            messagec = "Переспективы не очень хорошие";
+            messagec = text.entertainmet.ball.info_5;
           } else if (random === 11) {
-            messagec = "Весьма сомнительно";
+            messagec = text.entertainmet.ball.info_9;
           }
 
-          embed = new Discord.MessageEmbed().setTitle("".concat(messagec)).setDescription("".concat(arggs)).setColor('PURPLE');
+          embed = new Discord.MessageEmbed().setTitle("\uD83D\uDD2E 8Ball").setDescription("".concat(arggs, "? **").concat(messagec, "**")).setColor('PURPLE');
           message.channel.send(embed);
 
         case 5:
@@ -67,7 +69,8 @@ module.exports.run = function _callee(bot, message, args) {
 module.exports.config = {
   name: "8ball",
   usage: "~8ball",
-  description: "Выводит твой приговор судьбы",
+  description: "Deduces your verdict of fate",
   accessableby: "Members",
-  aliases: ['c', 'purge']
+  aliases: ['8', '8b', 'b'],
+  category: "entertainment"
 };

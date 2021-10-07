@@ -1,76 +1,45 @@
 const Discord = require("discord.js")
+text = require("../text_packs/en.json")
+const embedGenerator = require("../include/embedGenerator")
+module.exports.run = async (bot, message, args) =>{
 
-module.exports.run = async (bot, message, args) =>{try{
-
-    let embed1 = new Discord.MessageEmbed()
-            .setTitle(`Ошибка`)
-            .setDescription(`**Вы забыли ввести число!**`)
-            .setColor('RED')
+    let embed1 = await embedGenerator.run('warnings.clear.error_01');
+    let embed2 = await embedGenerator.run('warnings.clear.error_02');
+    let embed3 = await embedGenerator.run('warnings.clear.error_03');
+    let embed4 = await embedGenerator.run('warnings.clear.error_04');
+    let embed = await embedGenerator.run('warnings.clear.info_01');
     
-    let embed2 = new Discord.MessageEmbed()
-            .setTitle(`Ошибка`)
-            .setDescription(`**Введен неверный вид числа**`)
-            .setColor('RED')
+    if (!args) return message.channel.send({embeds:[embed1]})
+    .then (message => {setTimeout(() => message.delete(), 5000)});
 
-    let embed3 = new Discord.MessageEmbed()
-            .setTitle(`Ошибка`)
-            .setDescription(`**Введите число меньше 25**`)
-            .setColor('RED')
+    if (isNaN(args)) return message.channel.send({embeds:[embed2]})
+    .then (message => {setTimeout(() => message.delete(), 5000)});
 
-    let embed4 = new Discord.MessageEmbed()
-            .setTitle(`Ошибка`)
-            .setDescription(`**Введите число больше чем ноль**`)
-            .setColor('RED')
+    if (args > 26) return mes = message.channel.send({embeds:[embed3]})
+    .then (message => {setTimeout(() => message.delete(), 5000)});
 
-    const arggs = message.content.split(' ').slice(1); 
-    const amount = arggs.join(' ');
-    
-    if (!amount) return message.channel.send(embed1)
-    .then (message => message.delete({ timeout : 5000 }));
-    if (isNaN(amount)) return message.channel.send(embed2)
-    .then (message => message.delete({ timeout : 5000 }));
-    if (amount > 26) return message.channel.send(embed3)
-    .then (message => message.delete({ timeout : 5000 })); 
-    if (amount < 1) return message.channel.send(embed4)
-    .then (message => message.delete({ timeout : 5000 })); 
-    const num = Number(amount) + 1;
+    if (args < 1) return mes = message.channel.send({embeds:[embed4]})
+    .then (message => {setTimeout(() => message.delete(), 5000)});
+
+    const num = Number(args) + 1;
     async function delete_messages() {
 
     await message.channel.messages.fetch({
         limit: num
     }).then(messages => {
         message.channel.bulkDelete(messages)
-        if (num === 2){
-        let embed = new Discord.MessageEmbed()
-            
-            .setDescription(`**Удалено ${num - 1} сообщение**`)
-            .setColor('GREEN')
-        message.channel.send(embed)
-        .then (message => message.delete({ timeout : 2000 }))}
-        else if (num === 3 || num === 4 || num === 5){
-            let embed = new Discord.MessageEmbed()
-            
-            .setDescription(`**Удалено ${num - 1} сообщения**`)
-            .setColor('GREEN')
-            message.channel.send(embed)
-            .then (message => message.delete({ timeout : 2000 }))}
-        else if (num > 2){
-        let embed = new Discord.MessageEmbed()
-            .setDescription(`**Удалено ${num - 1} сообщений**`)
-            .setColor('GREEN')
-        message.channel.send(embed)
-        .then (message => message.delete({ timeout : 2000 }))}
-        
-        
-    })
+        embed.setDescription(embed.description + `${num - 1}`)
+        message.channel.send({embeds:[embed]})
+        .then (message => {setTimeout(() => message.delete(), 5000)})})
 };
-delete_messages(); // Вызов асинхронной функции
-}catch{console.log('clear error')}}
+delete_messages();
+}
 
 module.exports.config = {
     name: "clear",
-    description: "Удаляет заданное количество сообщений",
-    usage: "~claer",
+    description: "Deletes the specified number of messages",
+    usage: "~clear",
     accessableby: "Members",
-    aliases: ['c', 'cl']
+    aliases: ['c', 'cl'],
+    category: "admin"
 }

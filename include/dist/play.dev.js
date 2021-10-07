@@ -4,15 +4,18 @@ var ytdl = require("ytdl-core-discord");
 
 var ytdl_style = require("ytdl-core");
 
-var Discord = require("discord.js");
-
 var _require = require("../util/EvobotUtil"),
     canModifyQueue = _require.canModifyQueue,
     STAY_TIME = _require.STAY_TIME;
 
+var text = require("../text_packs/en.json");
+
+var _require2 = require("discord.js"),
+    MessageEmbed = _require2.MessageEmbed;
+
 module.exports = {
   play: function play(song, message, args) {
-    var config, PRUNING, queue, stream, streamType, dispatcher, url, addedEmbed, playingMessage, filter, collector;
+    var config, PRUNING, queue, stream, streamType, dispatcher, url, author, addedEmbed, playingMessage, filter, collector;
     return regeneratorRuntime.async(function play$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -104,56 +107,60 @@ module.exports = {
 
           case 27:
             songInfo = _context.sent;
+            author = song.author;
             song = {
               title: songInfo.videoDetails.title,
               url: songInfo.videoDetails.video_url,
               duration: songInfo.videoDetails.lengthSeconds,
               thumbnails: songInfo.videoDetails.thumbnails[3].url
             };
-            addedEmbed = new Discord.MessageEmbed().setColor('GREEN').setTitle(":musical_note: \u0421\u0435\u0439\u0447\u0430\u0441 \u0438\u0433\u0440\u0430\u0435\u0442 :musical_note:\n ".concat(song.title, " ")).addField("\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C: ", new Date(song.duration * 1000).toISOString().substr(11, 8)).setThumbnail(song.thumbnails).setURL(song.url);
-            _context.prev = 30;
-            _context.next = 33;
+            queue.songs[0] = song;
+            addedEmbed = new MessageEmbed().setColor(text.info.embedColor).setTitle(":musical_note: Now Playing :musical_note:\n ".concat(song.title, " ")).addField("Duration: ", new Date(song.duration * 1000).toISOString().substr(11, 8)).addField("By User:", author).setThumbnail(song.thumbnails).setURL(song.url);
+            _context.prev = 32;
+            _context.next = 35;
             return regeneratorRuntime.awrap(queue.textChannel.send(addedEmbed));
 
-          case 33:
+          case 35:
             playingMessage = _context.sent;
-            _context.next = 36;
-            return regeneratorRuntime.awrap(playingMessage.react("⏭"));
-
-          case 36:
             _context.next = 38;
-            return regeneratorRuntime.awrap(playingMessage.react("⏯"));
+            return regeneratorRuntime.awrap(playingMessage.react("⏭"));
 
           case 38:
             _context.next = 40;
-            return regeneratorRuntime.awrap(playingMessage.react("🔇"));
+            return regeneratorRuntime.awrap(playingMessage.react("⏯"));
 
           case 40:
             _context.next = 42;
-            return regeneratorRuntime.awrap(playingMessage.react("🔉"));
+            return regeneratorRuntime.awrap(playingMessage.react("🔇"));
 
           case 42:
             _context.next = 44;
-            return regeneratorRuntime.awrap(playingMessage.react("🔊"));
+            return regeneratorRuntime.awrap(playingMessage.react("🔉"));
 
           case 44:
             _context.next = 46;
-            return regeneratorRuntime.awrap(playingMessage.react("🔁"));
+            return regeneratorRuntime.awrap(playingMessage.react("🔊"));
 
           case 46:
             _context.next = 48;
-            return regeneratorRuntime.awrap(playingMessage.react("⏹"));
+            return regeneratorRuntime.awrap(playingMessage.react("🔁"));
 
           case 48:
-            _context.next = 53;
-            break;
+            _context.next = 50;
+            return regeneratorRuntime.awrap(playingMessage.react("⏹"));
 
           case 50:
-            _context.prev = 50;
-            _context.t1 = _context["catch"](30);
+            _context.next = 55;
+            break;
+
+          case 52:
+            _context.prev = 52;
+            _context.t1 = _context["catch"](32);
             console.error(_context.t1);
 
-          case 53:
+          case 55:
+            message.channel.send(button_1);
+
             filter = function filter(reaction, user) {
               return user.id !== message.client.user.id;
             };
@@ -292,11 +299,11 @@ module.exports = {
               }
             });
 
-          case 57:
+          case 60:
           case "end":
             return _context.stop();
         }
       }
-    }, null, null, [[9, 16], [30, 50]]);
+    }, null, null, [[9, 16], [32, 52]]);
   }
 };

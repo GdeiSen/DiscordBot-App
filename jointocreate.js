@@ -29,7 +29,7 @@ module.exports = function (client) {
 
     
 //log that the module is loaded
-    console.log(` :: ⬜️ Module: ${description.name} | Loaded version ${description.version} from ("${description.filename}")`)
+    console.log(`⬜ Join To Create Function Is Enable`)
 //voice state update event to check joining/leaving channels
   client.on("voiceStateUpdate", (oldState, newState) =>  {try{
   // SET CHANNEL NAME STRING

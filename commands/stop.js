@@ -1,23 +1,28 @@
-const { canModifyQueue } = require("../util/EvobotUtil");
-const Discord = require("discord.js");
-module.exports.run = (bot, message, args) => {
-  var embed1 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Ничего не воспроизводится**')
-  .setColor('RED')
-    const queue = message.client.queue.get(message.guild.id);
-
-    if (!queue) return message.reply(embed1).catch(console.error);
-    if (!canModifyQueue(message.member)) return;
-
-    queue.songs = [];
-    queue.connection.dispatcher.end();
-    queue.textChannel.send(`${message.author} ⏹ остановил музыку!`).catch(console.error);
-  };
-  module.exports.config = {
-    name: "stop",
-    description: "Останавливает воспроизведение",
-    usage: "~stop",
-    accessableby: "Members",
-    aliases: ['stp']
-  }
+const embedGenerator = require("../include/embedGenerator");
+const { accesTester } = require("../include/accesTester.js");
+module.exports.run = async (client, message, args) => {
+  const tester = new accesTester(message, args);
+  await tester.testAdioWArgsAcces().then(
+    async (result) => {
+      let guildQueue = await client.player.getQueue(message.guild.id);
+      guildQueue.stop();
+      message.channel
+        .send(
+          `${message.author} ${embedGenerator.run('direct.music.stop.info_01')}`
+        )
+        .catch(console.error);
+    },
+    async (error) => {
+      await message.channel.send({ embeds: [error] });
+      return 0;
+    }
+  );
+};
+module.exports.config = {
+  name: "stop",
+  description: "Stops playback",
+  usage: "~stop",
+  accessableby: "Members",
+  aliases: ["stp"],
+  category: "music",
+};

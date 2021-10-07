@@ -144,8 +144,9 @@ module.exports.run = function _callee3(client, message, args) {
 
 module.exports.config = {
   name: "react_role",
-  description: "Тестовая комманда для выдачи роли по нажатию на реакцию",
+  description: "Test command for issuing a role by clicking on the reaction",
   usage: "~react_role",
   accessableby: "Members",
-  aliases: []
+  aliases: [],
+  category: "test"
 };

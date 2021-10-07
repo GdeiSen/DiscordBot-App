@@ -14,7 +14,7 @@ var _require = require("../include/queue"),
 var _require2 = require("../include/play"),
     play = _require2.play;
 
-var YouTubeAPI = require("youtube-api");
+var YouTubeAPI = require("simple-youtube-api");
 
 var Discord = require("discord.js");
 
@@ -26,6 +26,8 @@ var _require3 = require("../util/EvobotUtil"),
 
 var youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
+var embedGenerator = require("../include/embedGenerator");
+
 module.exports.run = function _callee(bot, message, args) {
   var _serverQueue$songs, _queueConstruct$songs;
 
@@ -34,58 +36,87 @@ module.exports.run = function _callee(bot, message, args) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Для начала нужно быть в голосовом канале!**').setColor('RED');
-          embed2 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Вы должны быть в одинаковым канале с ботом!**').setColor('RED');
-          embed3 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется у меня недостаточно прав для присоединения к вашему каналу!**').setColor('RED');
-          embed4 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется у меня недостаточно прав для проигрывания музыки!**').setColor('RED');
-          embed5 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**К сожалению ничего не нашлось!**').setColor('RED');
-          embed6 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Кажется что-то пошло не так!**').setColor('RED');
-          embed7 = new Discord.MessageEmbed().setTitle('использование').setDescription("~ play <YouTube URL | Video Name | Soundcloud URL>").setColor('ORANGE');
+          _context.next = 2;
+          return regeneratorRuntime.awrap(embedGenerator.run('music.play.error_02'));
+
+        case 2:
+          embed1 = _context.sent;
+          _context.next = 5;
+          return regeneratorRuntime.awrap(embedGenerator.run('music.play.error_01'));
+
+        case 5:
+          embed2 = _context.sent;
+          _context.next = 8;
+          return regeneratorRuntime.awrap(embedGenerator.run('music.play.error_03'));
+
+        case 8:
+          embed3 = _context.sent;
+          _context.next = 11;
+          return regeneratorRuntime.awrap(embedGenerator.run('music.play.error_04'));
+
+        case 11:
+          embed4 = _context.sent;
+          _context.next = 14;
+          return regeneratorRuntime.awrap(embedGenerator.run('music.play.error_05'));
+
+        case 14:
+          embed5 = _context.sent;
+          _context.next = 17;
+          return regeneratorRuntime.awrap(embedGenerator.run('music.play.error_06'));
+
+        case 17:
+          embed6 = _context.sent;
+          _context.next = 20;
+          return regeneratorRuntime.awrap(embedGenerator.run('music.play.info_01'));
+
+        case 20:
+          embed7 = _context.sent;
+          embed7.setDescription(embed7.description + " **Playlist \"args\"**");
           channel = message.member.voice.channel;
           serverQueue = message.client.queue.get(message.guild.id);
 
-          if (args.length) {
-            _context.next = 11;
-            break;
-          }
-
-          return _context.abrupt("return", message.reply(embed7)["catch"](console.error));
-
-        case 11:
-          if (channel) {
-            _context.next = 13;
-            break;
-          }
-
-          return _context.abrupt("return", message.reply(embed1)["catch"](console.error));
-
-        case 13:
-          permissions = channel.permissionsFor(message.client.user);
-
-          if (permissions.has("CONNECT")) {
-            _context.next = 16;
-            break;
-          }
-
-          return _context.abrupt("return", message.reply(embed3));
-
-        case 16:
-          if (permissions.has("SPEAK")) {
-            _context.next = 18;
-            break;
-          }
-
-          return _context.abrupt("return", message.reply(embed4));
-
-        case 18:
           if (!(serverQueue && channel !== message.guild.me.voice.channel)) {
-            _context.next = 20;
+            _context.next = 26;
             break;
           }
 
           return _context.abrupt("return", message.reply(embed2)["catch"](console.error));
 
-        case 20:
+        case 26:
+          if (args.length) {
+            _context.next = 28;
+            break;
+          }
+
+          return _context.abrupt("return", message.reply(embed7)["catch"](console.error));
+
+        case 28:
+          if (channel) {
+            _context.next = 30;
+            break;
+          }
+
+          return _context.abrupt("return", message.reply(embed1)["catch"](console.error));
+
+        case 30:
+          permissions = channel.permissionsFor(message.client.user);
+
+          if (permissions.has("CONNECT")) {
+            _context.next = 33;
+            break;
+          }
+
+          return _context.abrupt("return", message.reply(embed3));
+
+        case 33:
+          if (permissions.has("SPEAK")) {
+            _context.next = 35;
+            break;
+          }
+
+          return _context.abrupt("return", message.reply(embed4));
+
+        case 35:
           search = args;
           pattern = /^.*(youtu.be\/|list=)([^#\&\?]*).*/gi;
           url = args;
@@ -96,108 +127,76 @@ module.exports.run = function _callee(bot, message, args) {
             connection: null,
             songs: [],
             loop: false,
-            volume: DEFAULT_VOLUME || 100,
+            volume: DEFAULT_VOLUME || 50,
             playing: true
           };
           playlist = null;
           videos = [];
 
           if (!urlValid) {
-            _context.next = 43;
+            _context.next = 58;
             break;
           }
 
-          _context.prev = 28;
-          _context.next = 31;
+          _context.prev = 43;
+          _context.next = 46;
           return regeneratorRuntime.awrap(youtube.getPlaylist(url, {
             part: "snippet"
           }));
 
-        case 31:
+        case 46:
           playlist = _context.sent;
-          _context.next = 34;
+          _context.next = 49;
           return regeneratorRuntime.awrap(playlist.getVideos(MAX_PLAYLIST_SIZE || 30, {
             part: "snippet"
           }));
 
-        case 34:
+        case 49:
           videos = _context.sent;
-          _context.next = 41;
-          break;
-
-        case 37:
-          _context.prev = 37;
-          _context.t0 = _context["catch"](28);
-          console.error(_context.t0);
-          return _context.abrupt("return", message.reply(embed5)["catch"](console.error));
-
-        case 41:
-          _context.next = 66;
-          break;
-
-        case 43:
-          if (!scdl.isValidUrl(args[0])) {
-            _context.next = 52;
-            break;
-          }
-
-          if (!args[0].includes("/sets/")) {
-            _context.next = 50;
-            break;
-          }
-
-          message.channel.send("⌛ поиск плейлиста");
-          _context.next = 48;
-          return regeneratorRuntime.awrap(scdl.getSetInfo(args[0], SOUNDCLOUD_CLIENT_ID));
-
-        case 48:
-          playlist = _context.sent;
-          videos = playlist.tracks.map(function (track) {
-            return {
-              title: track.title,
-              thumbnails: track.thumbnails[3].url,
-              //songInfo.videoDetails.thumbnails[3].url
-              url: track.permalink_url,
-              duration: track.duration / 1000
-            };
-          });
-
-        case 50:
-          _context.next = 66;
+          _context.next = 56;
           break;
 
         case 52:
           _context.prev = 52;
-          _context.next = 55;
+          _context.t0 = _context["catch"](43);
+          console.error(_context.t0);
+          return _context.abrupt("return", message.reply(embed5)["catch"](console.error));
+
+        case 56:
+          _context.next = 72;
+          break;
+
+        case 58:
+          _context.prev = 58;
+          _context.next = 61;
           return regeneratorRuntime.awrap(youtube.searchPlaylists(search, 1, {
             part: "snippet"
           }));
 
-        case 55:
+        case 61:
           results = _context.sent;
           playlist = results[0];
-          _context.next = 59;
+          _context.next = 65;
           return regeneratorRuntime.awrap(playlist.getVideos(MAX_PLAYLIST_SIZE || 30, {
             part: "snippet"
           }));
 
-        case 59:
+        case 65:
           videos = _context.sent;
-          _context.next = 66;
+          _context.next = 72;
           break;
 
-        case 62:
-          _context.prev = 62;
-          _context.t1 = _context["catch"](52);
+        case 68:
+          _context.prev = 68;
+          _context.t1 = _context["catch"](58);
           console.error(_context.t1);
           return _context.abrupt("return", message.reply(_context.t1.message)["catch"](console.error));
 
-        case 66:
+        case 72:
           newSongs = videos.map(function (video) {
             return song = {
-              title: video.title,
               url: video.url,
-              duration: video.durationSeconds
+              author: message.author
             };
           });
           serverQueue ? (_serverQueue$songs = serverQueue.songs).push.apply(_serverQueue$songs, _toConsumableArray(newSongs)) : (_queueConstruct$songs = queueConstruct.songs).push.apply(_queueConstruct$songs, _toConsumableArray(newSongs));
@@ -205,51 +204,49 @@ module.exports.run = function _callee(bot, message, args) {
           message.channel.send("".concat(message.author, " \u0417\u0430\u043A\u0430\u0437\u0430\u043B \u043F\u043B\u0435\u0439\u043B\u0438\u0441\u0442"));
 
           if (serverQueue) {
-            _context.next = 88;
+            _context.next = 94;
             break;
           }
 
           message.client.queue.set(message.guild.id, queueConstruct);
-          _context.prev = 72;
-          _context.next = 75;
+          _context.prev = 78;
+          _context.next = 81;
           return regeneratorRuntime.awrap(channel.join());
 
-        case 75:
+        case 81:
           queueConstruct.connection = _context.sent;
-          _context.next = 78;
+          _context.next = 84;
           return regeneratorRuntime.awrap(queueConstruct.connection.voice.setSelfDeaf(true));
 
-        case 78:
+        case 84:
           play(queueConstruct.songs[0], message, args);
-          _context.next = 88;
+          _context.next = 94;
           break;
 
-        case 81:
-          _context.prev = 81;
-          _context.t2 = _context["catch"](72);
+        case 87:
+          _context.prev = 87;
+          _context.t2 = _context["catch"](78);
           console.error(_context.t2);
           message.client.queue["delete"](message.guild.id);
-          _context.next = 87;
+          _context.next = 93;
           return regeneratorRuntime.awrap(channel.leave());
 
-        case 87:
+        case 93:
           return _context.abrupt("return", message.channel.send(embed2)["catch"](console.error));
 
-        case 88:
-          queue(bot, message, args);
-
-        case 89:
+        case 94:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[28, 37], [52, 62], [72, 81]]);
+  }, null, null, [[43, 52], [58, 68], [78, 87]]);
 };
 
 module.exports.config = {
   name: "playlist",
-  description: "выполняет проигрывание плейлиста",
+  description: "plays a playlist",
   usage: "~playlist",
   accessableby: "Members",
-  aliases: ['pl']
+  aliases: ['pl'],
+  category: "music"
 };

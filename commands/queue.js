@@ -1,43 +1,35 @@
 const { MessageEmbed } = require("discord.js");
-
+const embedGenerator = require("../include/embedGenerator");
 
 module.exports.run = async(bot,message,args)=> {
-    var embed1 = new MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Ничего не воспроизводится**')
-    .setColor('RED')
 
-    let embed4 = new MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Кажется у меня недостаточно прав для проигрывания музыки!**')
-    .setColor('RED')
+    let embed1 = await embedGenerator.run('warnings.error_03');
+    let embed4 = await embedGenerator.run('music.play.error_04');
     
     const permissions = message.channel.permissionsFor(message.client.user);
     if (!permissions.has(["MANAGE_MESSAGES", "ADD_REACTIONS"]))
-      return message.reply(embed4);
+      return message.reply({embeds: [embed4]});
 
     const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.channel.send(embed1);
+    if (!queue) return message.channel.send({embeds: [embed1]});
 
     let currentPage = 0;
-    const embeds = generateQueueEmbed(message, queue.songs);
-
-    const queueEmbed = await message.channel.send(
-      `**страница - ${currentPage + 1}/${embeds.length}**`,
-      embeds[currentPage]
+    const embeds = await generateQueueEmbed(message, queue.songs);
+    const queueEmbed = await message.channel.send({content:`**page - ${currentPage + 1}/${embeds.length}**`,
+      embeds: [embeds[currentPage]]}
     );
-
+      
     try {
       await queueEmbed.react("⬅️");
       await queueEmbed.react("⏹");
       await queueEmbed.react("➡️");
     } catch (error) {
       console.error(error);
-      message.channel.send(error.message).catch(console.error);
+      message.channel.send({content: `${error.message}`}).catch(console.error);
     }
 
     const filter = (reaction, user) =>
-      ["⬅️", "⏹", "➡️"].includes(reaction.emoji.name) && message.author.id === user.id;
+      ["⬅️", "⏹", "➡️"].includes(reaction.emoji.name);
     const collector = queueEmbed.createReactionCollector(filter, { time: 60000 });
 
     collector.on("collect", async (reaction, user) => {
@@ -59,13 +51,13 @@ module.exports.run = async(bot,message,args)=> {
         await reaction.users.remove(message.author.id);
       } catch (error) {
         console.error(error);
-        return message.channel.send(error.message).catch(console.error);
+        return message.channel.send({content:`error.message`}).catch(console.error);
       }
     });
   }
 ;
 
-function generateQueueEmbed(message, queue) {
+async function generateQueueEmbed(message, queue) {
   let embeds = [];
   let k = 10;
 
@@ -75,23 +67,21 @@ function generateQueueEmbed(message, queue) {
     k += 10;
 
     const info = current.map((track) => `${++j} - [${track.title}](${track.url})`).join("\n");
-
-    const embed = new MessageEmbed()
-      .setTitle("Очередь\n")
-      .setThumbnail(message.guild.iconURL())
-      .setColor('GREEN')
-      .setDescription(`**сейчас играет - [${queue[0].title}](${queue[0].url})**\n\n${info}\nиспользуйте кнопки для перемещения по страницам`)
+    let embed = await embedGenerator.run('music.queue.info_02');
+    await embed
+      .setThumbnail(queue[0].thumbnails)
+      .setDescription(`**${embed.description} - [${queue[0].title}](${queue[0].url})**\n\n${info}`)
       .setTimestamp();
-    embeds.push(embed);
+    embeds.push({embeds: [embed]});
   }
-
   return embeds;
 }
 
 module.exports.config = {
   name: "queue",
   usage: "~queue",
-  description: "Выводит состояние цекущей очереди",
+  description: "Displays the status of the current queue",
   accessableby: "Members",
-  aliases: ['q']
+  aliases: ['q'],
+  category: "music"
 }

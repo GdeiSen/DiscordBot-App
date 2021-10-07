@@ -1,29 +1,22 @@
 const ytdl = require("ytdl-core-discord");
 const ytdl_style = require("ytdl-core");
-const Discord = require("discord.js");
 const { canModifyQueue, STAY_TIME } = require("../util/EvobotUtil");
+const text = require("../text_packs/en.json")
+const { MessageEmbed } = require("discord.js");
+const config = require("../config.json");
+
 module.exports = {
   async play(song, message, args) {
 
-
-    let config;
-
-    try {
-      config = require("../config.json");
-    } catch (error) {
-      config = null;
-    }
-
     const PRUNING = config ? config.PRUNING : process.env.PRUNING;
-
     const queue = message.client.queue.get(message.guild.id);
 
-    if (!song) {
+    if (!song) {//need to be fixed
       setTimeout(function () {
         if (queue.connection.dispatcher && message.guild.me.voice.channel) return;
         queue.channel.leave();
       }, STAY_TIME * 1000);
-      queue.textChannel.send("❌ Очередь закончилась")
+        queue.textChannel.send({content :"❌ Очередь закончилась"})
       
       .catch(console.error);
       return message.client.queue.delete(message.guild.id);
@@ -43,24 +36,21 @@ module.exports = {
       }
 
       console.error(error);
-      return message.channel.send(`Error: ${error.message ? error.message : error}`);
+      return message.channel.send({content: `Error: ${error.message ? error.message : error}`});
     }
 
     queue.connection.on("disconnect", () => message.client.queue.delete(message.guild.id));
 
     const dispatcher = queue.connection
-      .play(stream, { type: streamType })
+      .subscribe(stream)
       .on("finish", () => {
         if (collector && !collector.ended) collector.stop();
 
         if (queue.loop) {
-          // if loop is on, push the song back at the end of the queue
-          // so it can repeat endlessly
           let lastSong = queue.songs.shift();
           queue.songs.push(lastSong);
           module.exports.play(queue.songs[0], message);
         } else {
-          // Recursively play the next song
           queue.songs.shift();
           module.exports.play(queue.songs[0], message);
         }
@@ -71,28 +61,34 @@ module.exports = {
         module.exports.play(queue.songs[0], message);
       });
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
-    const url = args;
     songInfo = await ytdl_style.getInfo(song.url);
+    let author = song.author;
     song = {
       title: songInfo.videoDetails.title,
       url: songInfo.videoDetails.video_url,
       duration: songInfo.videoDetails.lengthSeconds,
-      thumbnails: songInfo.videoDetails.thumbnails[3].url,
-      
+      thumbnails: songInfo.videoDetails.thumbnails[3].url
     };
-    
-    const addedEmbed = new Discord.MessageEmbed()
-    .setColor('GREEN')
-    .setTitle(`:musical_note: Сейчас играет :musical_note:\n ${song.title} `)
-    .addField(`Продолжительность: `,new Date(song.duration * 1000).toISOString().substr(11, 8))
-
+    queue.songs[0] = song;
+    const addedEmbed = new MessageEmbed()
+    .setColor(text.info.embedColor)
+    .setTitle(`:musical_note: Now Playing :musical_note:\n ${song.title} `)
+    .addField(`Duration: `,new Date(song.duration * 1000).toISOString().substr(11, 8))
+    .addField(`By User: `,author)
+    .addField(`Next: `,queue.songs[1])
     .setThumbnail(song.thumbnails)
     .setURL(song.url);
-  
-    
 
+
+
+
+
+
+
+
+    //=================================================================================
     try {
-      var playingMessage = await queue.textChannel.send(addedEmbed)
+      var playingMessage = await queue.textChannel.send({embeds:[addedEmbed]})
       await playingMessage.react("⏭");
       await playingMessage.react("⏯");
       await playingMessage.react("🔇");
@@ -119,7 +115,7 @@ module.exports = {
           reaction.users.remove(user).catch(console.error);
           if (!canModifyQueue(member)) return;
           queue.connection.dispatcher.end();
-          queue.textChannel.send(`${user} ⏩ пропустил трек`)
+          queue.textChannel.send({contect: `${user} ⏩ пропустил трек`})
           .then (queue => queue.delete({ timeout : 1500 }))
           .catch(console.error);
           collector.stop();
@@ -131,14 +127,14 @@ module.exports = {
           if (queue.playing) {
             queue.playing = false;
             queue.connection.dispatcher.pause(true);
-            queue.textChannel.send(`${user} ⏸ поставил на паузу`)
+            queue.textChannel.send({content:`${user} ⏸ поставил на паузу`})
             //.then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
             break;
           } else {
             queue.playing = true;
             queue.connection.dispatcher.resume(true);
-            queue.textChannel.send(`${user} ▶ продолжил возпроизведение`)
+            queue.textChannel.send({content:`${user} ▶ продолжил возпроизведение`})
             //.then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
             break;
@@ -151,12 +147,12 @@ module.exports = {
           if (queue.volume <= 0) {
             queue.volume = 30;
             queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
-            queue.textChannel.send(`${user} 🔊 включил звук`)
+            queue.textChannel.send({content:`${user} 🔊 включил звук`})
             .then (queue => queue.delete({ timeout : 1500 }));;
           } else {
             queue.volume = 0;
             queue.connection.dispatcher.setVolumeLogarithmic(0);
-            queue.textChannel.send(`${user} 🔇 выключил звук`)
+            queue.textChannel.send({content:`${user} 🔇 выключил звук`})
             .then (queue => queue.delete({ timeout : 1500 }));
           }
           break;
@@ -168,7 +164,7 @@ module.exports = {
           else queue.volume = queue.volume - 10;
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
           queue.textChannel
-            .send(`${user} 🔉 понизил громкость к ${queue.volume}%`)
+            .send({content:`${user} 🔉 понизил громкость к ${queue.volume}%`})
             .then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
           break;
@@ -180,7 +176,7 @@ module.exports = {
           else queue.volume = Number(queue.volume) + 10;
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
           queue.textChannel
-            .send(`${user} 🔊 увеличил громкость к ${queue.volume}%`)
+            .send({content:`${user} 🔊 увеличил громкость к ${queue.volume}%`})
             .then (queue => queue.delete({ timeout : 1500 }))
             .catch(console.error);
           break;
@@ -189,7 +185,7 @@ module.exports = {
           reaction.users.remove(user).catch(console.error);
           if (!canModifyQueue(member)) return;
           queue.loop = !queue.loop;
-          queue.textChannel.send(`повторение трека ${queue.loop ? "**включено**" : "**выключено**"}`)
+          queue.textChannel.send({content:`повторение трека ${queue.loop ? "**включено**" : "**выключено**"}`})
           .then (queue => queue.delete({ timeout : 1500 }))
           .catch(console.error);
           break;
@@ -198,7 +194,7 @@ module.exports = {
           reaction.users.remove(user).catch(console.error);
           if (!canModifyQueue(member)) return;
           queue.songs = [];
-          queue.textChannel.send(`${user} ⏹ остановил трек`)
+          queue.textChannel.send({content:`${user} ⏹ остановил трек`})
           .then (queue => queue.delete({ timeout : 1500 }))
           .catch(console.error);
           try {
@@ -222,5 +218,5 @@ module.exports = {
         playingMessage.delete({ timeout: 3000 }).catch(console.error);
       }
     });
-  }
+  }//=================================================================================
 };

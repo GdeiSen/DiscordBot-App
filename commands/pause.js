@@ -1,27 +1,23 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
 const Discord = require("discord.js");
-module.exports.run = (bot, message, args)=>{
+const embedGenerator = require("../include/embedGenerator")
+text = require("../text_packs/en.json")
+module.exports.run = async(bot, message, args)=>{
    {
-    var embed1 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Ничего не воспроизводится**')
-    .setColor('RED')
-    const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply(embed1).catch(console.error);
+    let embed1 = await embedGenerator.run('warnings.error_03');
+    let queue = client.player.getQueue(message.guild.id);
+    if (!queue) return message.reply({embeds: [embed1]}).catch(console.error);
     if (!canModifyQueue(message.member)) return;
-
-    if (queue.playing) {
-      queue.playing = false;
-      queue.connection.dispatcher.pause(true);
-      return queue.textChannel.send(`${message.author} ⏸ поставил на паузу`).catch(console.error);
-    }
+    queue.pause();
+    queue.textChannel.send({content: `${message.author} ${text.music.pause.info_01}`}).catch(console.error);
   }
 }
 module.exports.config = {
   name: "pause",
-  description: "Ставит на паузу возпроизведение",
+  description: "Pauses the playback",
   usage: "~pause",
   accessableby: "Members",
-  aliases: ['p', 'pau']
+  aliases: ['p', 'pau'],
+  category: "music"
 }
 

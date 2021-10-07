@@ -12,16 +12,17 @@ module.exports.run = async (bot, message, args) => {
     hours %= 24;
 
     let embed = new Discord.MessageEmbed()
-    .setTitle('текущее внутреннее время бота')
-    .setDescription(`время: \`${days} дни,${hours} часы, ${minutes} минуты, ${seconds} секунды\``)
-    .setColor('GREEN')
-    message.channel.send(embed)
+    .setTitle('Bot LifeTime Function')
+    .setDescription(`⏰ **Last Reboot:** Time: \`${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds\``)
+    .setColor('BLACK')
+    message.channel.send({embeds:[embed]})
 }
 
 module.exports.config = {
     name: "time",
-    description: "отображает текущее время и дату бота",
+    description: "displays the current time and date of the bot",
     usage: "~time",
     accessableby: "Members",
-    aliases: ['uptime']
+    aliases: ['uptime'],
+    category: "admin"
 }

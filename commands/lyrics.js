@@ -1,38 +1,61 @@
-const { MessageEmbed } = require("discord.js");
+const Discord = require("discord.js");
 const lyricsFinder = require("lyrics-finder");
-
-module.exports.run = async (bot, message, args) => {try{
-    const queue = message.client.queue.get(message.guild.id);
-    
+const embedGenerator = require("../include/embedGenerator");
+module.exports.run = async (client, message, args) => {
+  try {
+    let queue = client.player.getQueue(message.guild.id);
+    let name;
+    let embed1 = await embedGenerator.run("music.lyrics.error_01");
+    let embed2 = await embedGenerator.run("music.lyrics.error_02");
+    let embed3 = await embedGenerator.run("music.lyrics.error_03");
+    let embed4 = await embedGenerator.run("music.lyrics.info_01");
     let lyrics = null;
-    const title = queue.songs[0].title;
-    console.log(args);
-    if (args != '~lyr','~lyrics' && args) {lyrics = await lyricsFinder(args);
-        if (!lyrics) lyrics = ("Текст не был найден!");
+    if (!queue && !args) {
+      message.channel.send({ embeds: [embed3] });
+      return 0;
+    } else if (!queue && args) {
+      try {
+        lyrics = await lyricsFinder(args);
+        if (!lyrics) throw error;
+        name = args;
+      } catch (error) {
+        message.channel.send({ embeds: [embed2] });
+        return 0;
+      }
+    } else if (queue && !args) {
+      try {
+        const title = client.queue.songs[0].name;
+        name = title;
+        lyrics = await lyricsFinder(title);
+        if (!lyrics) throw error;
+      } catch (error) {
+        message.channel.send({ embeds: [embed1] });
+        return 0;
+      }
+    } else if (queue && args) {
+      try {
+        lyrics = await lyricsFinder(args);
+        if (!lyrics) throw error;
+        name = args;
+      } catch (error) {
+        message.channel.send({ embeds: [embed2] });
+        return 0;
+      }
     }
-    else{
-    try {
-      lyrics = await lyricsFinder(queue.songs[0].title);
-      if (!lyrics) lyrics = ("Текст не был найден!\n Попробуйте использовать ручной поиск > ~lyrics [args]");
-    } catch (error) {
-      lyrics = ("lyrics.lyricsNotFound");
-    }
-}
-    let lyricsEmbed = new MessageEmbed()
-      .setTitle('Текст песни')
-      .setDescription(lyrics)
-      .setColor("GREEN")
-      .setTimestamp();
 
-    if (lyricsEmbed.description.length >= 2048)
-      lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 2045)}...`;
-    return message.channel.send(lyricsEmbed).catch(console.error);
-  }catch{console.log('lyrics error')}}
+    embed4.setDescription(`${embed4.description} **${name}**\n  ${lyrics}`);
+    if (embed4.description.length >= 2048) embed4.description = `${embed4.description.substr(0, 2045)}...`;
+    message.channel.send({ embeds: [embed4] }).catch(console.error);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports.config = {
-    name: "lyrics",
-    description: "ввыводит текст песни",
-    usage: "~lyrics",
-    accessableby: "Members",
-    aliases: ['lyr']
-}
+  name: "lyrics",
+  description: "displays the lyrics of the song",
+  usage: "~lyrics",
+  accessableby: "Members",
+  aliases: ["lyr"],
+  category: "music"
+};

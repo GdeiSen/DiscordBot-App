@@ -8,8 +8,9 @@ module.exports.run = (bot, message, args) => {
     }
   module.exports.config = {
     name: "start",
-    description: "Лучше не использовать",
+    description: "It is better not to use",
     usage: "~start",
     accessableby: "Members",
-    aliases: ['strt']
+    aliases: ['strt'],
+    category: "test"
   }

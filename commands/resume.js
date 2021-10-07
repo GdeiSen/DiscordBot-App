@@ -1,5 +1,6 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
 const Discord = require("discord.js");
+const embedGenerator = require("../include/embedGenerator");
 module.exports.run = (bot, message, args) => {
   var embed1 = new Discord.MessageEmbed()
   .setTitle('ошибка')
@@ -12,15 +13,16 @@ module.exports.run = (bot, message, args) => {
     if (!queue.playing) {
       queue.playing = true;
       queue.connection.dispatcher.resume();
-      return queue.textChannel.send(`${message.author} ▶ продолжил воспроизведение!`).catch(console.error);
+      return queue.textChannel.send({content: `${message.author} ${embedGenerator.run('direct.music.resume.info_01')}`}).catch(console.error);
     }
 
-    return message.reply("воспроизведение продолжено").catch(console.error);
+    return message.reply({content: `${embedGenerator.run('direct.music.resume.info_02')}`}).catch(console.error);
   };
 module.exports.config = {
   name: "resume",
-  description: "Продолжает воспроизведение трека",
+  description: "Continues playing the track",
   usage: "~resume",
   accessableby: "Members",
-  aliases: ['res']
+  aliases: ['res'],
+  category: "music"
 }

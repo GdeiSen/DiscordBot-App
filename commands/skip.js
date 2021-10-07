@@ -1,23 +1,28 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
 const Discord = require("discord.js");
-module.exports.run =(bot, message, args) => {
-  var embed1 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Ничего не воспроизводится**')
-  .setColor('RED')
-    const queue = message.client.queue.get(message.guild.id);
-    if (!queue)
-      return message.reply(embed1).catch(console.error);
-    if (!canModifyQueue(message.member)) return;
+const embedGenerator = require("../include/embedGenerator");
+module.exports.run = (bot, message, args) => {
+  let embed1 = embedGenerator.run("warnings.error_03");
+  const queue = message.client.queue.get(message.guild.id);
+  if (!queue)
+    return message
+      .send({
+        embeds: [embed1]
+      })
+      .catch(console.error);
+  if (!canModifyQueue(message.member)) return;
 
-    queue.playing = true;
-    queue.connection.dispatcher.end();
-    queue.textChannel.send(`${message.author} ⏭ пропустил трек`).catch(console.error);
-  };
-  module.exports.config = {
-    name: "skip",
-    description: "Пропускает трек",
-    usage: "~skip",
-    accessableby: "Members",
-    aliases: ['sk']
-  }
+  queue.playing = true;
+  queue.connection.dispatcher.end();
+  queue.textChannel
+    .send(`${message.author} ${embedGenerator.run("direct.music.skip.info_01")}`)
+    .catch(console.error);
+};
+module.exports.config = {
+  name: "skip",
+  description: "Skips a track",
+  usage: "~skip",
+  accessableby: "Members",
+  aliases: ["sk"],
+  category: "music"
+};

@@ -5,7 +5,7 @@ var _require = require("discord.js"),
 
 var Discord = require("discord.js");
 
-var YouTubeAPI = require("youtube-api");
+var YouTubeAPI = require("simple-youtube-api");
 
 var _require2 = require("../util/EvobotUtil"),
     YOUTUBE_API_KEY = _require2.YOUTUBE_API_KEY;
@@ -175,8 +175,9 @@ module.exports.run = function _callee(bot, message, args) {
 
 module.exports.config = {
   name: "search",
-  description: "выполняет поиск трека и проигрывает его",
+  description: "searches for a track and plays it",
   usage: "~search",
   accessableby: "Members",
-  aliases: ['s']
+  aliases: ['s'],
+  category: "music"
 };

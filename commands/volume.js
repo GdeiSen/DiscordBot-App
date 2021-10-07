@@ -1,46 +1,34 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
-const Discord = require("discord.js");
+const embedGenerator = require("../include/embedGenerator")
 module.exports.run = (bot, message, args) => {
 
-  var embed1 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Ничего не воспроизводится**')
-  .setColor('RED')
 
-  var embed2 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Для начала нужно быть в голосовом канале**')
-  .setColor('RED')
+  let embed1 = embedGenerator.run("warnings.error_03");
+  let embed2 = embedGenerator.run('music.play.error_02');
+  let embed3 = embedGenerator.run('music.volume.error_01');
+  let embed4 = embedGenerator.run('music.volume.error_02');
 
-  var embed3 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Введите параметр громкости**')
-  .setColor('RED')
-
-  var embed4 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Введите параметр громкости от 0 до 100**')
-  .setColor('RED')
     const queue = message.client.queue.get(message.guild.id);
 
-    if (!queue) return message.reply(embed1).catch(console.error);
+    if (!queue) return message.channel.send({embeds:[embed1]}).catch(console.error);
     if (!canModifyQueue(message.member))
-      return message.reply(embed2).catch(console.error);
+      return message.channel.send({embeds:[embed2]}).catch(console.error);
 
-    if (!args) return message.reply(`🔊 Громкость: **${queue.volume}%**`).catch(console.error);
-    if (isNaN(args)) return message.reply(`🔊 Громкость: **${queue.volume}%**`).catch(console.error);
+    if (!args) return message.channel.send({content:`${embedGenerator.run("direct.music.volume.info_01")} **${queue.volume}%**`}).catch(console.error);
+    if (isNaN(args)) return message.channel.send({content:`${embedGenerator.run("direct.music.volume.info_01")} **${queue.volume}%**`}).catch(console.error);
     if (Number(args) > 100 || Number(args) < 0 )
-      return message.reply(embed4).catch(console.error);
+      return message.channel.send({embeds:[embed4]}).catch(console.error);
 
     queue.volume = args;
     queue.connection.dispatcher.setVolumeLogarithmic(args / 100);
 
-    return queue.textChannel.send(`Громкость выставлена на: **${args}%**`).catch(console.error);
+    return queue.textChannel.send({content:`${embedGenerator.run("direct.music.volume.info_02")} **${args}%**`}).catch(console.error);
   };
   module.exports.config = {
     name: "volume",
-    description: "Выставляет значение громкости",
+    description: "Sets the volume value",
     usage: "~volume args",
     accessableby: "Members",
-    aliases: ['vol']
+    aliases: ['vol'],
+    category: "music"
   }

@@ -1,26 +1,22 @@
-//const createBar = require("string-progressbar");
+
+const createBar = require("string-progressbar");
 const { MessageEmbed } = require("discord.js");
-
-module.exports.run = (bot,message,args)=>{
-    const queue = message.client.queue.get(message.guild.id);
-
-    var embed1 = new MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Ничего не воспроизводится**')
-    .setColor('RED')
-
-    if (!queue) return message.reply(embed1).catch(console.error);
+const embedGenerator = require("../include/embedGenerator")
+module.exports.run = async(client,message,args)=>{
+    let queue = await client.player.getQueue(message.guild.id);
+    let embed1 = await embedGenerator.run('warnings.error_03');
+  
+    if (!queue) return message.reply({embeds: [embed1]}).catch(console.error);
 
     const song = queue.songs[0];
-    const seek = (queue.connection.dispatcher.streamTime - queue.connection.dispatcher.pausedTime) / 1000;
+    const seek = (queue.connection.streamTime - queue.connection.pausedTime) / 1000;
     const left = song.duration - seek;
-
-    let nowPlaying = new MessageEmbed()
-      .setTitle("сейчас играет")
-      .setDescription(`${song.title}\n${song.url}`)
-      .setColor('GREEN')
-      .setAuthor(message.client.user.username);
-
+    console.log(seek);
+    let nowPlaying = await embedGenerator.run('music.nowPlaying.info_01');
+    nowPlaying
+      .setDescription(`${song.name}\n${song.url}`)
+      .setAuthor(message.client.user.username)
+      .setThumbnail(song.thumbnail)
     if (song.duration > 0) {
       nowPlaying.addField(
         "\u200b",
@@ -34,12 +30,13 @@ module.exports.run = (bot,message,args)=>{
       nowPlaying.setFooter("Time Remaining: " + new Date(left * 1000).toISOString().substr(11, 8));
     }
 
-    return message.channel.send(nowPlaying);
+    return message.channel.send({embeds: [nowPlaying]});
   };
   module.exports.config = {
     name: "nowplaying",
-    description: "отображает текущее воспроизведение",
+    description: "displays the current playback",
     usage: "~nowplaying",
     accessableby: "Members",
-    aliases: ['now', 'n', 'np']
+    aliases: ['now', 'n', 'np'],
+    category: "music"
 }

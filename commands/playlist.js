@@ -4,61 +4,37 @@ const YouTubeAPI = require("simple-youtube-api");
 const Discord = require("discord.js");
 const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID, MAX_PLAYLIST_SIZE, DEFAULT_VOLUME} = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
-
+const embedGenerator = require("../include/embedGenerator");
 
 module.exports.run = async (bot,message,args)=>{
-  var embed1 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Для начала нужно быть в голосовом канале!**')
-    .setColor('RED')
 
-    var embed2 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Вы должны быть в одинаковым канале с ботом!**')
-    .setColor('RED')
 
-    let embed3 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Кажется у меня недостаточно прав для присоединения к вашему каналу!**')
-    .setColor('RED')
-
-    let embed4 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Кажется у меня недостаточно прав для проигрывания музыки!**')
-    .setColor('RED')
-
-    let embed5 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**К сожалению ничего не нашлось!**')
-    .setColor('RED')
-
-    let embed6 = new Discord.MessageEmbed()
-    .setTitle('ошибка')
-    .setDescription('**Кажется что-то пошло не так!**')
-    .setColor('RED')
-
-    let embed7 = new Discord.MessageEmbed()
-    .setTitle('использование')
-    .setDescription(`~ play <YouTube URL | Video Name | Soundcloud URL>`)
-    .setColor('ORANGE')
+  let embed1 = await embedGenerator.run('music.play.error_02');
+  let embed2 = await embedGenerator.run('music.play.error_01');
+  let embed3 = await embedGenerator.run('music.play.error_03');
+  let embed4 = await embedGenerator.run('music.play.error_04');
+  let embed5 = await embedGenerator.run('music.play.error_05');
+  let embed6 = await embedGenerator.run('music.play.error_06');
+  let embed7 = await embedGenerator.run('music.play.info_01');
+  embed7.setDescription(embed7.description + ` **Playlist "args"**`);
 
     const { channel } = message.member.voice;
     const serverQueue = message.client.queue.get(message.guild.id);
 
+    if (serverQueue && channel !== message.guild.me.voice.channel)
+      return message.reply({embeds: [embed2]}).catch(console.error);
+
     if (!args.length)
       return message
-        .reply(embed7)
+        .reply({embeds: [embed7]})
         .catch(console.error);
-    if (!channel) return message.reply(embed1).catch(console.error);
+    if (!channel) return message.reply({embeds: [embed1]}).catch(console.error);
 
     const permissions = channel.permissionsFor(message.client.user);
     if (!permissions.has("CONNECT"))
-      return message.reply(embed3);
+      return message.reply({embeds: [embed3]});
     if (!permissions.has("SPEAK"))
-      return message.reply(embed4);
-
-    if (serverQueue && channel !== message.guild.me.voice.channel)
-      return message.reply(embed2).catch(console.error);
+      return message.reply({embeds: [embed4]});
 
     const search = args;
     const pattern = /^.*(youtu.be\/|list=)([^#\&\?]*).*/gi;
@@ -71,7 +47,7 @@ module.exports.run = async (bot,message,args)=>{
       connection: null,
       songs: [],
       loop: false,
-      volume: DEFAULT_VOLUME || 100,
+      volume: DEFAULT_VOLUME || 50,
       playing: true
     };
 
@@ -84,7 +60,7 @@ module.exports.run = async (bot,message,args)=>{
         videos = await playlist.getVideos(MAX_PLAYLIST_SIZE || 30, { part: "snippet" });
       } catch (error) {
         console.error(error);
-        return message.reply(embed5).catch(console.error);
+        return message.reply({embeds: [embed5]}).catch(console.error);
       }
     } else {
       try {
@@ -93,15 +69,14 @@ module.exports.run = async (bot,message,args)=>{
         videos = await playlist.getVideos(MAX_PLAYLIST_SIZE || 30, { part: "snippet" });
       } catch (error) {
         console.error(error);
-        return message.reply(error.message).catch(console.error);
+        return message.reply({content: `${error.message}`}).catch(console.error);
       }
     }
 
     const newSongs = videos.map((video) => {
       return (song = {
-        title: video.title,
         url: video.url,
-        duration: video.durationSeconds
+        author: message.author
       });
     });
 
@@ -112,7 +87,7 @@ module.exports.run = async (bot,message,args)=>{
 
     
 
-    message.channel.send(`${message.author} Заказал плейлист`);
+    message.channel.send({content: `${message.author} Заказал плейлист`});
     
 
     if (!serverQueue) {
@@ -126,15 +101,16 @@ module.exports.run = async (bot,message,args)=>{
         console.error(error);
         message.client.queue.delete(message.guild.id);
         await channel.leave();
-        return message.channel.send(embed2).catch(console.error);
+        return message.channel.send({embeds:[embed2]}).catch(console.error);
       }
     }
-    queue(bot,message,args);
+    //queue(bot,message,args);
   };
   module.exports.config = {
     name: "playlist",
-    description: "выполняет проигрывание плейлиста",
+    description: "plays a playlist",
     usage: "~playlist",
     accessableby: "Members",
-    aliases: ['pl']
+    aliases: ['pl'],
+    category: "music"
 }

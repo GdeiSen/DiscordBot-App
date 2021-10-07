@@ -1,31 +1,27 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
 const Discord = require("discord.js");
+const embedGenerator = require("../include/embedGenerator");
 module.exports.run = (bot,message, args) => {
   
-  var embed1 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Ничего не воспроизводится**')
-  .setColor('RED')
+  let embed1 = embedGenerator.run('warnings.error_01');
+  let embed2 = embedGenerator.run('music.remove.error_01');
 
-  var embed2 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription(`**недостаточно треков в очереди**`)
-  .setColor('RED')
     const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.channel.send(embed1).catch(console.error);
+    if (!queue) return message.channel.send({embeds: [embed1]}).catch(console.error);
     if (!canModifyQueue(message.member)) return;
     if (args[0] > queue.songs.length)
       return message.reply(embed2).catch(console.error);
-    if (!args.length) return message.reply(`Использование: ${message.client.prefix}remove <номер>`);
-    if (isNaN(args[0])) return message.reply(`Использование: ${message.client.prefix}remove <номер>`);
+    if (!args.length) return message.reply({content: `${embedGenerator.run('direct.warnings.info_01')} ${message.client.prefix} ${embedGenerator.run('direct.warnings.info_02')}`});
+    if (isNaN(args[0])) return message.reply({content: `${embedGenerator.run('direct.warnings.info_01')} ${message.client.prefix} ${embedGenerator.run('direct.warnings.info_02')}`});
 
-    const song = queue.songs.splice(args[0] - 1, 1);
-    queue.textChannel.send(`${message.author} ❌ убрал **${song[0].title}** из очереди`);
+    const song = queue.songs.splice(args - 1, 1);
+    queue.textChannel.send({content: `${message.author} ${embedGenerator.run('direct.warnings.info_03')} **${song[0].title}** ${embedGenerator.run('direct.warnings.info_04')}`});
   };
   module.exports.config = {
     name: "remove",
-    description: "удаляет трек из очереди",
+    description: "deletes a track from the queue",
     usage: "~remove args",
     accessableby: "Members",
-    aliases: []
+    aliases: [],
+    category: "music"
   }
