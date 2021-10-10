@@ -1,7 +1,7 @@
 {
-  "name": "gdeibot",
-  "version": "0.2",
-  "description": "Бот для музыки и многого другого",
+  "name": "gordeybot",
+  "version": "2.4",
+  "description": "Music Discord Bot",
   "main": "index.js",
   "author": "Gordey (gordeysenuta@gmail.com)",
   "private": true,

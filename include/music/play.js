@@ -1,7 +1,7 @@
 const { song_ } = require("./song.js")
 const ytdl = require("ytdl-core");
 const Youtube  = require("simple-youtube-api");
-const youtube = new Youtube(youtubeAPI);
+//const youtube = new Youtube(youtubeAPI);
 const { queueMaster } = require("./queueConstructor.js");
 class songMaster {
     constructor(client,message){
@@ -9,7 +9,7 @@ class songMaster {
         this.serverQueueConstruct = new queueMaster(client,message);
     }
     serverQueueConstruct = new queueMaster(client,message);
-    resolveYouTube(query){
+    /*resolveYouTube(query){
         if (query.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/)) {
             try {
               const playlist = await youtube.getPlaylist(query);
@@ -91,6 +91,6 @@ class songMaster {
           console.error(e);
           return voiceChannel.leave();
         });
-    }
+    }*/
 }
 exports.queueMaster = songMaster;
