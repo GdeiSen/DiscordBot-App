@@ -1,6 +1,6 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
 const Discord = require("discord.js");
-const embedGenerator = require("../include/embedGenerator")
+const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = (bot, message, args) =>{
     let embed1 = embedGenerator.run('warnings.error_03');
 

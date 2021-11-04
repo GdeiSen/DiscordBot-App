@@ -1,5 +1,5 @@
 const Discord = require("discord.js")
-const embedGenerator = require("../include/embedGenerator")
+const embedGenerator = require("../include/utils/embedGenerator")
 
 module.exports.run = async (bot, message, args) => {
     let embed = await embedGenerator.run('info.ping.info_01');

@@ -7,7 +7,7 @@ const {
   YOUTUBE_API_KEY
 } = require("../util/EvobotUtil");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
-const embedGenerator = require("../include/embedGenerator")
+const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = async (bot, message, args) => {
   let embed1 = await embedGenerator.run('music.play.error_02');
   let embed2 = await embedGenerator.run('music.search.error_01');

@@ -1,18 +1,57 @@
 "use strict";
 
-var _require = require("../util/EvobotUtil"),
-    canModifyQueue = _require.canModifyQueue;
+var embedGenerator = require("../include/utils/embedGenerator");
 
-var Discord = require("discord.js");
+var _require = require("../include/music_engine/queueMaster"),
+    queueMaster = _require.queueMaster;
 
-module.exports.run = function (bot, message, args) {
-  var embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Ничего не воспроизводится**').setColor('RED');
-  var queue = message.client.queue.get(message.guild.id);
-  if (!queue) return message.reply(embed1)["catch"](console.error);
-  if (!canModifyQueue(message.member)) return;
-  queue.songs = [];
-  queue.connection.dispatcher.end();
-  queue.textChannel.send("".concat(message.author, " \u23F9 \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u043B \u043C\u0443\u0437\u044B\u043A\u0443!"))["catch"](console.error);
+var _require2 = require("../include/utils/accesTester.js"),
+    accesTester = _require2.accesTester;
+
+module.exports.run = function _callee2(client, message, args) {
+  var tester;
+  return regeneratorRuntime.async(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          tester = new accesTester(message, args);
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(tester.testPlayCommandAudioAccesPack().then(function _callee(result) {
+            var queue, embed;
+            return regeneratorRuntime.async(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    queue = client.queue.get(message.guild.id);
+                    QueueMaster = new queueMaster(client, message);
+                    QueueMaster.clearQueue();
+                    queue.status = 'stopped';
+                    queue.player.stop();
+                    embed = embedGenerator.run('music.stop.info_01');
+                    embed.setDescription("".concat(message.author.username, " ").concat(embed.description));
+                    message.channel.send({
+                      embeds: [embed]
+                    });
+
+                  case 8:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            });
+          }, function (error) {
+            message.channel.send({
+              embeds: [error]
+            });
+            return 0;
+          }));
+
+        case 3:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  });
 };
 
 module.exports.config = {
@@ -20,6 +59,6 @@ module.exports.config = {
   description: "Stops playback",
   usage: "~stop",
   accessableby: "Members",
-  aliases: ['stp'],
+  aliases: ["stp"],
   category: "music"
 };

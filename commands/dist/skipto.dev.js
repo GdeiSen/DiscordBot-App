@@ -1,31 +1,87 @@
 "use strict";
 
-var _require = require("../util/EvobotUtil"),
-    canModifyQueue = _require.canModifyQueue;
+var embedGenerator = require("../include/utils/embedGenerator");
 
-var Discord = require("discord.js");
+var _require = require("../include/music_engine/queueMaster"),
+    queueMaster = _require.queueMaster;
 
-module.exports.run = function (bot, message, args) {
-  var queue = message.client.queue.get(message.guild.id);
-  var embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Ничего не воспроизводится**').setColor('RED');
-  var embed2 = new Discord.MessageEmbed().setTitle('ошибка').setDescription("**\u043D\u0435\u0434\u043E\u0441\u0442\u0430\u0442\u043E\u0447\u043D\u043E \u0442\u0440\u0435\u043A\u043E\u0432 \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438.\n\u0438\u043B\u0438 \u0432\u044B \u043F\u0440\u0435\u0432\u044B\u0441\u0438\u043B\u0438 \u043C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u043E\u0435 \u0447\u0438\u0441\u043B\u043E \u0434\u043B\u044F \u043F\u0440\u043E\u043F\u0443\u0441\u043A\u0430 - 15**").setColor('RED');
-  if (!queue) return message.channel.send(embed1)["catch"](console.error);
-  if (!args.length || isNaN(args)) return message.reply("\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u0435: ".concat(message.client.prefix).concat(module.exports.name, " <Queue Number>"))["catch"](console.error);
-  if (!queue) return message.channel.send(embed1)["catch"](console.error);
-  if (!canModifyQueue(message.member)) return;
-  if (args > queue.songs.length) return message.reply(embed2)["catch"](console.error);
-  queue.playing = true;
+var _require2 = require("../include/utils/accesTester.js"),
+    accesTester = _require2.accesTester;
 
-  if (queue.loop) {
-    for (var i = 0; i < args - 2; i++) {
-      queue.songs.push(queue.songs.shift());
+var skip = require('./skip');
+
+module.exports.run = function _callee2(client, message, args) {
+  var tester;
+  return regeneratorRuntime.async(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          tester = new accesTester(message, args);
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(tester.testPlayCommandAudioAccesPack().then(function _callee(result) {
+            var queue, embed2, i, embed;
+            return regeneratorRuntime.async(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    queue = message.client.queue.get(message.guild.id);
+                    embed2 = embedGenerator.run('music.skipto.error_01');
+
+                    if (!(args > queue.songs.length)) {
+                      _context.next = 6;
+                      break;
+                    }
+
+                    return _context.abrupt("return", message.reply({
+                      embeds: [embed2]
+                    })["catch"](console.error));
+
+                  case 6:
+                    if (!(args == 1 || args == 0)) {
+                      _context.next = 9;
+                      break;
+                    }
+
+                    skip.run(client, message, args);
+                    return _context.abrupt("return", 0);
+
+                  case 9:
+                    if (queue.config.loop == true) {
+                      for (i = 0; i < args - 2; i++) {
+                        queue.songs.push(queue.songs.shift());
+                      }
+                    } else {
+                      queue.songs = queue.songs.slice(args - 2);
+                    }
+
+                    QueueMaster = new queueMaster(client, message);
+                    queue.status = 'pending';
+                    queue.player.stop();
+                    embed = embedGenerator.run('music.skip.info_01');
+                    embed.setDescription("".concat(message.author.username, " ").concat(embed.description));
+                    message.channel.send({
+                      embeds: [embed]
+                    });
+
+                  case 16:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            });
+          }, function (error) {
+            message.channel.send({
+              embeds: [error]
+            });
+            return 0;
+          }));
+
+        case 3:
+        case "end":
+          return _context2.stop();
+      }
     }
-  } else {
-    queue.songs = queue.songs.slice(args - 2);
-  }
-
-  queue.connection.dispatcher.end();
-  queue.textChannel.send("".concat(message.author, " \u23ED \u043F\u0440\u043E\u043F\u0443\u0441\u0442\u0438\u043B \u043D\u0430 ").concat(args - 1, " \u0442\u0440\u0435\u043A\u043E\u0432"))["catch"](console.error);
+  });
 };
 
 module.exports.config = {
@@ -33,6 +89,6 @@ module.exports.config = {
   description: "Skips a track for a certain period",
   usage: "~skipto args",
   accessableby: "Members",
-  aliases: ['skpt'],
+  aliases: ["skpt"],
   category: "music"
 };

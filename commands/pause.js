@@ -1,15 +1,19 @@
-const { canModifyQueue } = require("../util/EvobotUtil");
-const Discord = require("discord.js");
-const embedGenerator = require("../include/embedGenerator")
-text = require("../text_packs/en.json")
-module.exports.run = async(bot, message, args)=>{
-   {
-    let embed1 = await embedGenerator.run('warnings.error_03');
-    let queue = client.player.getQueue(message.guild.id);
-    if (!queue) return message.reply({embeds: [embed1]}).catch(console.error);
-    if (!canModifyQueue(message.member)) return;
-    queue.pause();
-    queue.textChannel.send({content: `${message.author} ${text.music.pause.info_01}`}).catch(console.error);
+const embedGenerator = require("../include/utils/embedGenerator")
+const { accesTester } = require("../include/utils/accesTester.js");
+module.exports.run = async(client, message, args)=>{
+{
+  const tester = new accesTester(message, args);
+  await tester.testPlayCommandAudioAccesPack().then(
+    async (result) => {
+      let queue = client.queue.get(message.guild.id);
+      if(queue.status === 'paused'){message.channel.send({content: `${message.author} ${embedGenerator.run('direct.music.pause.info_02')}`}).catch(console.error);}
+      else{let embed = embedGenerator.run('music.pause.info_01');
+      embed.setDescription(`${message.author.username} ${embed.description}`);
+      message.channel.send({embeds:[embed]})}
+      queue.status = 'paused';
+      queue.player.pause();
+    },
+    (error) => {message.channel.send({ embeds: [error] }); return 0});
   }
 }
 module.exports.config = {
@@ -17,7 +21,7 @@ module.exports.config = {
   description: "Pauses the playback",
   usage: "~pause",
   accessableby: "Members",
-  aliases: ['p', 'pau'],
+  aliases: ['pa', 'pau'],
   category: "music"
 }
 

@@ -1,6 +1,6 @@
-const embedGenerator = require("../include/embedGenerator");
+const embedGenerator = require("../include/utils/embedGenerator")
 const { RepeatMode } = require('discord-music-player');
-const { accesTester } = require("../include/accesTester.js");
+const { accesTester } = require("../include/utils/accesTester.js");
 module.exports.run = async (client, message, args) => {
   const tester = new accesTester(message, args);
   await tester.testAdioWArgsAcces().then(

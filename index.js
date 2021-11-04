@@ -14,7 +14,7 @@ const { MessageEmbed } = require("discord.js");
 
 client.once("ready", () => {
   console.log(`⬜ Main Base Is Enable`);
-  client.user.setActivity(`~help и ~play`, {
+  client.user.setActivity(`In Development!`, {
     type: "LISTENING"
   });
 });
@@ -61,7 +61,7 @@ client.on('messageCreate', async message => {
 
   let commandfile = client.commands.get(cmd.slice(client.prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(client.prefix.length)))
   try {
-    if (commandfile && require("./idblocker").run(message) === "admin"){commandfile.run(client, message, args)};
+    if (commandfile && require("./include/utils/idBlocker").run(message) === "admin"){commandfile.run(client, message, args)};
   } catch (error) {
     let error_text = new MessageEmbed()
       .setTitle(text.warnings.error_01.embedTitle)

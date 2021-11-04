@@ -1,23 +1,23 @@
-const { canModifyQueue } = require("../util/EvobotUtil");
-const Discord = require("discord.js");
-const embedGenerator = require("../include/embedGenerator");
-module.exports.run = (bot, message, args) => {
-  var embed1 = new Discord.MessageEmbed()
-  .setTitle('ошибка')
-  .setDescription('**Ничего не воспроизводится**')
-  .setColor('RED')
-    const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply(embed1).catch(console.error);
-    if (!canModifyQueue(message.member)) return;
-
-    if (!queue.playing) {
-      queue.playing = true;
-      queue.connection.dispatcher.resume();
-      return queue.textChannel.send({content: `${message.author} ${embedGenerator.run('direct.music.resume.info_01')}`}).catch(console.error);
+const embedGenerator = require("../include/utils/embedGenerator")
+const { accesTester } = require("../include/utils/accesTester.js");
+module.exports.run = async(client, message, args)=>{
+  {
+    const tester = new accesTester(message, args);
+    await tester.testPlayCommandAudioAccesPack().then(
+      async (result) => {
+        let queue = client.queue.get(message.guild.id);
+        if(queue.status === 'playing'){message.channel.send({content: `${message.author} ${embedGenerator.run('direct.music.resume.info_02')}`}).catch(console.error);}
+        else{let embed = embedGenerator.run('music.resume.info_01');
+        embed.setDescription(`${message.author.username} ${embed.description}`);
+        message.channel.send({embeds:[embed]})}
+        queue.status = 'playing';
+        queue.player.unpause();
+        queue.player.emit('UNPAUSED');
+      },
+      (error) => {message.channel.send({ embeds: [error] }); return 0});
     }
-
-    return message.reply({content: `${embedGenerator.run('direct.music.resume.info_02')}`}).catch(console.error);
-  };
+  }
+  
 module.exports.config = {
   name: "resume",
   description: "Continues playing the track",
@@ -26,3 +26,5 @@ module.exports.config = {
   aliases: ['res'],
   category: "music"
 }
+
+

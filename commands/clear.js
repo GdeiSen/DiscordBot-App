@@ -1,6 +1,6 @@
 const Discord = require("discord.js")
 text = require("../text_packs/en.json")
-const embedGenerator = require("../include/embedGenerator")
+const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = async (bot, message, args) =>{
 
     let embed1 = await embedGenerator.run('warnings.clear.error_01');

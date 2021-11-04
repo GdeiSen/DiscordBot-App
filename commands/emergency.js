@@ -1,7 +1,7 @@
 //const { MessageEmbed, Message } = require("discord.js");
 const config = require("../config.json");
 const text = require("../text_packs/en.json");
-const embedGenerator = require("../include/embedGenerator");
+const embedGenerator = require("../include/utils/embedGenerator")
 
 
 module.exports.run = async (client, message, args) => {

@@ -1,18 +1,56 @@
 "use strict";
 
-var _require = require("../util/EvobotUtil"),
-    canModifyQueue = _require.canModifyQueue;
+var embedGenerator = require("../include/utils/embedGenerator");
 
-var Discord = require("discord.js");
+var _require = require("../include/music_engine/queueMaster"),
+    queueMaster = _require.queueMaster;
 
-module.exports.run = function (bot, message, args) {
-  var embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Ничего не воспроизводится**').setColor('RED');
-  var queue = message.client.queue.get(message.guild.id);
-  if (!queue) return message.reply(embed1)["catch"](console.error);
-  if (!canModifyQueue(message.member)) return;
-  queue.playing = true;
-  queue.connection.dispatcher.end();
-  queue.textChannel.send("".concat(message.author, " \u23ED \u043F\u0440\u043E\u043F\u0443\u0441\u0442\u0438\u043B \u0442\u0440\u0435\u043A"))["catch"](console.error);
+var _require2 = require("../include/utils/accesTester.js"),
+    accesTester = _require2.accesTester;
+
+module.exports.run = function _callee2(client, message, args) {
+  var tester;
+  return regeneratorRuntime.async(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          tester = new accesTester(message, args);
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(tester.testPlayCommandAudioAccesPack().then(function _callee(result) {
+            var queue, embed;
+            return regeneratorRuntime.async(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    queue = client.queue.get(message.guild.id);
+                    QueueMaster = new queueMaster(client, message);
+                    queue.status = 'pending';
+                    queue.player.stop();
+                    embed = embedGenerator.run('music.skip.info_01');
+                    embed.setDescription("".concat(message.author.username, " ").concat(embed.description));
+                    message.channel.send({
+                      embeds: [embed]
+                    });
+
+                  case 7:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            });
+          }, function (error) {
+            message.channel.send({
+              embeds: [error]
+            });
+            return 0;
+          }));
+
+        case 3:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  });
 };
 
 module.exports.config = {
@@ -20,6 +58,6 @@ module.exports.config = {
   description: "Skips a track",
   usage: "~skip",
   accessableby: "Members",
-  aliases: ['sk'],
+  aliases: ["sk"],
   category: "music"
 };

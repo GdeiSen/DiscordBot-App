@@ -1,23 +1,60 @@
 "use strict";
 
-var _require = require("../util/EvobotUtil"),
-    canModifyQueue = _require.canModifyQueue;
+var embedGenerator = require("../include/utils/embedGenerator");
 
-var Discord = require("discord.js");
+var _require = require("../include/utils/accesTester.js"),
+    accesTester = _require.accesTester;
 
-module.exports.run = function (bot, message, args) {
-  {
-    var embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Ничего не воспроизводится**').setColor('RED');
-    var queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply(embed1)["catch"](console.error);
-    if (!canModifyQueue(message.member)) return;
+module.exports.run = function _callee2(client, message, args) {
+  var tester;
+  return regeneratorRuntime.async(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          tester = new accesTester(message, args);
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(tester.testPlayCommandAudioAccesPack().then(function _callee(result) {
+            var queue, embed;
+            return regeneratorRuntime.async(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    queue = client.queue.get(message.guild.id);
 
-    if (queue.playing) {
-      queue.playing = false;
-      queue.connection.dispatcher.pause(true);
-      return queue.textChannel.send("".concat(message.author, " \u23F8 \u043F\u043E\u0441\u0442\u0430\u0432\u0438\u043B \u043D\u0430 \u043F\u0430\u0443\u0437\u0443"))["catch"](console.error);
+                    if (queue.status === 'paused') {
+                      message.channel.send({
+                        content: "".concat(message.author, " ").concat(embedGenerator.run('direct.music.pause.info_02'))
+                      })["catch"](console.error);
+                    } else {
+                      embed = embedGenerator.run('music.pause.info_01');
+                      embed.setDescription("".concat(message.author.username, " ").concat(embed.description));
+                      message.channel.send({
+                        embeds: [embed]
+                      });
+                    }
+
+                    queue.status = 'paused';
+                    queue.player.pause();
+
+                  case 4:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            });
+          }, function (error) {
+            message.channel.send({
+              embeds: [error]
+            });
+            return 0;
+          }));
+
+        case 3:
+        case "end":
+          return _context2.stop();
+      }
     }
-  }
+  });
 };
 
 module.exports.config = {
@@ -25,6 +62,6 @@ module.exports.config = {
   description: "Pauses the playback",
   usage: "~pause",
   accessableby: "Members",
-  aliases: ['p', 'pau'],
+  aliases: ['pa', 'pau'],
   category: "music"
 };

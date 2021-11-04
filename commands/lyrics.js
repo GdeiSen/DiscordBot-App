@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const lyricsFinder = require("lyrics-finder");
-const embedGenerator = require("../include/embedGenerator");
+const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = async (client, message, args) => {
   try {
-    let queue = client.player.getQueue(message.guild.id);
+    let queue = client.queue.get(message.guild.id);
     let name;
     let embed1 = await embedGenerator.run("music.lyrics.error_01");
     let embed2 = await embedGenerator.run("music.lyrics.error_02");
@@ -19,17 +19,17 @@ module.exports.run = async (client, message, args) => {
         if (!lyrics) throw error;
         name = args;
       } catch (error) {
-        message.channel.send({ embeds: [embed2] });
+        message.channel.send({ embeds: [embed1] });
         return 0;
       }
     } else if (queue && !args) {
       try {
-        const title = client.queue.songs[0].name;
+        const title = client.queue.songs[0].title;
         name = title;
         lyrics = await lyricsFinder(title);
         if (!lyrics) throw error;
       } catch (error) {
-        message.channel.send({ embeds: [embed1] });
+        message.channel.send({ embeds: [embed2] });
         return 0;
       }
     } else if (queue && args) {
@@ -38,7 +38,7 @@ module.exports.run = async (client, message, args) => {
         if (!lyrics) throw error;
         name = args;
       } catch (error) {
-        message.channel.send({ embeds: [embed2] });
+        message.channel.send({ embeds: [embed1] });
         return 0;
       }
     }

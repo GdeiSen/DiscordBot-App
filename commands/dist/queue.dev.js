@@ -3,10 +3,14 @@
 var _require = require("discord.js"),
     MessageEmbed = _require.MessageEmbed;
 
-var embedGenerator = require("../include/embedGenerator");
+var embedGenerator = require("../include/utils/embedGenerator");
+
+var _require2 = require('discord.js'),
+    MessageActionRow = _require2.MessageActionRow,
+    MessageButton = _require2.MessageButton;
 
 module.exports.run = function _callee2(bot, message, args) {
-  var embed1, embed4, permissions, queue, currentPage, embeds, queueEmbed, filter, collector;
+  var embed1, embed4, permissions, queue, row, currentPage, embeds, embed;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -28,7 +32,9 @@ module.exports.run = function _callee2(bot, message, args) {
             break;
           }
 
-          return _context2.abrupt("return", message.reply(embed4));
+          return _context2.abrupt("return", message.reply({
+            embeds: [embed4]
+          }));
 
         case 9:
           queue = message.client.queue.get(message.guild.id);
@@ -38,165 +44,114 @@ module.exports.run = function _callee2(bot, message, args) {
             break;
           }
 
-          return _context2.abrupt("return", message.channel.send(embed1));
+          return _context2.abrupt("return", message.channel.send({
+            embeds: [embed1]
+          }));
 
         case 12:
+          row = new MessageActionRow().addComponents(new MessageButton().setCustomId('primary').setLabel('Primary').setStyle('PRIMARY'));
           currentPage = 0;
-          _context2.next = 15;
-          return regeneratorRuntime.awrap(generateQueueEmbed(message, queue.songs));
+          _context2.next = 16;
+          return regeneratorRuntime.awrap(generateQueueEmbed(message, queue.songs, queue.current));
 
-        case 15:
+        case 16:
           embeds = _context2.sent;
-          _context2.next = 18;
-          return regeneratorRuntime.awrap(message.channel.send("**page - ".concat(currentPage + 1, "/").concat(embeds.length, "**"), embeds[currentPage]));
-
-        case 18:
-          queueEmbed = _context2.sent;
-          _context2.prev = 19;
-          _context2.next = 22;
-          return regeneratorRuntime.awrap(queueEmbed.react("⬅️"));
-
-        case 22:
-          _context2.next = 24;
-          return regeneratorRuntime.awrap(queueEmbed.react("⏹"));
-
-        case 24:
-          _context2.next = 26;
-          return regeneratorRuntime.awrap(queueEmbed.react("➡️"));
-
-        case 26:
-          _context2.next = 32;
-          break;
-
-        case 28:
-          _context2.prev = 28;
-          _context2.t0 = _context2["catch"](19);
-          console.error(_context2.t0);
-          message.channel.send(_context2.t0.message)["catch"](console.error);
-
-        case 32:
-          filter = function filter(reaction, user) {
-            return ["⬅️", "⏹", "➡️"].includes(reaction.emoji.name);
-          };
-
-          collector = queueEmbed.createReactionCollector(filter, {
-            time: 60000
-          });
-          collector.on("collect", function _callee(reaction, user) {
+          embed = embeds[currentPage];
+          console.log(embeds);
+          setTimeout(function _callee() {
             return regeneratorRuntime.async(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
                   case 0:
-                    _context.prev = 0;
+                    message.channel.send({
+                      content: 'Queue',
+                      embeds: [embed],
+                      components: [row]
+                    });
 
-                    if (reaction.emoji.name === "➡️") {
-                      if (currentPage < embeds.length - 1) {
-                        currentPage++;
-                        queueEmbed.edit("**\u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430 - ".concat(currentPage + 1, "/").concat(embeds.length, "**"), embeds[currentPage]);
-                      }
-                    } else if (reaction.emoji.name === "⬅️") {
-                      if (currentPage !== 0) {
-                        --currentPage;
-                        queueEmbed.edit("**\u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430 - ".concat(currentPage + 1, "/").concat(embeds.length, "**"), embeds[currentPage]);
-                      }
-                    } else {
-                      collector.stop();
-                      reaction.message.reactions.removeAll();
-                    }
-
-                    _context.next = 4;
-                    return regeneratorRuntime.awrap(reaction.users.remove(message.author.id));
-
-                  case 4:
-                    _context.next = 10;
-                    break;
-
-                  case 6:
-                    _context.prev = 6;
-                    _context.t0 = _context["catch"](0);
-                    console.error(_context.t0);
-                    return _context.abrupt("return", message.channel.send(_context.t0.message)["catch"](console.error));
-
-                  case 10:
+                  case 1:
                   case "end":
                     return _context.stop();
                 }
               }
-            }, null, null, [[0, 6]]);
-          });
+            });
+          }, 3000); //   try {
+          //     await queueEmbed.react("⬅️");
+          //     await queueEmbed.react("⏹");
+          //     await queueEmbed.react("➡️");
+          //   } catch (error) {
+          //     console.error(error);
+          //     message.channel.send({content: `${error.message}`}).catch(console.error);
+          //   }
+          //   const filter = (reaction, user) =>
+          //     ["⬅️", "⏹", "➡️"].includes(reaction.emoji.name);
+          //   const collector = queueEmbed.createReactionCollector(filter, { time: 60000 });
+          //   collector.on("collect", async (reaction, user) => {
+          //     try {
+          //       if (reaction.emoji.name === "➡️") {
+          //         if (currentPage < embeds.length - 1) {
+          //           currentPage++;
+          //           queueEmbed.edit(`**страница - ${currentPage + 1}/${embeds.length}**`, embeds[currentPage]);
+          //         }
+          //       } else if (reaction.emoji.name === "⬅️") {
+          //         if (currentPage !== 0) {
+          //           --currentPage;
+          //           queueEmbed.edit(`**страница - ${currentPage + 1}/${embeds.length}**`, embeds[currentPage]);
+          //         }
+          //       } else {
+          //         collector.stop();
+          //         reaction.message.reactions.removeAll();
+          //       }
+          //       await reaction.users.remove(message.author.id);
+          //     } catch (error) {
+          //       console.error(error);
+          //       return message.channel.send({content:`error.message`}).catch(console.error);
+          //     }
+          //   });
+          // }
 
-        case 35:
+        case 20:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[19, 28]]);
+  });
 };
 
-function generateQueueEmbed(message, queue) {
-  var embeds, k, _loop, i;
+function generateQueueEmbed(message, queue, current1) {
+  var embeds, k, currentSong, _loop, i;
 
-  return regeneratorRuntime.async(function generateQueueEmbed$(_context4) {
+  return regeneratorRuntime.async(function generateQueueEmbed$(_context3) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
           embeds = [];
           k = 10;
+          currentSong = current1;
 
           _loop = function _loop(i) {
-            var current, j, info, embed;
-            return regeneratorRuntime.async(function _loop$(_context3) {
-              while (1) {
-                switch (_context3.prev = _context3.next) {
-                  case 0:
-                    current = queue.slice(i, k);
-                    j = i;
-                    k += 10;
-                    info = current.map(function (track) {
-                      return "".concat(++j, " - [").concat(track.title, "](").concat(track.url, ")");
-                    }).join("\n");
-                    _context3.next = 6;
-                    return regeneratorRuntime.awrap(embedGenerator.run('music.queue.info_02'));
-
-                  case 6:
-                    embed = _context3.sent;
-                    _context3.next = 9;
-                    return regeneratorRuntime.awrap(embed.setThumbnail(queue[0].thumbnails).setDescription("**".concat(embed.description, " - [").concat(queue[0].title, "](").concat(queue[0].url, ")**\n\n").concat(info)).setTimestamp());
-
-                  case 9:
-                    console.log(embed);
-                    embeds.push(embed);
-
-                  case 11:
-                  case "end":
-                    return _context3.stop();
-                }
-              }
-            });
+            var current = queue.slice(i, k);
+            var j = i;
+            k += 10;
+            var info = current.map(function (track) {
+              return "".concat(++j, " - [").concat(track.title, "](").concat(track.url, ")");
+            }).join("\n");
+            var embed = new MessageEmbed();
+            embed.setTitle('Title').setThumbnail(queue[0].thumbnails).setDescription("**Now Playing - [".concat(currentSong.title, "](").concat(currentSong.url, ")**\n\n").concat(info)).setTimestamp().setColor('BLACK');
+            console.log(embed);
+            embeds.push(embed);
           };
 
-          i = 0;
-
-        case 4:
-          if (!(i < queue.length)) {
-            _context4.next = 10;
-            break;
+          for (i = 0; i < queue.length; i += 10) {
+            _loop(i);
           }
 
-          _context4.next = 7;
-          return regeneratorRuntime.awrap(_loop(i));
+          console.log(embeds);
+          return _context3.abrupt("return", embeds);
 
         case 7:
-          i += 10;
-          _context4.next = 4;
-          break;
-
-        case 10:
-          return _context4.abrupt("return", embeds);
-
-        case 11:
         case "end":
-          return _context4.stop();
+          return _context3.stop();
       }
     }
   });

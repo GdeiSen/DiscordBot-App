@@ -1,23 +1,61 @@
 "use strict";
 
-var _require = require("../util/EvobotUtil"),
-    canModifyQueue = _require.canModifyQueue;
+var embedGenerator = require("../include/utils/embedGenerator");
 
-var Discord = require("discord.js");
+var _require = require("../include/utils/accesTester.js"),
+    accesTester = _require.accesTester;
 
-module.exports.run = function (bot, message, args) {
-  var embed1 = new Discord.MessageEmbed().setTitle('ошибка').setDescription('**Ничего не воспроизводится**').setColor('RED');
-  var queue = message.client.queue.get(message.guild.id);
-  if (!queue) return message.reply(embed1)["catch"](console.error);
-  if (!canModifyQueue(message.member)) return;
+module.exports.run = function _callee2(client, message, args) {
+  var tester;
+  return regeneratorRuntime.async(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          tester = new accesTester(message, args);
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(tester.testPlayCommandAudioAccesPack().then(function _callee(result) {
+            var queue, embed;
+            return regeneratorRuntime.async(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    queue = client.queue.get(message.guild.id);
 
-  if (!queue.playing) {
-    queue.playing = true;
-    queue.connection.dispatcher.resume();
-    return queue.textChannel.send("".concat(message.author, " \u25B6 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043B \u0432\u043E\u0441\u043F\u0440\u043E\u0438\u0437\u0432\u0435\u0434\u0435\u043D\u0438\u0435!"))["catch"](console.error);
-  }
+                    if (queue.status === 'playing') {
+                      message.channel.send({
+                        content: "".concat(message.author, " ").concat(embedGenerator.run('direct.music.resume.info_02'))
+                      })["catch"](console.error);
+                    } else {
+                      embed = embedGenerator.run('music.resume.info_01');
+                      embed.setDescription("".concat(message.author.username, " ").concat(embed.description));
+                      message.channel.send({
+                        embeds: [embed]
+                      });
+                    }
 
-  return message.reply("воспроизведение продолжено")["catch"](console.error);
+                    queue.status = 'playing';
+                    queue.player.unpause();
+                    queue.player.emit('UNPAUSED');
+
+                  case 5:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            });
+          }, function (error) {
+            message.channel.send({
+              embeds: [error]
+            });
+            return 0;
+          }));
+
+        case 3:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  });
 };
 
 module.exports.config = {

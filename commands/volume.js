@@ -1,5 +1,5 @@
 const { canModifyQueue } = require("../util/EvobotUtil");
-const embedGenerator = require("../include/embedGenerator")
+const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = (bot, message, args) => {
 
 

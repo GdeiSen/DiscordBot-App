@@ -1,5 +1,5 @@
 const Discord = require("discord.js")
-const embedGenerator = require("../include/embedGenerator")
+const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = (bot, message, args) => {
     let embed = embedGenerator.run('info.info_06');
     let index = 0;

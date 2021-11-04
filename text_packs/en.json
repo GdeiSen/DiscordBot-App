@@ -1,44 +1,49 @@
 {
     "warnings": {
         "error_01": {
-            "embedTitle": "⚠️ Oooops Critical Error!",
+            "embedTitle": "⚠️   Oooops Critical Error!",
             "embedDescription": "A critical error was caused. This happens very rarely and means that everything did not go according to plan. We will be very grateful if you contact the system developer",
             "embedColor": "BLACK"
         },
         "error_02": {
-            "embedTitle": "⚠️ Oooops You don't have access!",
+            "embedTitle": "⚠️   Oooops You don't have access!",
             "embedDescription": "Unfortunately, you do not have access to the bot, contact the developer to join the testing!",
             "embedColor": "BLACK"
         },
         "error_03": {
-            "embedTitle": "⚠️ Oooops Nothing is playing!",
+            "embedTitle": "⚠️   Oooops Nothing is playing!",
             "embedDescription": "Unfortunately nothing is playing right now. Send **Play** command or type **Help** to see the full list of commands!",
             "embedColor": "BLACK"
         },
         "error_04": {
-            "embedTitle": "⚠️ Are you sure you typed everything correct?",
+            "embedTitle": "⚠️   Are you sure you typed everything correct?",
             "embedDescription": "Usage of Command: ",
+            "embedColor": "BLACK"
+        },
+        "error_05": {
+            "embedTitle": "⚠️   Error 403!",
+            "embedDescription": "Unfortunately at the moment this error cannot be corrected from our side! this happens quite rarely. The error can be caused absolutely accidentally by the YouTube servers. we deeply apologize for the inconvenience of using the bot",
             "embedColor": "BLACK"
         },
 
         "clear": {
             "error_01": {
-                "embedTitle": "⚠️ Syntax Error",
+                "embedTitle": "⚠️   Syntax Error",
                 "embedDescription": "Please enter the number!",
                 "embedColor": "BLACK"
             },
             "error_02": {
-                "embedTitle": "⚠️ Syntax Error",
+                "embedTitle": "⚠️   Syntax Error",
                 "embedDescription": "Uncorrect number type!",
                 "embedColor": "BLACK"
             },
             "error_03": {
-                "embedTitle": "⚠️ Syntax Error",
+                "embedTitle": "⚠️   Syntax Error",
                 "embedDescription": "Enter a number less than 25!",
                 "embedColor": "BLACK"
             },
             "error_04": {
-                "embedTitle": "⚠️ Syntax Error",
+                "embedTitle": "⚠️   Syntax Error",
                 "embedDescription": "Enter a number greater than 0!",
                 "embedColor": "BLACK"
             },
@@ -146,21 +151,26 @@
             "info_01": "🔄 queue repetition is"
         },
         "pause": {
-            "info_01": "⏸ Paused this song"
+            "info_01":{
+                "embedTitle": "⏸   Playback is paused!",
+                "embedDescription": "paused this playback",
+                "embedColor": "BLACK"
+            },
+            "info_02": "⏸ Playback is already paused"
         },
         "lyrics": {
             "error_01": {
-                "embedTitle": "⚠️ Not Found",
+                "embedTitle": "⚠️   Not Found",
                 "embedDescription": "Unfortunately i didn't find any lyrics for this song!",
                 "embedColor": "BLACK"
             },
             "error_02": {
-                "embedTitle": "⚠️ Not Found",
+                "embedTitle": "⚠️   Not Found",
                 "embedDescription": "Unfortunately i didn't find any lyrics for this song! You can try manual searching by using this command with additional arguments **lyrics + args**",
                 "embedColor": "BLACK"
             },
             "error_03": {
-                "embedTitle": "⚠️ Oooops Nothing is playing!",
+                "embedTitle": "⚠️   Oooops Nothing is playing!",
                 "embedDescription": "Unfortunately nothing is playing right now. Send **Play** command or type **Help** to see the full list of commands! You can try manual searching by using this command with additional arguments **lyrics + args**",
                 "embedColor": "BLACK"
             },
@@ -179,42 +189,57 @@
         },
         "play": {
             "error_01":{
-                "embedTitle": "⚠️ Oooops Where are You?",
+                "embedTitle": "⚠️   Oooops Where are You?",
                 "embedDescription": "you must be in the same channel with the bot. Or **AdminMode** should be activated",
                 "embedColor": "BLACK"
             },
             "error_02":{
-                "embedTitle": "⚠️ Oooops Where are You?",
+                "embedTitle": "⚠️   Oooops Where are You?",
                 "embedDescription": "you must be in the voice channel. Or **AdminMode** should be activated",
                 "embedColor": "BLACK"
             },
             "error_03":{
-                "embedTitle": "⚠️ Oooops Where are My Rights?",
+                "embedTitle": "⚠️   Oooops Where are My Rights?",
                 "embedDescription": "I don't have the rights to join channels",
                 "embedColor": "BLACK"
             },
             "error_04":{
-                "embedTitle": "⚠️ Oooops Where are My Rights?",
+                "embedTitle": "⚠️   Oooops Where are My Rights?",
                 "embedDescription": "I don't have the rights to speak",
                 "embedColor": "BLACK"
             },
             "error_05":{
-                "embedTitle": "⚠️ Oooops Nothing, Just Nothing",
+                "embedTitle": "⚠️   Oooops Nothing, Just Nothing",
                 "embedDescription": "Unfortunately i didn't find this song",
                 "embedColor": "BLACK"
             },
             "error_06":{
-                "embedTitle": "⚠️ Oooops Something went Wrong",
+                "embedTitle": "⚠️   Oooops Something went Wrong",
                 "embedDescription": "Well... I dont actually know what's going on here",
                 "embedColor": "BLACK"
             },
             "info_01":{
-                "embedTitle": "⚠️ Are you sure you typed everything correct?",
+                "embedTitle": "⚠️   Are you sure you typed everything correct?",
                 "embedDescription": "Usage of Command: prefix + play <song name>",
                 "embedColor": "BLACK"
             },
             "info_02_01":"✅",
-            "info_02_02":"Successfully added"
+            "info_02_02":"Successfully added",
+            "info_03":{
+                "embedTitle": "⚠️   Nothing left in queue!",
+                "embedDescription": "Playback Stopped!",
+                "embedColor": "BLACK"
+            },
+            "info_04":{
+                "embedTitle": "⚠️   I was disconnected from channel!",
+                "embedDescription": "Playback Stopped!",
+                "embedColor": "BLACK"
+            },
+            "info_05":{
+                "embedTitle": "✅   Succefully Added!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
         },
         "playlist": {
             "info_01":"Ordered playlist"
@@ -239,17 +264,21 @@
             "info_04":" From the queue"
         },
         "resume": {
-            "info_01":"▶ Сontinued playback",
-            "info_02":"▶ Playback continued"
+            "info_01":{
+                "embedTitle": "▶️   Playback is continued!",
+                "embedDescription": "continued playback",
+                "embedColor": "BLACK"
+            },
+            "info_02":"▶️ Playback is already continued"
         },
         "search":{
             "error_01":{
-                "embedTitle": "⚠️ Search",
+                "embedTitle": "⚠️   Search",
                 "embedDescription": "The message collector has already been interacted in this channel!\nPlease complete previous one!",
                 "embedColor": "BLACK"
             },
             "info_01":{
-                "embedTitle": "⚠️ Search",
+                "embedTitle": "⚠️   Search",
                 "embedDescription": "The message collector has already been interacted in this channel!\nPlease complete previous one!",
                 "embedColor": "BLACK"
             },
@@ -260,14 +289,22 @@
             }
         },
         "shuffle":{
-            "info_01":"🔀 the queue is shuffled!"
+            "info_01":{
+                "embedTitle": "🔀   Queue is shuffled!",
+                "embedDescription": "shuffled queue",
+                "embedColor": "BLACK"
+            }
         },
         "skip":{
-            "info_01":"⏭ skipped this song"
+            "info_01":{
+                "embedTitle": "⏭   song skipped",
+                "embedDescription": "skipped this song",
+                "embedColor": "BLACK"
+            }
         },
         "skipto":{
             "error_01":{
-                "embedTitle": "⚠️ Limit",
+                "embedTitle": "⚠️   Limit",
                 "embedDescription": "there are not enough tracks in the queue.\nOr have you exceeded the maximum number for skipping-15",
                 "embedColor": "BLACK"
             },
@@ -275,18 +312,22 @@
             "info_02": " tracks"
         },
         "stop":{
-            "info_01":"⏹ stopped playback"
+            "info_01":{
+                "embedTitle": "⏹   playback stopped",
+                "embedDescription": "stopped playback",
+                "embedColor": "BLACK"
+            }
         },
         "volume":{
             "info_01":"🔊 volume: ",
             "info_02":"🔊 volume is set to: ",
             "error_01": {
-                "embedTitle": "⚠️ Syntax Error",
+                "embedTitle": "⚠️   Syntax Error",
                 "embedDescription": "Enter a volume value",
                 "embedColor": "BLACK"
             },
             "error_02": {
-                "embedTitle": "⚠️ Syntax Error",
+                "embedTitle": "⚠️   Syntax Error",
                 "embedDescription": "Enter a volume value between 0 and 100",
                 "embedColor": "BLACK"
             }

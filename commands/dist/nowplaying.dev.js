@@ -1,56 +1,71 @@
 "use strict";
 
-var createBar = require("string-progressbar");
+var progressbar = require('string-progressbar');
 
 var _require = require("discord.js"),
     MessageEmbed = _require.MessageEmbed;
 
-var embedGenerator = require("../include/embedGenerator");
+var _require2 = require("../include/utils/accesTester.js"),
+    accesTester = _require2.accesTester;
 
-module.exports.run = function _callee(bot, message, args) {
-  var queue, embed1, song, seek, left, nowPlaying;
+var embedGenerator = require("../include/utils/embedGenerator");
+
+module.exports.run = function _callee(client, message, args) {
+  var queue;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          queue = message.client.queue.get(message.guild.id);
+          _context.prev = 0;
           _context.next = 3;
-          return regeneratorRuntime.awrap(embedGenerator.run('warnings.error_03'));
+          return regeneratorRuntime.awrap(client.queue.get(message.guild.id));
 
         case 3:
-          embed1 = _context.sent;
+          queue = _context.sent;
+          console.log(queue.player._state.resource); // let queue = await client.queue.get(message.guild.id);
+          // let embed1 = await embedGenerator.run('warnings.error_03');
+          // if (!queue) return message.reply({embeds: [embed1]}).catch(console.error);
+          // const song = queue.current;
+          // let total = Math.round(queue.current.durationObj.seconds + (queue.current.durationObj.minutes*60) + (queue.current.durationObj.hours*3600))
+          // let current = Math.round(queue.connection.receiver.connectionData.nonce/50);
+          // let songStart;
+          // if((current - total) < 0){
+          //   songStart = total - Math.abs(current - total);
+          // }else{songStart = current - total};
+          // let songCurrent = (current - song.nonce/50);
+          // let date = new Date(0);
+          // let timeString;
+          // if(songCurrent>3600){
+          //   date.setSeconds(songCurrent);
+          //   timeString = date.toISOString().substr(11, 8);
+          // }
+          // if(songCurrent<=3600){
+          //   date.setSeconds(songCurrent);
+          //   timeString = date.toISOString().substr(14, 5);
+          // }
+          // let nowPlaying = await embedGenerator.run('music.nowPlaying.info_01');
+          // nowPlaying
+          //   .setDescription(`${song.title}\n${song.url}`)
+          //   .setAuthor(message.client.user.username)
+          //   .setThumbnail(song.thumbnail)
+          //   .addField(`${timeString} [${progressbar(total,songCurrent,20)[0]}]`,`Still Playing`,true);
+          // return message.channel.send({embeds: [nowPlaying]});
 
-          if (queue) {
-            _context.next = 6;
-            break;
-          }
-
-          return _context.abrupt("return", message.reply(embed1)["catch"](console.error));
-
-        case 6:
-          song = queue.songs[0];
-          seek = (queue.connection.dispatcher.streamTime - queue.connection.dispatcher.pausedTime) / 1000;
-          left = song.duration - seek;
           _context.next = 11;
-          return regeneratorRuntime.awrap(embedGenerator.run('music.nowPlaying.info_01'));
+          break;
+
+        case 7:
+          _context.prev = 7;
+          _context.t0 = _context["catch"](0);
+          console.log('[ERROR] [NP] Module error');
+          console.log(_context.t0);
 
         case 11:
-          nowPlaying = _context.sent;
-          nowPlaying.setDescription("".concat(song.title, "\n").concat(song.url)).setAuthor(message.client.user.username).setThumbnail(song.thumbnails);
-
-          if (song.duration > 0) {
-            nowPlaying.addField("\u200B", new Date(seek * 1000).toISOString().substr(11, 8) + "[" + createBar(song.duration == 0 ? seek : song.duration, seek, 20)[0] + "]" + (song.duration == 0 ? " ◉ LIVE" : new Date(song.duration * 1000).toISOString().substr(11, 8)), true);
-            nowPlaying.setFooter("Time Remaining: " + new Date(left * 1000).toISOString().substr(11, 8));
-          }
-
-          return _context.abrupt("return", message.channel.send(nowPlaying));
-
-        case 15:
         case "end":
           return _context.stop();
       }
     }
-  });
+  }, null, null, [[0, 7]]);
 };
 
 module.exports.config = {

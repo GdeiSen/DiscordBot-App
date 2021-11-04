@@ -1,5 +1,5 @@
 
-const embedGenerator = require("../include/embedGenerator")
+const embedGenerator = require("../include/utils/embedGenerator")
 
 module.exports.run = async(bot,message, args) => {
     var arggs = args;
