@@ -13,5 +13,6 @@ module.exports.config = {
     usage: "~ping",
     accessableby: "Members",
     aliases: ['pg'],
-    category: "admin"
+    category: "admin",
+    accesTest: "none"
 }

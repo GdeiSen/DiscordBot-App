@@ -25,7 +25,11 @@
             "embedDescription": "Unfortunately at the moment this error cannot be corrected from our side! this happens quite rarely. The error can be caused absolutely accidentally by the YouTube servers. we deeply apologize for the inconvenience of using the bot",
             "embedColor": "BLACK"
         },
-
+        "error_06": {
+            "embedTitle": "⚠️   Oooops This Function is Blocked!",
+            "embedDescription": "Unfortunately at the moment this function cannot be executed!",
+            "embedColor": "BLACK"
+        },
         "clear": {
             "error_01": {
                 "embedTitle": "⚠️   Syntax Error",
@@ -139,7 +143,6 @@
                 "embedColor": "PURPLE"
             }
         }
-
     },
     "music": {
         "loop": {
@@ -247,9 +250,15 @@
         "queue": {
             "info_01":"Page ",
             "info_02":{
-                "embedTitle": "Queue\n",
+                "embedTitle": "Current Queue\n",
                 "embedDescription": "Now Playing",
-                "embedColor": "GREEN"
+                "embedColor": "BLACK"
+            },
+            "info_03":"Current Queue ",
+            "info_04":{
+                "embedTitle": "⚠️   Queue",
+                "embedDescription": "The message collector has already been interacted in this channel!\nPlease complete previous one!",
+                "embedColor": "BLACK"
             }
         },
         "remove": {
@@ -273,11 +282,6 @@
         },
         "search":{
             "error_01":{
-                "embedTitle": "⚠️   Search",
-                "embedDescription": "The message collector has already been interacted in this channel!\nPlease complete previous one!",
-                "embedColor": "BLACK"
-            },
-            "info_01":{
                 "embedTitle": "⚠️   Search",
                 "embedDescription": "The message collector has already been interacted in this channel!\nPlease complete previous one!",
                 "embedColor": "BLACK"

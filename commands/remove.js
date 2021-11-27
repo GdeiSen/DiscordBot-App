@@ -1,21 +1,18 @@
-const { canModifyQueue } = require("../util/EvobotUtil");
-const Discord = require("discord.js");
 const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = (bot,message, args) => {
   
   let embed1 = embedGenerator.run('warnings.error_01');
   let embed2 = embedGenerator.run('music.remove.error_01');
-
+    
     const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.channel.send({embeds: [embed1]}).catch(console.error);
-    if (!canModifyQueue(message.member)) return;
-    if (args[0] > queue.songs.length)
-      return message.reply(embed2).catch(console.error);
-    if (!args.length) return message.reply({content: `${embedGenerator.run('direct.warnings.info_01')} ${message.client.prefix} ${embedGenerator.run('direct.warnings.info_02')}`});
-    if (isNaN(args[0])) return message.reply({content: `${embedGenerator.run('direct.warnings.info_01')} ${message.client.prefix} ${embedGenerator.run('direct.warnings.info_02')}`});
-
+    if (args > queue.songs.length || args[0] == 0) return message.channel.send({embeds:[embed2]}).catch(console.error);
+    else if (!args || isNaN(args[0])){ 
+      let embed1 = embedGenerator.run("warnings.error_04");
+      embed1.setDescription(`${embed1.description} remove **track number**`);
+      return message.channel.send({ embeds: [embed1] });
+    }
     const song = queue.songs.splice(args - 1, 1);
-    queue.textChannel.send({content: `${message.author} ${embedGenerator.run('direct.warnings.info_03')} **${song[0].title}** ${embedGenerator.run('direct.warnings.info_04')}`});
+    message.channel.send({content: `${message.author} ${embedGenerator.run('direct.music.remove.info_03')} **${song[0].title}** ${embedGenerator.run('direct.music.remove.info_04')}`});
   };
   module.exports.config = {
     name: "remove",
@@ -23,5 +20,6 @@ module.exports.run = (bot,message, args) => {
     usage: "~remove args",
     accessableby: "Members",
     aliases: [],
-    category: "music"
+    category: "music",
+    accesTest: "music-command"
   }

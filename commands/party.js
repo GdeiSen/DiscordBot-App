@@ -11,5 +11,6 @@ module.exports.config = {
     usage: "~party",
     accessableby: "Members",
     aliases: ['prty', 'pa'],
-    category: "entertainment"
+    category: "entertainment",
+    accesTest: "none"
 }

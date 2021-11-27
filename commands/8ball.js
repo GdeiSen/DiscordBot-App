@@ -76,5 +76,6 @@ module.exports.config = {
     description: "Deduces your verdict of fate",
     accessableby: "Members",
     aliases: ['8', '8b', 'b'],
-    category: "entertainment"
+    category: "entertainment",
+    accesTest: "none"
 }

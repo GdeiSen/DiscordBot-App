@@ -1,4 +1,3 @@
-const Discord = require("discord.js")
 text = require("../text_packs/en.json")
 const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = async (bot, message, args) =>{
@@ -41,5 +40,6 @@ module.exports.config = {
     usage: "~clear",
     accessableby: "Members",
     aliases: ['c', 'cl'],
-    category: "admin"
+    category: "admin",
+    accesTest: "none"
 }

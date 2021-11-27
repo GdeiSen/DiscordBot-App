@@ -1,13 +1,6 @@
-const { canModifyQueue } = require("../util/EvobotUtil");
-const Discord = require("discord.js");
 const embedGenerator = require("../include/utils/embedGenerator")
-module.exports.run = (bot, message, args) =>{
-    let embed1 = embedGenerator.run('warnings.error_03');
-
+module.exports.run = async (bot, message, args) =>{
     const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.channel.send({embeds:[embed1]}).catch(console.error);
-    if (!canModifyQueue(message.member)) return;
-
     let songs = queue.songs;
     for (let i = songs.length - 1; i > 1; i--) {
       let j = 1 + Math.floor(Math.random() * i);
@@ -15,7 +8,9 @@ module.exports.run = (bot, message, args) =>{
     }
     queue.songs = songs;
     message.client.queue.set(message.guild.id, queue);
-    queue.textChannel.send({content: `${embedGenerator.run('direct.music.shuffle.info_01')}`}).catch(console.error);
+    let embed = await embedGenerator.run('music.shuffle.info_01');
+    embed.setDescription(`${message.author.username} ${embed.description}`);
+    message.channel.send({embeds: [embed]}).catch(console.error);
   };
   module.exports.config = {
     name: "shuffle",
@@ -23,5 +18,6 @@ module.exports.run = (bot, message, args) =>{
     usage: "~shuffle",
     accessableby: "Members",
     aliases: ['sh'],
-    category: "music"
+    category: "music",
+    accesTest: "music-command"
   }

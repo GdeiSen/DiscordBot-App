@@ -1,37 +1,31 @@
 const embedGenerator = require("../include/utils/embedGenerator");
-const { RepeatMode } = require('discord-music-player');
-const { accesTester } = require("../include/utils/accesTester.js");
 module.exports.run = async (client, message, args) => {
-  const tester = new accesTester(message, args);
-  await tester.testAdioWArgsAcces().then(
-    async (result) => {
-      let guildQueue = await client.player.getQueue(message.guild.id);
-      if(guildQueue.songloop == 0 || guildQueue.songloop == undefined){
-        guildQueue.queueLoop = 0;
-        guildQueue.songloop = 1;
-        guildQueue.setRepeatMode(RepeatMode.SONG);
-        message.channel
-        .send(
-          `${embedGenerator.run('direct.music.loop.info_01')} ${embedGenerator.run('direct.music.loop.info_02')}`
-        )
-        .catch(console.error);
-      }
-      else{
-        guildQueue.queueLoop = 0;
-        guildQueue.songloop = 0;
-        guildQueue.setRepeatMode(RepeatMode.DISABLED);
-        message.channel
-        .send(
-          `${embedGenerator.run('direct.music.loop.info_01')} ${embedGenerator.run('direct.music.loop.info_03')}`
-        )
-        .catch(console.error);
-      }
-    },
-    (error) => {
-      message.channel.send({ embeds: [error] });
-      return 0;
+  let queue = await message.client.queue.get(message.guild.id);
+  if(!args){
+    if(queue.current.loop == false){
+      let embed4 = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_03")}`;
+      message.channel.send(embed4);
     }
-  );
+    else{
+      let embed5 = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_02")}`;
+      message.channel.send(embed5);
+    }
+  }
+  else if(args == 'off'){
+    queue.playerMaster.songLoop(false);
+    let embed2 = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_03")}`;
+    message.channel.send(embed2);
+  }
+  else if(args == 'on'){
+    queue.playerMaster.songLoop(true);
+    let embed3 = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_02")}`;
+    message.channel.send(embed3);
+  }
+  else {
+    let embed1 = embedGenerator.run("warnings.error_04");
+    embed1.setDescription(`${embed1.description} loop **on**/**off**`);
+    message.channel.send({ embeds: [embed1] });
+  }
 };
 
 module.exports.config = {
@@ -40,4 +34,5 @@ module.exports.config = {
   aliases: ["l"],
   description: "Option to enable track repetition",
   category: "music",
+  accesTest: "music-command"
 };

@@ -24,5 +24,6 @@ module.exports.config = {
     usage: "~time",
     accessableby: "Members",
     aliases: ['uptime'],
-    category: "admin"
+    category: "admin",
+    accesTest: "none"
 }

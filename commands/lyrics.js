@@ -1,4 +1,3 @@
-const Discord = require("discord.js");
 const lyricsFinder = require("lyrics-finder");
 const embedGenerator = require("../include/utils/embedGenerator")
 module.exports.run = async (client, message, args) => {
@@ -57,5 +56,6 @@ module.exports.config = {
   usage: "~lyrics",
   accessableby: "Members",
   aliases: ["lyr"],
-  category: "music"
+  category: "music",
+  accesTest: "music-command"
 };

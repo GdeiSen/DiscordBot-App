@@ -4,12 +4,14 @@ const Youtube = require("simple-youtube-api");
 const config = require("../../config.json");
 const youtube = new Youtube(config.YOUTUBE_API_KEY);
 const EventEmitter = require('events');
+const { threadId } = require("worker_threads");
 class queueMaster extends EventEmitter{
     constructor(client, message) {
         super();
         this.client = client;
         this.message = message;
         this.queue = new queue_;
+        this.status = 'pending';
     }
     getQueue() {
         if(this.client.queue){
@@ -29,20 +31,19 @@ class queueMaster extends EventEmitter{
     async clearQueue() {
         this.emit('INFO','[INFO] [QM] clearQueue function activated!')
         if (this.getQueue() !== null){ 
-            this.client.queue.songs = null;
-            this.client.queue.current = null;
-            this.client.queue.player = null;
-            this.client.queue.connection = null;
+            this.queue.songs = [];
+            this.queue.current = [];
+            this.queue.config.loop = false;
             this.message.client.queue.set(this.message.guild.id, this.queue);
         }
     }
-    async addSong(song) {
+    async addSong(song,option) {
         this.emit('INFO','[INFO] [QM] addSong function activated!')
         if (this.getQueue() != undefined) {
             this.queue = this.getQueue();
             this.queue.songs.push(song);
             this.message.client.queue.set(this.message.guild.id, this.queue);
-            this.emit('SONG_LOADING_DONE');
+            if(!option || option !== 'playlist_song') this.emit('SONG_LOADING_DONE');
         } else {
             await this.createQueue();
             this.addSong(song);
@@ -54,7 +55,7 @@ class queueMaster extends EventEmitter{
             await this.addSong(song_arr[index])
         }
     }
-
+    
     async resolveAuto(query) {
         this.emit('INFO', "[INFO] [QM] selector activated!")
         const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
@@ -92,7 +93,7 @@ class queueMaster extends EventEmitter{
           for (let i = 0; i < videosObj.length; i++) {
             const video = await videosObj[i].fetch();
             let song = await this.songConstructor(video);
-            await this.addSong(song);
+            await this.addSong(song,'playlist_song');
           }
           this.emit('PLAYLIST_LOADING_DONE',playlist, this.message.author.username);
         } catch (err) {

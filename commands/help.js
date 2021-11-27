@@ -25,5 +25,6 @@ module.exports.run = (client,message,args) =>{
     usage: "~help",
     accessableby: "Members",
     aliases: ['h', 'hlp'],
-    category: "admin"
+    category: "admin",
+    accesTest: "none"
 }
