@@ -8,9 +8,10 @@ Also support Microsoft sql server connection and React site connection! (Functio
 
 Current command list:
 =============================
-(Prefix)help - (ready)
 Full command list
 (Support dynamic command searching function (if a new command file for the bot is added and it has a configuration, it will be automatically illustrated in the list))
+
+(Prefix)help - (ready)
 =============================
 (Prefix)play <Song Name> - (with bugs)
 Playing music
