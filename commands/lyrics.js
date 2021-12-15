@@ -23,7 +23,7 @@ module.exports.run = async (client, message, args) => {
       }
     } else if (queue && !args) {
       try {
-        const title = client.queue.songs[0].title;
+        const title = client.queue.current.title;
         name = title;
         lyrics = await lyricsFinder(title);
         if (!lyrics) throw error;

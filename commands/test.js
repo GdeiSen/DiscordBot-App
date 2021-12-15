@@ -11,10 +11,6 @@ module.exports.run = async (bot, message, args) => {
     embed.addField(`💾 DataBase status: ${bot.dataBaseEngine.status}.`, "\`No errors with data!\`");
     embed.addField(`📡 SiteServer status: ${bot.serverEngine.status}.`, "\`No errors with server!\`");
     message.channel.send({ embeds: [embed] })
-
-    const guild = bot.guilds.cache.get("780086468944199700");
-    const list = await guild.members.fetch();
-    list.forEach((user)=>console.log(user.user.username))
 }
 
 module.exports.config = {

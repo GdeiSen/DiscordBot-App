@@ -10,6 +10,7 @@ module.exports.run = async (client, message, args) => {
       })
       .catch(console.error);
   } else {
+    queue.playerMaster.emit('PLAYER_METHOD_ACT','pause',true)
     let embed = embedGenerator.run("music.pause.info_01");
     embed.setDescription(`${message.author.username} ${embed.description}`);
     message.channel.send({ embeds: [embed] });

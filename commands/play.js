@@ -1,6 +1,7 @@
 const player = require("../include/music_engine/musicEngine");
 module.exports.run = async (client, message, args) => {
     player.run(client, message, args, "auto");
+    queue.playerMaster.emit('PLAYER_METHOD_ACT','play',true)
 };
 module.exports.config = {
   name: "play",

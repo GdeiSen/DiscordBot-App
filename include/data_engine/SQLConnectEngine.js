@@ -1,6 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const EventEmitter = require('events');
-const emitter = new EventEmitter;
+const { createServerModel, getServerData } = require('../data_engine/tables/Servers');
+const { createUserModel, getUserData } = require('../data_engine/tables/Users');
+const { createCurrentPlayback, getCurrentPlaybackData } = require('./tables/CurrentPlayback')
+const { createServerQueue, getServerQueueData } = require('./tables/ServerQueue')
+const config = require('../../config.json')
 class DataBase extends EventEmitter {
   constructor(client) {
     super();
@@ -9,143 +13,84 @@ class DataBase extends EventEmitter {
 
   async createConnection(option) {
     try {
-      this.sequelize = new Sequelize("DiscordBotDataBase", "Admin", "Sengordei#1", {
-        dialect: "mssql",
-        host: "GORDEYPC",
+      this.sequelize = new Sequelize(config.SQL_SERVER_DB_NAME, config.SQL_SERVER_USER_NAME, config.SQL_SERVER_USER_PASSWORD, {
+        dialect: config.SQL_SERVER_DIALECT,
+        host: config.SQL_SERVER_HOST,
         logging: false,
       });
       await this.sequelize
         .authenticate()
         .then(() => { console.log('⬜ Data Base Connection Is Enable'); this.status = 'online'; })
-        .catch(error => { console.error('🟥 Unable to connect to the database:', error); this.status = 'offline' })
-      this.#createServerModel();
-      this.#createUserModel();
-      this.updateServerData();
-      this.updateUserData();
-    } catch (error) { console.log('🟥 Data Base Connection Error!'); this.status = 'offline', this.emit('CHANGE') }
+        .catch(error => { console.error('🟥 Unable to connect to the database:', error); this.status = 'offline'})
+      this.#createServerModel().then(() => this.updateServerData());
+      this.#createUserModel().then(() => this.updateUserData());
+      this.#createCurrentPlaybackModel().then(() => this.updateCurrentPlaybackData());
+      this.#createServerQueueModel().then(() => this.updateServerQueueData());
+    } catch (error) { console.log('🟥 Data Base Connection Error!'); this.status = 'offline'; this.emit('CHANGE')}
   }
 
   #pushDataToModel(model, data) {
     try {
       model.bulkCreate(data);
-    } catch (error) { console.log('🟥 Data Base Pushing Error!'); this.status = 'offline', this.emit('CHANGE') }
+    } catch (error) { console.log('🟥 Data Base Pushing Error!', error); this.status = 'offline', this.emit('CHANGE') }
   }
 
-  #createServerModel() {
-    this.Server = this.sequelize.define(
-      'Server',
-      {
-        Id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
-          primaryKey: true
-        },
-        ServerName: {
-          type: DataTypes.CHAR,
-          allowNull: false,
-        },
-        ServerId: {
-          type: DataTypes.CHAR,
-          allowNull: false,
-        },
-        MemberCount: {
-          type: DataTypes.CHAR,
-          allowNull: false,
-        },
-      },
-      {
-        timestamps: false,
-        createdAt: false,
-        updatedAt: false,
-
-      }
-    )
-    this.Server.rawAttributes
+  async #createServerModel() {
+    return this.Server = await createServerModel(this.sequelize);
   }
 
-  #createUserModel() {
-    this.User = this.sequelize.define(
-      'User',
-      {
-        Id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
-          primaryKey: true
-        },
-        UserName: {
-          type: DataTypes.CHAR,
-          allowNull: false,
-        },
-        UserId: {
-          type: DataTypes.CHAR,
-          allowNull: false,
-        },
-        UserServerId: {
-          type: DataTypes.CHAR,
-          allowNull: false,
-        },
-      },
-      {
-        timestamps: false,
-        createdAt: false,
-        updatedAt: false,
-
-      }
-    )
+  async #createUserModel() {
+    return this.User = await createUserModel(this.sequelize);
   }
 
-  getData(model, options) {
+  async #createCurrentPlaybackModel() {
+    return this.CurrentPlayback = await createCurrentPlayback(this.sequelize);
+  }
+
+  async #createServerQueueModel() {
+    return this.ServerQueue = await createServerQueue(this.sequelize);
+  }
+
+  getData(model, mode, options) {
     try {
-      if (options) {
+      if (options && mode == 'getUserList') {
         if (model) return (model.findAll({ where: { UserServerId: options } }));
-        else this.connect().then(() => { this.getData(model) });
-      } else {
+        else this.createConnection().then(() => { this.getData(model, mode, options) });
+      } else if(mode == 'getServerList'){
         if (model) return (model.findAll());
-        else this.connect().then(() => { this.getData(model) });
-      }
+        else this.createConnection().then(() => { this.getData(model, mode, options) });
+      } else if(options && mode == 'getCurrentPlayback'){
+        if (model) return (model.findAll({ where: { ServerId: options } }));
+        else this.createConnection().then(() => { this.getData(model, mode, options) });
+      } else if(options && mode == 'getServerQueueFromDB'){
+        if (model) return (model.findAll({ where: { ServerId: options } }));
+        else this.createConnection().then(() => { this.getData(model, mode, options) });
+    }
     } catch (error) { console.log('🟥 Data Base Selection Error!') }
   }
 
-  updateServerData() {
+  async updateServerData() {
     try {
-      let array = [];
-      let pushDelay;
-      this.Server.sync({ force: true }).then(async () => {
-        this.client.guilds.cache.forEach(async element => {
-          clearTimeout(pushDelay);
-          let object = {
-            ServerName: element.name,
-            ServerId: element.id,
-            MemberCount: element.memberCount
-          }
-          array.push(object);
-          pushDelay = setTimeout(() => this.#pushDataToModel(this.Server, array), 1000);
-        })
-      })
-    } catch (error) { console.log('🟥 Data Base Update Error!') }
+      getServerData(this.Server,this.client).then((data)=>this.#pushDataToModel(this.Server,data))
+    } catch (error) { console.log('🟥 Data Base Update Error!', error) }
   }
 
   async updateUserData() {
     try {
-      let array = [];
-      let pushDelay;
-      this.User.sync({ force: true }).then(async () => {
-        this.client.guilds.cache.forEach(async guild => {
-          await guild.members.fetch().then(async (list) => {
-            await list.forEach(async (user) => {
-              clearTimeout(pushDelay);
-              let object = {
-                UserName: user.user.username,
-                UserId: user.user.id,
-                UserServerId: user.guild.id,
-              }
-              array.push(object);
-              pushDelay = setTimeout(() => this.#pushDataToModel(this.User, array), 1000);
-            })
-          })
-        })
-      })
-    } catch (error) { console.log('🟥 Data Base Update Error!') }
+     getUserData(this.User,this.client).then((data)=>this.#pushDataToModel(this.User,data))
+    } catch (error) { console.log('🟥 Data Base Update Error!', error) }
+  }
+
+  async updateServerQueueData() {
+    try {
+      getServerQueueData(this.ServerQueue,this.client).then((data)=>this.#pushDataToModel(this.ServerQueue,data))
+    } catch (error) { console.log('🟥 Data Base Update Error!', error) }
+  }
+
+  async updateCurrentPlaybackData() {
+    try {
+      getCurrentPlaybackData(this.CurrentPlayback,this.client).then((data)=>this.#pushDataToModel(this.CurrentPlayback,data))
+    } catch (error) { console.log('🟥 Data Base Update Error!', error) }
   }
 }
 exports.DataBase = DataBase;

@@ -7,6 +7,7 @@ const fs = require("fs");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const text = require("./text_packs/en.json")
 const config = require("./config.json");
+const package = require("./package.json")
 client.dataBaseEngine = new DataBase(client);
 client.serverEngine = new ServerEngine(client);
 client.commands = new Collection();
@@ -18,8 +19,8 @@ client.prefix = config.PREFIX;
 
 client.once("ready", () => {
   console.log(`⬜ Main Manager Is Enable`);
-  client.user.setActivity(`BETA 2.3`, {
-    type: "LISTENING"
+  client.user.setActivity(`${package.version}`, {
+    type: "PLAYING"
   });
   try {
     client.dataBaseEngine.createConnection();

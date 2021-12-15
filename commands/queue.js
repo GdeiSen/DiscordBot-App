@@ -1,6 +1,6 @@
 const embedGenerator = require("../include/utils/embedGenerator")
-const {MessageActionRow,MessageButton} = require('discord.js');
-const {accesTester} = require("../include/utils/accesTester");
+const { MessageActionRow, MessageButton } = require('discord.js');
+const { accesTester } = require("../include/utils/accesTester");
 module.exports.run = async (client, message, args) => {
   let embed1 = await embedGenerator.run('music.queue.info_04');
   let embed4 = await embedGenerator.run('music.play.error_04');
@@ -9,19 +9,19 @@ module.exports.run = async (client, message, args) => {
     return message.reply({
       embeds: [embed4]
     });
-  if (message.channel.activeCollector == true) return message.channel.send({embeds:[embed1]});
+  if (message.channel.activeCollector == true) return message.channel.send({ embeds: [embed1] });
   message.channel.activeCollector = true;
   const queue = message.client.queue.get(message.guild.id);
   const row = new MessageActionRow()
     .addComponents(
       new MessageButton()
-      .setCustomId('back')
-      .setEmoji('◀️')
-      .setStyle('PRIMARY'),
+        .setCustomId('back')
+        .setEmoji('◀️')
+        .setStyle('PRIMARY'),
       new MessageButton()
-      .setCustomId('next')
-      .setEmoji('▶️')
-      .setStyle('PRIMARY'),
+        .setCustomId('next')
+        .setEmoji('▶️')
+        .setStyle('PRIMARY'),
     );
   let currentPage = 0;
   const embeds = await generateQueueEmbed(message, queue.songs, queue.current);

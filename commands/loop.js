@@ -12,11 +12,13 @@ module.exports.run = async (client, message, args) => {
     }
   }
   else if(args == 'off'){
+    queue.playerMaster.emit('PLAYER_METHOD_ACT','loop',false)
     queue.playerMaster.songLoop(false);
     let embed2 = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_03")}`;
     message.channel.send(embed2);
   }
   else if(args == 'on'){
+    queue.playerMaster.emit('PLAYER_METHOD_ACT','loop',true)
     queue.playerMaster.songLoop(true);
     let embed3 = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_02")}`;
     message.channel.send(embed3);
