@@ -56,40 +56,49 @@ Turns on or turns off song looping
 (Prefix)queueloop <option: ‘on’ ‘off’> - (ready)
 Turns on or turns off queue looping
 
-(Function uses the player method) =============================
+(Function uses the player method) 
+=============================
 (Prefix)playlist <playlist name> - (ready)
 Searching for playlist by playlist name
 
-(Activate the queueMaster function “resolve playlist” with option “auto” if arguments != url) =============================
+(Activate the queueMaster function “resolve playlist” with option “auto” if arguments != url) 
+=============================
 (Prefix)resume - (ready)
 Resumes the current playback
 
-(Function uses the player method) =============================
+(Function uses the player method) 
+=============================
 (Prefix)skip - (ready)
 Skips the current song
 
-(Function uses the player method) =============================
+(Function uses the player method) 
+=============================
 (Prefix)skipto <number> - (ready)
 Skips a certain amount of songs
 
-(Function uses the player method with the help of cycle) =============================
+(Function uses the player method with the help of cycle) 
+=============================
 (Prefix)shuffle - (ready)
 Shuffles a song queue
 
-(Function uses the external function) =============================
+(Function uses the external function) 
+=============================
 (Prefix)volume - (ready)
 Set the volume to the current playback
 
-(Function uses the player method) =============================
+(Function uses the player method) 
+=============================
 (Prefix)clear - (ready)
 Clears a certain amount of messages in the guild
 
-(Function can delete only message with >50 days of their uptime or an error will be occurred) =============================
+(Function can delete only message with >50 days of their uptime or an error will be occurred) 
+=============================
 (Prefix)8ball - (ready)
 Displays the judgment of fate
 =============================
 (Prefix)uptime - (ready)
-Displays the current bit uptime =============================
+Displays the current bit uptime 
+=============================
 (Prefix)remove - (in dev)
 Removes song fro the current queue 
 
@@ -98,44 +107,74 @@ Removes song fro the current queue
 
 
 Objects:
+ 
 client.queue
+ 
 .current = (song object)
+ 
 .songs = (array of song objects)
+ 
 .config = {
 .loop = (bool)
 .volume = (number)
 .stayPermission = (‘default’…) - (in dev)
 .maxSize = (‘default’…) - (in dev)
 }
+ 
 .player = (discord.js player object)
+ 
 .playerMaster = (playerMaster object)
+ 
 .queueMaster = (queueMaster object)
+ 
 .previous = (song object)
+ 
 .guild = (discord.js guild object)
+ 
 .channel = (discord.js channel object)
+ 
 .voiceChannel = (discord.js voiceChannel object)
+ 
 .isPlaying (not executing) => .status
+ 
 .isPaused (not executing) => .status
+ 
 .isStopped (not executing) => .status
+ 
 .status = (‘pending’, ’playing’, ’paused’, ’stopped’)
+ 
 .connection = (discord.js connection object)
 
 song
+ 
 .title = (string song title)
+ 
 .url = (string song url
+ 
 .author = (discord.js user object)
+ 
 .loop = (bool)
+ 
 .duration = (string song duration, NOT utc format)
+ 
 .durationObj = {
 .seconds
 .minutes
 .hours
 }
+ 
 .thumbnail = (string song thumbnail url)
+ 
 .onAir = (bool)
+ 
 .private (not executing)
+ 
 .nonce (not executing)
+ 
 .startTime = (utc date format)
+ 
 .pausedTime = (utc date format)
 
+ 
+ 
 Version 0.2.5 Beta - in development
