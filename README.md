@@ -10,17 +10,14 @@ Current command list:
 =============================
 (Prefix)help - (ready)
 Full command list
-
 (Support dynamic command searching function (if a new command file for the bot is added and it has a configuration, it will be automatically illustrated in the list))
 =============================
 (Prefix)play <Song Name> - (with bugs)
 Playing music
-
 (Activate it’s own music engine which constructed with help of ytdl-core and simple-youtube)
 =============================
 (Prefix)search <Search Request> - (with bugs)
 Searching for songs by search request
-
 (Creating and sending list of searched songs with collector function)
 =============================
 (Prefix)nowplaying - (ready)
