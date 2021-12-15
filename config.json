@@ -1,12 +1,12 @@
 {
-  "YOUTUBE_API_KEY": "AIzaSyBtFSzyn-lbT323PdfdSwPruHNhnd1yqww",
-  "YOUTUBE_API_KEY1": "AIzaSyCKR7qLFKuvcYXTjgL_SIvX4yNeqtytz3M",
-  "YOUTUBE_API_KEY2": "AIzaSyAbmTUCsiZ9Zdl_18MOtxd3OiMUXyeZZy4",
+  "YOUTUBE_API_KEY": "",
+  "YOUTUBE_API_KEY1": "",
+  "YOUTUBE_API_KEY2": "",
 
-  "SQL_SERVER_DB_NAME": "DiscordBotDataBase",
-  "SQL_SERVER_USER_NAME": "Admin",
-  "SQL_SERVER_USER_PASSWORD": "Sengordei#1",
-  "SQL_SERVER_HOST": "GORDEYPC",
+  "SQL_SERVER_DB_NAME": "",
+  "SQL_SERVER_USER_NAME": "",
+  "SQL_SERVER_USER_PASSWORD": "",
+  "SQL_SERVER_HOST": "",
   "SQL_SERVER_DIALECT": "mssql",
 
   "SERVER_PORT":"5000",
@@ -15,5 +15,5 @@
   "PRUNING": false,
   "STAY_TIME": 30,
   "DEFAULT_VOLUME": 30,
-  "TOKEN": "ODgwNDAxNTk4ODgxMzQxNDYx.YSdv4g.opQDhc3Bvgly6Sr2-O8jX5z74qo"
+  "TOKEN": ""
 }
