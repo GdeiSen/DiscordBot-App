@@ -1,3 +1,4 @@
+const config = require("../../../config.json")
 class queue {
     guild
     channel
@@ -12,9 +13,9 @@ class queue {
     status
     config = {
         loop: false,
-        volume: 50,
-        stayPermission: "default",
-        maxSize: "default"
+        volume: config.DEFAULT_VOLUME,
+        stayPermission: config.STAY_TIME,
+        maxSize: config.MAX_PLAYLIST_SIZE,
     }
 }
 exports.queue_ = queue;
