@@ -7,7 +7,7 @@ class accesTester extends EventEmitter {
     this.args = args;
     this.option = option;
   }
-  async startSelector() {//TRASH HERE
+  async startSelector() {
     switch (this.option) {
       case 'none': { if(this.MemberTester())this.emit('GRANTED'); break }
       case 'blocked': { let embed1 = await embedGenerator.run("warnings.error_06"); this.emit('DENIED', embed1); break }
@@ -52,7 +52,7 @@ class accesTester extends EventEmitter {
   //====================================================================================== TESTERS
   async testUserId() {
     let embed1 = await embedGenerator.run("warnings.error_02");
-    if (this.message.author.id === "614819288506695697" || this.message.author.id === "---596967380089962496" || this.message.author.id === "---468380034273509376" && !this.message.author.bot);
+    if (this.message.author.id === "614819288506695697" || this.message.author.id === "596967380089962496" || this.message.author.id === "468380034273509376" && !this.message.author.bot);
     else return embed1
   }
   async testUserVoiceChannelAvailability() {

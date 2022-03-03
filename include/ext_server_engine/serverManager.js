@@ -51,28 +51,28 @@ class ExtServerEngine extends EventEmitter {
     }
 
     async broadcastData(message) {
-        let request = message.request.name;
+        let requestName = message.request.name;
+        let respond = {requestMessage: message};
         let data = message.data;
-        let object = {requestMessage: message};
-        if (request == 'getServerQueue' && data.serverId) {
-            object.data = await this.serverGetterManager.getServerQueueData(data.serverId.replace(/\s/g, '')) 
-            object.type = 'serverQueue';
-            this.sendData(object);
+        if (requestName == 'getServerQueue' && data.serverId) {
+            respond.data = await this.serverGetterManager.getServerQueueData(data.serverId.replace(/\s/g, '')) 
+            respond. type = 'serverQueue';
+            this.sendData(respond);
         }
-        else if (request == 'getCurrentPlayback' && data.serverId) {
-            object.data = await this.serverGetterManager.getCurrentPlayback(data.serverId.replace(/\s/g, ''));
-            object.type = 'currentPlayback';
-            this.sendData(object);
+        else if (requestName == 'getCurrentPlayback' && data.serverId) {
+            respond.data = await this.serverGetterManager.getCurrentPlayback(data.serverId.replace(/\s/g, ''));
+            respond.type = 'currentPlayback';
+            this.sendData(respond);
         }
-        else if (request == 'getServerUsers' && data.serverId) {
-            object.data = await this.serverGetterManager.getServerUsers(data.serverId.replace(/\s/g, ''));
-            object.type = 'serverUsers';
-            this.sendData(object);
+        else if (requestName == 'getServerUsers' && data.serverId) {
+            respond.data = await this.serverGetterManager.getServerUsers(data.serverId.replace(/\s/g, ''));
+            respond.type = 'serverUsers';
+            this.sendData(respond);
         }
-        else if (request == 'getServers') {
-            object.data = await this.serverGetterManager.getServers();
-            object.type = 'servers';
-            this.sendData(object);
+        else if (requestName == 'getServers') {
+            respond.data = await this.serverGetterManager.getServers();
+            respond.type = 'servers';
+            this.sendData(respond);
         }
     }
 

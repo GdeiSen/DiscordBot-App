@@ -23,6 +23,7 @@ class player extends EventEmitter {
       this.#addListeners();
       this.status = 'active';
     })
+    this.removeAllListeners('PLAYBACK_STOPPED');
     this.on('PLAYBACK_STOPPED', () => {
       //this.setStayTimer();
       this.status = 'pending';

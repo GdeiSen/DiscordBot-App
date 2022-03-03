@@ -72,7 +72,7 @@
     "pg-protocol": "^1.5.0",
     "pg-types": "^2.2.0",
     "pgpass": "^1.0.4",
-    "play-dl": "^1.5.0",
+    "play-dl": "^1.8.9",
     "postgres-array": "^2.0.0",
     "postgres-bytea": "^1.0.0",
     "postgres-date": "^1.0.7",
