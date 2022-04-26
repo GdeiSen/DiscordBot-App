@@ -1,16 +1,7 @@
-const embedGenerator = require("../../include/utils/embedGenerator");
-
 module.exports.run = async (client, message, args) => {
-  const queue = message.client.queue.get(message.guild.id);
-  let embed2 = embedGenerator.run("music.skipto.error_01");
-  if (queue.playerMaster.skipTo(args) == false)
-    return message.reply({ embeds: [embed2] }).catch(console.error);
-  else {
-    let embed = embedGenerator.run("music.skip.info_01");
-    embed.setDescription(`${message.author.username} ${embed.description}`);
-    message.channel.send({ embeds: [embed] });
-  }
-  return 0;
+  let queue = message.client.queue.get(message.guild.id);
+  if (queue.playerManager.skipTo(args) == false) queue.embedManager.sendSkipToEmbed(message.channel, { warning: 'incorrect_args' })
+  else queue.embedManager.sendSkipToEmbed(message.channel)
 };
 
 module.exports.config = {

@@ -8,8 +8,7 @@ module.exports.run = async (bot, message, args) => {
     });
     embed.addField(`⏳ Websocket heartbeat: ${bot.ws.ping}ms.`, "\`System is connected!\`");
     embed.addField(`⚙ Commands scanned: ${index}.`, "\`No errors with scanning!\`");
-    embed.addField(`💾 DataBase status: ${bot.dataBaseEngine.status}.`, "\`No errors with data!\`");
-    embed.addField(`📡 SiteServer status: ${bot.serverEngine.status}.`, "\`No errors with server!\`");
+    embed.addField(`📡 External Server status: ${bot.extServerEngine.status}.`, "\`No errors with server!\`");
     message.channel.send({ embeds: [embed] })
 }
 

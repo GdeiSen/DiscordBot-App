@@ -11,13 +11,6 @@
   "SPOTIFY_EXPIRY": "1641909515570",
   "SPOTIFY_REDIRECT_URL":"http://127.0.0.1/index.html",
   
-  "USE_DATABASE_CONNECTION": true,
-  "SQL_SERVER_DB_NAME": "DiscordBotDataBase",
-  "SQL_SERVER_USER_NAME": "Admin",
-  "SQL_SERVER_USER_PASSWORD": "Sengordei#1",
-  "SQL_SERVER_HOST": "GORDEYPC",
-  "SQL_SERVER_DIALECT": "mssql",
-
   "CREATE_SERVERLIST_TABLE": true,
   "CREATE_USERLIST_TABLE": true,
   "CREATE_QUEUE_TABLE": true,
@@ -34,7 +27,7 @@
   "MAX_PLAYLIST_SIZE": 25,
   "PREFIX": "~",
   "PRUNING": false,
-  "STAY_PERMISSION": "default",
+  "STAY_PERMISSION": "always",
   "DEFAULT_VOLUME": 30,
-  "TOKEN": "ODgwNDAxNTk4ODgxMzQxNDYx.YSdv4g.ogJv0HJQRjb84gyhPqVIah7n2C8"
+  "TOKEN": "ODgwNDAxNTk4ODgxMzQxNDYx.YSdv4g.m5iZUD48be-9FtTEgKZMQUiVLbQ"
 }

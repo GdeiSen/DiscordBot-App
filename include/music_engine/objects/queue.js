@@ -1,5 +1,5 @@
 const config = require("../../../config.json")
-class queue {
+class Queue {
     guild
     channel
     voiceChannel
@@ -10,7 +10,10 @@ class queue {
     isStoppped = false
     connection
     player
-    status
+    status = 'pending'
+    playerManager
+    queueManager
+    queryResolver
     config = {
         loop: false,
         volume: config.DEFAULT_VOLUME,
@@ -18,4 +21,4 @@ class queue {
         maxSize: config.MAX_PLAYLIST_SIZE,
     }
 }
-exports.queue_ = queue;
+exports.Queue = Queue;

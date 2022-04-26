@@ -1,31 +1,31 @@
 const { Client, Collection, Intents } = require("discord.js");
-const { accesTester } = require("./include/utils/accesTester");
+const { AccessTester } = require("./include/utils/accessTester");
 const { ExtServerEngine } = require("./include/ext_server_engine/serverManager");
-const { FileSystemManager } = require("./include/utils/fileSystemManager.js");
+const { MusicPlayer } = require("./include/music_engine/musicPlayer");
 const fs = require("fs");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const config = require("./config.json");
 const package = require("./package.json")
+client.musicPlayer = new MusicPlayer(client);
 client.extServerEngine = new ExtServerEngine(client);
 client.commands = new Collection();
 client.aliases = new Collection();
 client.categories = new Collection();
 client.queue = new Map();
-client.fileSystemManager = new FileSystemManager();
 client.prefix = config.PREFIX;
 client.login(config.TOKEN);
 console.clear();
+
 client.once("ready", () => {
   console.log(`⬜ Main Manager Is Enable`);
   let flag = true;
   setInterval(() => {
-    if (flag == true) client.user.setActivity(`${package.version}`, { type: "PLAYING" });
-    else client.user.setActivity(`IN DEVELOPMENT`, { type: "PLAYING" });
+    if (flag == true) client.user.setActivity(`VERSION: ${package.version}`, { type: "PLAYING" });
+    else client.user.setActivity(`SOCKET DEVELOPMENT`, { type: "PLAYING" });
     flag = !flag;
-  }, 5000);
+  }, 2000);
   try {
     client.extServerEngine.createConnect();
-    client.fileSystemManager.createDefFiles();
   } catch (error) { console.log(error) }
 });
 
@@ -59,15 +59,15 @@ function scanCommands(path) {
     });
   });
 }
-client.on('guildDelete', () => {
-  client.dataBaseEngine.updateServerData();
-  client.dataBaseEngine.updateUserData();
-})
+// client.on('guildDelete', () => {
+//   client.dataBaseEngine.updateServerData();
+//   client.dataBaseEngine.updateUserData();
+// })
 
-client.on('guildCreate', () => {
-  client.dataBaseEngine.updateServerData();
-  client.dataBaseEngine.updateUserData();
-})
+// client.on('guildCreate', () => {
+//   client.dataBaseEngine.updateServerData();
+//   client.dataBaseEngine.updateUserData();
+// })
 
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
@@ -79,11 +79,10 @@ client.on('messageCreate', async message => {
   if (!message.content.startsWith(client.prefix)) return;
   let commandfile = client.commands.get(cmd.slice(client.prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(client.prefix.length)))
   try {
-    const tester = new accesTester(message, args, commandfile.config.accesTest);
-    tester.on('DENIED', (error) => { message.channel.send({ embeds: [error] }) })
+    let tester = new AccessTester(client, message.guild)
+    tester.test(message, args, commandfile.config.accesTest);
+    tester.on('DENIED', (error) => {message.channel.send({ embeds: [error] }) })
     tester.on('GRANTED', () => { commandfile.run(client, message, args) })
-    await tester.startSelector();
   } catch (error) { return }
-
 })
 

@@ -1,7 +1,5 @@
-const player = require("../../include/music_engine/musicEngine");
-
 module.exports.run = async (client, message, args) => {
-  player.run(client, message, args, "auto");
+  client.musicPlayer.play(message, args);
 };
 
 module.exports.config = {

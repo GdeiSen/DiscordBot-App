@@ -12,7 +12,7 @@
         },
         "error_03": {
             "embedTitle": "⚠️   Oooops Nothing is playing!",
-            "embedDescription": "Unfortunately nothing is playing right now. Send **Play** command or type **Help** to see the full list of commands!",
+            "embedDescription": "",
             "embedColor": "BLACK"
         },
         "error_04": {
@@ -28,6 +28,16 @@
         "error_06": {
             "embedTitle": "⚠️   Oooops This Function is Blocked!",
             "embedDescription": "Unfortunately at the moment this function cannot be executed!",
+            "embedColor": "BLACK"
+        },
+        "error_07": {
+            "embedTitle": "⚠️   Are you sure you typed everything correct?",
+            "embedDescription": "",
+            "embedColor": "BLACK"
+        },
+        "error_08": {
+            "embedTitle": "⚠️   Not so fast my friend!",
+            "embedDescription": "",
             "embedColor": "BLACK"
         },
         "clear": {
@@ -60,7 +70,7 @@
     },
     "info": {
         "info_01": {
-            "embedTitle": ":musical_note: Now Playing :musical_note:\n",
+            "embedTitle": "Now Playing:\n",
             "embedField": "Duration: ",
             "embedColor": "GREEN"
         },
@@ -120,6 +130,13 @@
         }
     },
     "entertainmet": {
+        "keyboard":{
+            "embed": {
+                "embedTitle": "⌨️   From English layout to Russian:",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
+        },
         "ball": {
             "info_01": "Definitely yes!",
             "info_02": "No doubt about it",
@@ -140,26 +157,56 @@
             "embed": {
                 "embedTitle": "🔮 8Ball",
                 "embedDescription": "8ball",
-                "embedColor": "PURPLE"
+                "embedColor": "BLACK"
             }
         }
     },
     "music": {
         "loop": {
-            "info_01": "🔄 track repetition is",
-            "info_02": "**enabled**",
-            "info_03": "**disabled**"
+            "info_01":{
+                "embedTitle": "🔂   Song loop is enabled!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_02":{
+                "embedTitle": "🔂   Song loop is disabled!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_01":{
+                "embedTitle": "⚠️   You can only use **on/true** or **off/false**",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
         },
         "queueLoop": {
-            "info_01": "🔄 queue repetition is"
+            "info_01":{
+                "embedTitle": "🔁   Queue loop is enabled!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_02":{
+                "embedTitle": "🔁   Queue loop is disabled!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_01":{
+                "embedTitle": "⚠️   You can only use **on/true** or **off/false**",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
         },
         "pause": {
             "info_01":{
                 "embedTitle": "⏸   Playback is paused!",
-                "embedDescription": "paused this playback",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02": "⏸ Playback is already paused"
+            "info_02":{
+                "embedTitle": "⏸   Playback is already paused!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
         },
         "lyrics": {
             "error_01": {
@@ -180,14 +227,14 @@
             "info_01": {
                 "embedTitle": "Lyrics",
                 "embedDescription": "Lyrics for: ",
-                "embedColor": "GREEN"
+                "embedColor": "BLACK"
             }
         },
         "nowPlaying": {
             "info_01": {
                 "embedTitle": "Now Playing",
                 "embedDescription": "",
-                "embedColor": "GREEN"
+                "embedColor": "BLACK"
             }
         },
         "play": {
@@ -230,22 +277,41 @@
             "info_02_02":"Successfully added",
             "info_03":{
                 "embedTitle": "⚠️   Nothing left in queue!",
-                "embedDescription": "Playback Stopped!",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
             "info_04":{
                 "embedTitle": "⚠️   I was disconnected from channel!",
-                "embedDescription": "Playback Stopped!",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
             "info_05":{
-                "embedTitle": "✅   Succefully Added!",
-                "embedDescription": "",
+                "embedTitle": "✅   Track successfully Added!",
+                "embedDescription": " ",
+                "embedColor": "BLACK"
+            },
+            "info_06":{
+                "embedTitle": "❌   I cannot find any data by your request!",
+                "embedDescription": " ",
                 "embedColor": "BLACK"
             }
         },
         "playlist": {
-            "info_01":"Ordered playlist"
+            "info_01":{
+                "embedTitle": "✅   Playlist successfully Added!",
+                "embedDescription": " ",
+                "embedColor": "BLACK"
+            },
+            "info_02":{
+                "embedTitle": "⌛   Playlist is loading Please wait!",
+                "embedDescription": " ",
+                "embedColor": "BLACK"
+            },
+            "info_03":{
+                "embedTitle": "❌   I cannot find the playlist!",
+                "embedDescription": " ",
+                "embedColor": "BLACK"
+            }
         },
         "queue": {
             "info_01":"Page ",
@@ -263,27 +329,32 @@
         },
         "remove": {
             "error_01":{
-                "embedTitle": "⚠️ Remove",
-                "embedDescription": "Unfortunately, there are not enough songs in the queue!",
+                "embedTitle": "⚠️   Use the existing track number",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":"Usage: ",
-            "info_02":" prefix remove <number>",
-            "info_03":"❌ Removed ",
-            "info_04":" From the queue"
+            "info_01":{
+                "embedTitle": "⤴️   Track removed from the queue",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
         },
         "resume": {
             "info_01":{
                 "embedTitle": "▶️   Playback is continued!",
-                "embedDescription": "continued playback",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02":"▶️ Playback is already continued"
+            "info_02":{
+                "embedTitle": "▶️   Playback is already continued!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
         },
         "search":{
             "error_01":{
-                "embedTitle": "⚠️   Collector",
-                "embedDescription": "The message collector has already been interacted in this channel!\nPlease complete previous one!",
+                "embedTitle": "⚠️   The message collector has already been interacted in this channel!\nPlease complete previous one!",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
             "info_02":{
@@ -295,44 +366,50 @@
         "shuffle":{
             "info_01":{
                 "embedTitle": "🔀   Queue is shuffled!",
-                "embedDescription": "shuffled queue",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
         "skip":{
             "info_01":{
                 "embedTitle": "⏭   song skipped",
-                "embedDescription": "skipped this song",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
         "skipto":{
             "error_01":{
-                "embedTitle": "⚠️   Limit",
-                "embedDescription": "there are not enough tracks in the queue.\nOr have you exceeded the maximum number for skipping-15",
+                "embedTitle": "⚠️   Use the existing track number and less than 15",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01": "⏭ skipped -",
-            "info_02": " tracks"
+            "info_01":{
+                "embedTitle": "⏭   songs skipped",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }  
         },
         "stop":{
             "info_01":{
                 "embedTitle": "⏹   playback stopped",
-                "embedDescription": "stopped playback",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
         "volume":{
-            "info_01":"🔊 volume: ",
-            "info_02":"🔊 volume is set to: ",
-            "error_01": {
-                "embedTitle": "⚠️   Syntax Error",
-                "embedDescription": "Enter a volume value",
+            "info_01":{
+                "embedTitle": "🔊   Volume set to: ",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02": {
-                "embedTitle": "⚠️   Syntax Error",
-                "embedDescription": "Enter a volume value between 0 and 100",
+            "info_02":{
+                "embedTitle": "🔊   Volume is:  ",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_01": {
+                "embedTitle": "⚠️   Use a volume value from 0 to 100",
+                "embedDescription": "",
                 "embedColor": "BLACK"
             }
         }

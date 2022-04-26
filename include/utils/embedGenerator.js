@@ -55,11 +55,10 @@ module.exports.run = (embedId) => {
             }
             return current_opened_el;
         }
-
         let embedMessage = new Discord.MessageEmbed()
-            .setTitle(search(title))
-            .setDescription(search(desc))
-            .setColor(search(color))
+        if(search(title)) embedMessage.setTitle(search(title))
+        if(search(desc)) embedMessage.setDescription(search(desc))
+        if(search(color)) embedMessage.setColor(search(color))
         return embedMessage;
     }
 }

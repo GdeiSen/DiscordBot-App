@@ -1,31 +1,23 @@
-const embedGenerator = require("../../include/utils/embedGenerator");
-
 module.exports.run = async (client, message, args) => {
   let queue = await message.client.queue.get(message.guild.id);
-  if(!args){
-    if(queue.current.loop == false){
-      let embed = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_03")}`;
-      message.channel.send(embed);
+  if (!args) {
+    if (queue.current.loop == false) {
+      queue.embedManager.sendSongLoopEmbed(message.channel, { state: false })
     }
-    else{
-      let embed = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_02")}`;
-      message.channel.send(embed);
+    else {
+      queue.embedManager.sendSongLoopEmbed(message.channel, { state: true })
     }
   }
-  else if(args == 'off' || args == 'false'){
-    queue.playerMaster.songLoop(false);
-    let embed = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_03")}`;
-    message.channel.send(embed);
+  else if (args == 'off' || args == 'false') {
+    queue.playerManager.songLoop(false);
+    queue.embedManager.sendSongLoopEmbed(message.channel, { state: false })
   }
-  else if(args == 'on'|| args == 'true'){
-    queue.playerMaster.songLoop(true);
-    let embed = `${embedGenerator.run("direct.music.loop.info_01")} ${embedGenerator.run("direct.music.loop.info_02")}`;
-    message.channel.send(embed);
+  else if (args == 'on' || args == 'true') {
+    queue.playerManager.songLoop(true);
+    queue.embedManager.sendSongLoopEmbed(message.channel, { state: true })
   }
   else {
-    let embed = embedGenerator.run("warnings.error_04");
-    embed.setDescription(`${embed.description} loop **on**/**off**`);
-    message.channel.send({ embeds: [embed] });
+    queue.embedManager.sendSongLoopEmbed(message.channel, { warning: 'incorrect_args' })
   }
 };
 
