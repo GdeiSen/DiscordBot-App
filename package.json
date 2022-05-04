@@ -1,0 +1,33 @@
+{
+  "name": "baverio",
+  "version": "2.1.0",
+  "description": "private music and entertainment bot",
+  "main": "index.js",
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "discord-menu-buttons": "^1.4.7",
+    "discord-music-player": "^8.0.2",
+    "discord.js": "^13.6.0",
+    "express": "^4.17.3",
+    "git": "^0.1.5",
+    "lyrics-finder": "^21.7.0",
+    "play-dl": "^1.8.9",
+    "socket.io": "^4.4.1",
+    "string-progressbar": "^1.0.4",
+    "ws": "^7.5.5"
+  },
+  "scripts": {
+    "start": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GdeiSen/DiscordBot-Work-In-Progress.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GdeiSen/DiscordBot-Work-In-Progress/issues"
+  },
+  "homepage": "https://github.com/GdeiSen/DiscordBot-Work-In-Progress#readme"
+}
