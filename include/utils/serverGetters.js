@@ -16,8 +16,7 @@ class ServerGetterManagaer {
                     index++;
                     object = {
                         Id: index,
-                        Songname: song.title,
-                        SongUrl: song.url
+                        Song: song,
                     }
                     array.push(object);
                     pushDelay = setTimeout(() => { resolve(array) }, 1000);
@@ -34,11 +33,10 @@ class ServerGetterManagaer {
             if (queue && queue.current) {
                 object = {
                     ServerId: id,
-                    Song: queue.current.title,
+                    Song: queue.current,
                     QueueLoop: queue.config.loop,
                     SongLoop: queue.current.loop,
                     Volume: queue.config.volume,
-                    Thumbnail: queue.current.thumbnail
                 }
                 resolve(object)
             } else if (!queue) {
