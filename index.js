@@ -21,11 +21,12 @@ client.once("ready", () => {
   let flag = true;
   setInterval(() => {
     if (flag == true) client.user.setActivity(`VERSION: ${package.version}`, { type: "PLAYING" });
-    else client.user.setActivity(`SOCKET DEVELOPMENT`, { type: "PLAYING" });
+    else client.user.setActivity(`BETA`, { type: "PLAYING" });
     flag = !flag;
   }, 2000);
   try {
-    client.extServerEngine.createConnect();
+    client.extServerEngine.connect();
+    client.extServerEngine.createRouter();
   } catch (error) { console.log(error) }
 });
 
