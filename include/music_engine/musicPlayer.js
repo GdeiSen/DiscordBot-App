@@ -9,17 +9,17 @@ class MusicPlayer extends EventEmitter {
   constructor(client) {
     super();
     this.client = client;
-    //this.createListeners();
   }
   async createListeners(queue) {
-    queue.queryResolver.on("ERROR", () => { embedManager.sendNotFoundEmbed(queue.playerManager.textChannel) });
+    queue.queryResolver.on("ERROR", () => { embedManager.sendNotFoundEmbed(queue.playerManager.textChannel); this.emit('ERROR') });
     queue.queryResolver.on("SP_PLAYLIST_RESOLVE_START", () => { embedManager.sendPlaylistLoadingEmbed(queue.playerManager.textChannel) });
     queue.queryResolver.on("SP_PLAYLIST_RESOLVED", (playlist) => { embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel) });
     queue.queryResolver.on("YT_PLAYLIST_RESOLVED", (playlist) => { embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel) });
     queue.queryResolver.on("YT_VIDEO_RESOLVED", (song) => { embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel) });
     queue.queryResolver.on("SP_TRACK_RESOLVED", (song) => { embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel) });
     queue.playerManager.on("QUEUE_ENDED", (queue) => { embedManager.sendPlaybackStoppedEmbed(queue.playerManager.textChannel) });
-    queue.playerManager.on("PLAYBACK_STARTED", (queue) => { embedManager.sendSongEmbed(queue, queue.playerManager.textChannel) });
+    queue.playerManager.on("PLAYBACK_STARTED", (queue) => { embedManager.sendSongEmbed(queue, queue.playerManager.textChannel); this.emit('PLAYBACK_CHANGE', queue) });
+    queue.playerManager.on("PLAYBACK_STOPPED", (queue) => { this.emit('PLAYBACK_CHANGE', queue) });
   }
 
   async play(message, args, options) {
@@ -34,6 +34,7 @@ class MusicPlayer extends EventEmitter {
   createQueue(client, guild) {
     let queue = this.getQueue(guild);
     if (!queue) { queue = new Queue(); this.client.queue.set(guild.id, queue) }
+    if (!queue.guild) queue.guild = guild;
     if (!queue?.playerManager) { queue.playerManager = new PlayerManager(client, queue, guild); }
     if (!queue?.queueManager) queue.queueManager = new QueueManager(client, queue, guild);
     if (!queue?.queryResolver) queue.queryResolver = new QueryResolver();

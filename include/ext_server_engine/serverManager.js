@@ -25,6 +25,13 @@ class ExtServerEngine extends EventEmitter {
             name: "GATEWAY"
         })
         this.connectionManager.connect();
+        this.createPlaybackListener();
+    }
+
+    createPlaybackListener() {
+        this.client.musicPlayer.on('PLAYBACK_CHANGE', (queue) => {
+            this.connectionManager.post({ name: "playbackChange", serverId: queue.guild.id })
+        })
     }
 
     async createRouter() {
@@ -37,7 +44,7 @@ class ExtServerEngine extends EventEmitter {
         this.connectionManager.addRoute('removeSongFunction', async (request, responce) => { this.removeSongFunction(request.serverId, request.songIndex); responce.send(true) })
         this.connectionManager.addRoute('disconnectFunction', async (request, responce) => { this.disconnectFunction(request.serverId); responce.send(true) })
         this.connectionManager.addRoute('togglePauseSongFunction', (request, responce) => { this.togglePauseFunc(request.serverId); responce.send(true) })
-        this.connectionManager.addRoute('testFunction', async (request, responce) => { responce.send(true) })
+        this.connectionManager.addRoute('status', (request, responce) => { responce.send('connected') });
     }
 
     async togglePauseFunc(serverId) {

@@ -60,15 +60,6 @@ function scanCommands(path) {
     });
   });
 }
-// client.on('guildDelete', () => {
-//   client.dataBaseEngine.updateServerData();
-//   client.dataBaseEngine.updateUserData();
-// })
-
-// client.on('guildCreate', () => {
-//   client.dataBaseEngine.updateServerData();
-//   client.dataBaseEngine.updateUserData();
-// })
 
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
