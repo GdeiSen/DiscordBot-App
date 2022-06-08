@@ -10,21 +10,14 @@ module.exports.run = async (client, message, args) => {
     let embed3 = await embedGenerator.run("music.lyrics.error_03");
     let embed4 = await embedGenerator.run("music.lyrics.info_01");
     let lyrics = null;
-    if (!queue && !args) {
+
+    if (!queue?.current && !args) {
       message.channel.send({ embeds: [embed3] });
       return 0;
-    } else if (!queue && args) {
+    }
+    else if (queue?.current && !args) {
       try {
-        lyrics = await lyricsFinder(args);
-        if (!lyrics) throw error;
-        name = args;
-      } catch (error) {
-        message.channel.send({ embeds: [embed1] });
-        return 0;
-      }
-    } else if (queue && !args) {
-      try {
-        const title = client.queue.current.title;
+        const title = queue.current.title;
         name = title;
         lyrics = await lyricsFinder(title);
         if (!lyrics) throw error;
@@ -32,7 +25,8 @@ module.exports.run = async (client, message, args) => {
         message.channel.send({ embeds: [embed2] });
         return 0;
       }
-    } else if (queue && args) {
+    }
+    else if (args) {
       try {
         lyrics = await lyricsFinder(args);
         if (!lyrics) throw error;
@@ -42,8 +36,12 @@ module.exports.run = async (client, message, args) => {
         return 0;
       }
     }
-
+    else {
+      message.channel.send({ embeds: [embed1] });
+      return 0;
+    }
     embed4.setDescription(`${embed4.description} **${name}**\n  ${lyrics}`);
+    embed4.setThumbnail(queue.current.thumbnail?.url ? queue.current.thumbnail.url : queue.current.thumbnails[0].url)
     if (embed4.description.length >= 2048) embed4.description = `${embed4.description.substr(0, 2045)}...`;
     message.channel.send({ embeds: [embed4] }).catch(console.error);
   } catch (error) {

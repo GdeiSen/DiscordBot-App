@@ -1,5 +1,4 @@
 const { QueueManager } = require("./managers/queueManager.js");
-const { MessageEmbed } = require("discord.js");
 const { PlayerManager } = require("./managers/playerManager");
 const { QueryResolver } = require("./managers/queryResolver");
 const { Queue } = require("./objects/queue");
@@ -12,15 +11,40 @@ class MusicPlayer extends EventEmitter {
   }
   async createListeners(queue) {
     queue.queryResolver.on("ERROR", () => { embedManager.sendNotFoundEmbed(queue.playerManager.textChannel); this.emit('ERROR') });
-    queue.queryResolver.on("SP_PLAYLIST_RESOLVE_START", () => { embedManager.sendPlaylistLoadingEmbed(queue.playerManager.textChannel) });
-    queue.queryResolver.on("SP_PLAYLIST_RESOLVED", (playlist) => { embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel) });
-    queue.queryResolver.on("YT_PLAYLIST_RESOLVED", (playlist) => { embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel) });
-    queue.queryResolver.on("YT_VIDEO_RESOLVED", (song) => { embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel) });
-    queue.queryResolver.on("SP_TRACK_RESOLVED", (song) => { embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel) });
-    queue.playerManager.on("QUEUE_ENDED", (queue) => { embedManager.sendPlaybackStoppedEmbed(queue.playerManager.textChannel) });
-    queue.playerManager.on("PLAYBACK_STARTED", (queue) => { embedManager.sendSongEmbed(queue, queue.playerManager.textChannel); this.emit('PLAYBACK_CHANGE', queue) });
-    queue.playerManager.on("PLAYBACK_STOPPED", (queue) => { this.emit('PLAYBACK_CHANGE', queue) });
+    queue.queryResolver.on("SP_PLAYLIST_RESOLVE_START", () => {
+      embedManager.sendPlaylistLoadingEmbed(queue.playerManager.textChannel);
+    });
+    queue.queryResolver.on("SP_PLAYLIST_RESOLVED", (playlist) => {
+      embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel);
+      this.emit('SP_PLAYLIST_RESOLVED', queue);
+    });
+    queue.queryResolver.on("YT_PLAYLIST_RESOLVED", (playlist) => {
+      this.emit('YT_PLAYLIST_RESOLVED', queue);
+      embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel);
+    });
+    queue.queryResolver.on("YT_VIDEO_RESOLVED", (song) => {
+      this.emit('YT_VIDEO_RESOLVED', queue);
+      embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel);
+    });
+    queue.queryResolver.on("SP_TRACK_RESOLVED", (song) => {
+      this.emit('SP_TRACK_RESOLVED', queue);
+      embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel);
+    });
+    queue.playerManager.on("QUEUE_ENDED", (queue) => {
+      this.emit('QUEUE_ENDED', queue);
+      embedManager.sendPlaybackStoppedEmbed(queue.playerManager.textChannel);
+    });
+    queue.playerManager.on("PLAYBACK_STARTED", (queue) => {
+      this.emit('PLAYBACK_STARTED', queue);
+      embedManager.sendSongEmbed(queue, queue.playerManager.textChannel); this.emit('PLAYBACK_CHANGE', queue);
+    });
+    queue.playerManager.on("PLAYBACK_STOPPED", (queue) => {
+      this.emit('PLAYBACK_STOPPED', queue);
+
+    });
+    queue.playerManager.on("ERROR", (err) => { queue.playerManager.stop(); queue.playerManager.textChannel.send(err) });
   }
+
 
   async play(message, args, options) {
     let queue = this.createQueue(this.client, message.guild);
@@ -28,6 +52,7 @@ class MusicPlayer extends EventEmitter {
     if (queue.playerManager.listeners("PLAYBACK_STARTED").length == 0) { this.createListeners(queue) };
     if (options?.searchType == 'playlist') queue.queueManager.pushSongsToQueue(await queue.queryResolver.search(args, message, { searchType: 'playlist' }));
     else queue.queueManager.pushSongsToQueue(await queue.queryResolver.search(args, message));
+    console.log(queue.status);
     if (queue.status !== "playing") queue.playerManager.startPlayback(message.member.voice.channel);
   }
 

@@ -25,7 +25,7 @@ class PlayerManager extends EventEmitter {
       this.queue.status = 'loading';
       this.#createConnection().then(async (status) => {
         if (status == 'ready') {
-          this.queue.queueManager.queueSongsChanger();
+          this.queue.queueManager.skip();
           if (!this.player) await this.#createPlayer();
           await this.#createStream(this.queue.current.url);
           await this.#createResource();
@@ -204,7 +204,7 @@ class PlayerManager extends EventEmitter {
       this.player.stop();
       this.emit('PLAYER_COMMAND', { commandName: 'skip', executionResult: true, currentState: this.queue.status });
       return true;
-    } catch (err) { this.emit('ERROR', '[ERROR] [PL] skip function error'); return 0 }
+    } catch (err) { this.emit('ERROR', '[ERROR] [PL] skip function error'); console.log(err); return 0 }
   }
 
   setVolume(args) {
@@ -292,6 +292,12 @@ class PlayerManager extends EventEmitter {
       this.emit('PLAYER_COMMAND', { commandName: 'skipTo', executionResult: true })
       return true;
     } catch (err) { this.emit('ERROR', '[ERROR] [PL] skipTo function error'); console.log(err) }
+  }
+
+  seek(args) {
+    this.player.play(this.resource, { seek: args });
+    console.log(args);
+    this.connection.subscribe(this.player);
   }
 
   remove(args) {

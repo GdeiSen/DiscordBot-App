@@ -148,63 +148,65 @@ module.exports.sendSongEmbed = async (queue, channel) => {
     collector.on("end", async (i) => {
         activeSongEmbed.edit({
             components: [],
-        });
+        }).catch((err)=>{});
     });
 }
 
 module.exports.sendQueueEmbed = async (channel, queue) => {
-    if (channel?.activeCollector) channel.activeCollector.stop();
-    let currentPage = 0;
-    const row = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-                .setCustomId('back')
-                .setEmoji('◀️')
-                .setStyle('PRIMARY'),
-            new MessageButton()
-                .setCustomId('next')
-                .setEmoji('▶️')
-                .setStyle('PRIMARY'),
-        );
-    const embeds = await generateQueueEmbed(queue.songs, queue.current);
-    let queueEmbed = await channel.send({
-        content: 'Queue',
-        embeds: [embeds[currentPage]],
-        components: [row]
-    });
-    const filter = i => i.customId === 'next' || i.customId === 'back';
-    collector = channel.createMessageComponentCollector({
-        filter,
-        time: 15000
-    });
-    channel.activeCollector = collector;
     try {
-        collector.on('collect', async item => {
-            if (item.customId === 'next') {
-                messageIndex = item;
-                if (currentPage < embeds.length - 1) {
-                    currentPage++;
-                    await item.update({
-                        content: `**page - ${currentPage + 1}/${embeds.length}**`,
-                        embeds: [embeds[currentPage]]
-                    });
-                } else { item.deferUpdate(); }
-            } else if (item.customId === 'back') {
-                if (currentPage !== 0) {
-                    --currentPage;
-                    await item.update({ content: `**page - ${currentPage + 1}/${embeds.length}**`, embeds: [embeds[currentPage]] });
-                }
-                else { item.deferUpdate(); }
-            }
-        });
-    } catch (err) { console.log(err) };
-    collector.on('end', async i => {
-        queueEmbed.edit({
-            content: `**page - ${currentPage + 1}/${embeds.length}**`,
+        if (channel?.activeCollector) channel.activeCollector.stop();
+        let currentPage = 0;
+        const row = new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('back')
+                    .setEmoji('◀️')
+                    .setStyle('PRIMARY'),
+                new MessageButton()
+                    .setCustomId('next')
+                    .setEmoji('▶️')
+                    .setStyle('PRIMARY'),
+            );
+        const embeds = await generateQueueEmbed(queue.songs, queue.current);
+        let queueEmbed = await channel.send({
+            content: 'Queue',
             embeds: [embeds[currentPage]],
-            components: []
+            components: [row]
+        });
+        const filter = i => i.customId === 'next' || i.customId === 'back';
+        collector = channel.createMessageComponentCollector({
+            filter,
+            time: 15000
+        });
+        channel.activeCollector = collector;
+        collector.on('collect', async item => {
+            try {
+                if (item.customId === 'next') {
+                    messageIndex = item;
+                    if (currentPage < embeds.length - 1) {
+                        currentPage++;
+                        await item.update({
+                            content: `**page - ${currentPage + 1}/${embeds.length}**`,
+                            embeds: [embeds[currentPage]]
+                        });
+                    } else { item.deferUpdate(); }
+                } else if (item.customId === 'back') {
+                    if (currentPage !== 0) {
+                        --currentPage;
+                        await item.update({ content: `**page - ${currentPage + 1}/${embeds.length}**`, embeds: [embeds[currentPage]] });
+                    }
+                    else { item.deferUpdate(); }
+                }
+            } catch (err) { }
+        });
+        collector.on('end', async i => {
+            queueEmbed.edit({
+                content: `**page - ${currentPage + 1}/${embeds.length}**`,
+                embeds: [embeds[currentPage]],
+                components: []
+            }).catch((err)=>{})
         })
-    })
+    } catch (err) { console.log(err) }
 }
 
 module.exports.sendNowPlayingEmbed = async (queue, channel) => {

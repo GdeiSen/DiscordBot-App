@@ -55,14 +55,16 @@ module.exports.run = async (bot, message, args) => {
         var messagec = text.entertainmet.ball.info_17;
     }
     else if (random === 12) {
-        var messagec = text.entertainmet.ball.info_1;
+        var messagec = text.entertainmet.ball.info_18;
     }
     else if (random === 10) {
-        var messagec = text.entertainmet.ball.info_5;
+        var messagec = text.entertainmet.ball.info_19;
     }
     else if (random === 11) {
-        var messagec = text.entertainmet.ball.info_9;
+        var messagec = text.entertainmet.ball.info_20;
     }
+    arggs = arggs.replace(/[?]/g, '')
+    arggs = arggs.replace(/[,]/g, ' ')
     let embed = await embedGenerator.run('entertainmet.ball.embed');
     embed.setDescription(`${arggs}? **${messagec}**`);
     message.channel.send({ embeds: [embed] })

@@ -10,7 +10,7 @@ class QueueManager extends EventEmitter {
     this.buffer = [];
   }
 
-  queueSongsChanger() {
+  skip() {
     try {
       if (this.queue.current && ((this.queue.config.loop == true && this.queue.songs.length == 0) || this.queue.current.loop == true)) {
         return 0;

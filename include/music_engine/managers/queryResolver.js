@@ -33,21 +33,27 @@ class QueryResolver extends EventEmitter {
       else type = await play.validate(query);
       switch (type) {
         case "yt_video":
+          this.emit("YT_VIDEO_RESOLVE_START");
           resolve(await this.YT_VideoSolver(query));
           break;
         case "yt_playlist":
+          this.emit("YT_PLAYLIST_RESOLVE_START");
           resolve(await this.YT_PlaylistSolver(query));
           break;
         case "sp_track":
+          this.emit("SP_TRACK_RESOLVE_START");
           resolve(await this.SP_TrackSolver(query));
           break;
         case "sp_playlist":
+          this.emit("SP_PLAYLIST_RESOLVE_START");
           resolve(await this.SP_PlaylistSolver(query));
           break;
         case "sp_album":
+          this.emit("SP_PLAYLIST_RESOLVE_START");
           resolve(await this.SP_PlaylistSolver(query));
           break;
         case "search":
+          this.emit("YT_VIDEO_RESOLVE_START");
           resolve(await this.Search_VideoSolver(query));
           break;
         default:
@@ -58,7 +64,6 @@ class QueryResolver extends EventEmitter {
   }
 
   async Search_VideoSolver(query, options) {
-    this.emit("YT_VIDEO_RESOLVE_START");
     let buffer = []
     let yt_video;
     let limit = 1
@@ -82,7 +87,6 @@ class QueryResolver extends EventEmitter {
   }
 
   async YT_VideoSolver(query) {
-    this.emit("YT_VIDEO_RESOLVE_START");
     let buffer = []
     let yt_video;
     let promise = new Promise(async (resolve, reject) => {
@@ -103,7 +107,6 @@ class QueryResolver extends EventEmitter {
   }
 
   async YT_PlaylistSolver(query) {
-    this.emit("YT_PLAYLIST_RESOLVE_START");
     let buffer = []
     let yt_playlist;
     let queryUrl;
@@ -135,7 +138,6 @@ class QueryResolver extends EventEmitter {
   }
 
   async SP_TrackSolver(query) {
-    this.emit("SP_TRACK_RESOLVE_START");
     let buffer = []
     let yt_video;
     let sp_track;
@@ -159,7 +161,6 @@ class QueryResolver extends EventEmitter {
   }
 
   async SP_PlaylistSolver(query) {
-    this.emit("SP_PLAYLIST_RESOLVE_START");
     let buffer = []
     let yt_video;
     let sp_track;

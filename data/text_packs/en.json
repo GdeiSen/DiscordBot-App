@@ -153,7 +153,10 @@
             "info_14": "My answer is No",
             "info_15": "According to my data, no",
             "info_16": "The prospects are not very good",
-            "info_17": "Very doubtful",
+            "info_17": "Oh yes of course!",
+            "info_18": "Ask someone else",
+            "info_19": "I am one hundred percent sure that there is not",
+            "info_20": "I'm too lazy to answer, let's do it tomorrow",
             "embed": {
                 "embedTitle": "🔮 8Ball",
                 "embedDescription": "8ball",

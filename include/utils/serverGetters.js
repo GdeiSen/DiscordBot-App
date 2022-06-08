@@ -1,4 +1,4 @@
-class ServerGetterManagaer {
+class ServerGetterManager {
     constructor(client) {
         this.client = client
     }
@@ -14,7 +14,6 @@ class ServerGetterManagaer {
     }
 
     async getCurrentPlayback(id) {
-        console.log(id);
         const promise = new Promise(async (resolve, reject) => {
             let queue = this.client.queue.get(id)
             if (queue && queue.current) {
@@ -77,4 +76,4 @@ class ServerGetterManagaer {
 
 
 }
-exports.ServerGetterManagaer = ServerGetterManagaer;
+exports.ServerGetterManager = ServerGetterManager;

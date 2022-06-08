@@ -1,13 +1,13 @@
 const { Client, Collection, Intents } = require("discord.js");
-const { AccessTester } = require("./include/utils/accessTester");
-const { ExtServerEngine } = require("./include/ext_server_engine/serverManager");
+const { AccessTester } = require("./include/utils/commandMiddleware");
+const { ExtServerEngine } = require("./include/external_server/managers/connectionManager");
 const { MusicPlayer } = require("./include/music_engine/musicPlayer");
 const fs = require("fs");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const config = require("./config.json");
 const package = require("./package.json")
 client.musicPlayer = new MusicPlayer(client);
-client.extServerEngine = new ExtServerEngine(client);
+client.extServerManager = new ExtServerEngine(client);
 client.commands = new Collection();
 client.aliases = new Collection();
 client.categories = new Collection();
@@ -25,8 +25,8 @@ client.once("ready", () => {
     flag = !flag;
   }, 2000);
   try {
-    client.extServerEngine.connect();
-    client.extServerEngine.createRouter();
+    client.extServerManager.connect();
+    client.extServerManager.createRouter();
   } catch (error) { console.log(error) }
 });
 
