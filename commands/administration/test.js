@@ -6,9 +6,9 @@ module.exports.run = async (bot, message, args) => {
     bot.commands.forEach(command => {
         index++;
     });
-    embed.addField(`⏳ Websocket heartbeat: ${bot.ws.ping}ms.`, "\`System is connected!\`");
+    embed.addField(`⏳ Websocket heartbeat: ${bot?.ws?.ping || "untested!"}ms.`, "\`System is connected!\`");
     embed.addField(`⚙ Commands scanned: ${index}.`, "\`No errors with scanning!\`");
-    embed.addField(`📡 External Server status: ${bot.extServerEngine.status}.`, "\`No errors with server!\`");
+    embed.addField(`📡 External Server status: ${bot?.extServerEngine?.status || "untested!"}.`, "\`No errors with server!\`");
     message.channel.send({ embeds: [embed] })
 }
 
