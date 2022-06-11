@@ -1,13 +1,12 @@
-const { Client, Collection, Intents } = require("discord.js");
+const { Client, Collection, Intents, VoiceRegion } = require("discord.js");
 const { AccessTester } = require("./include/utils/commandMiddleware");
 const { ExtServerEngine } = require("./include/external_server/managers/connectionManager");
 const { MusicPlayer } = require("./include/music_engine/musicPlayer");
 const fs = require("fs");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const config = require("./config.json");
-const package = require("./package.json")
+const package = require("./package.json");
 client.musicPlayer = new MusicPlayer(client);
-client.extServerManager = new ExtServerEngine(client);
 client.commands = new Collection();
 client.aliases = new Collection();
 client.categories = new Collection();
@@ -15,8 +14,10 @@ client.queue = new Map();
 client.prefix = config.PREFIX;
 client.login(config.TOKEN);
 console.clear();
-
-client.once("ready", () => {
+process.on("multipleResolves", (type, promise, reason) => {
+  if (reason.toLocaleString() === "Error: Cannot perform IP discovery - socket closed") return;
+});
+client.once("ready", async () => {
   console.log(`⬜ Main Manager Is Enable`);
   let flag = true;
   setInterval(() => {
@@ -24,10 +25,11 @@ client.once("ready", () => {
     else client.user.setActivity(`BETA`, { type: "PLAYING" });
     flag = !flag;
   }, 2000);
-  try {
+  if (config.USE_EXTERNAL_SERVER == true) {
+    client.extServerManager = new ExtServerEngine(client);
     client.extServerManager.connect();
     client.extServerManager.createRouter();
-  } catch (error) { console.log(error) }
+  }
 });
 
 scanCommands('./commands/music/');
@@ -73,8 +75,8 @@ client.on('messageCreate', async message => {
   try {
     let tester = new AccessTester(client, message.guild)
     tester.test(message, args, commandfile.config.accesTest);
-    tester.on('DENIED', (error) => {message.channel.send({ embeds: [error] }) })
-    tester.on('GRANTED', () => { commandfile.run(client, message, args) })
+    tester.on('DENIED', (error) => { message.channel.send({ embeds: [error] }) })
+    tester.on('GRANTED', () => { try { commandfile.run(client, message, args) } catch (err) { return 0 } })
   } catch (error) { return }
 })
 

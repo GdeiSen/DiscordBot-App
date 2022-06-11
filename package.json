@@ -4,6 +4,7 @@
   "description": "private music and entertainment bot",
   "main": "index.js",
   "dependencies": {
+    "@discordjs/voice": "^0.10.0",
     "amqplib": "^0.8.0",
     "discord-menu-buttons": "^1.4.7",
     "discord-music-player": "^8.0.2",
