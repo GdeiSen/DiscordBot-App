@@ -1,11 +1,10 @@
 const play = require('play-dl')
 const EventEmitter = require('events');
 const config = require('../../../config.json')
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus, entersState } = require("@discordjs/voice");
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus, entersState, VoiceConnectionStatus } = require("@discordjs/voice");
 const { clearTimeout } = require('timers');
 const { isArray } = require('lodash');
 class PlayerManager extends EventEmitter {
-
   constructor(client, queue, guild) {
     super();
     this.stayTimer;
@@ -23,17 +22,16 @@ class PlayerManager extends EventEmitter {
     try {
       if (this.queue.status !== 'pending' && this.queue.status !== 'stopped') return 0;
       this.queue.status = 'loading';
-      this.#createConnection().then(async (status) => {
-        if (status == 'ready') {
-          this.queue.queueManager.skip();
-          if (!this.player) await this.#createPlayer();
-          await this.#createStream(this.queue.current.url);
-          await this.#createResource();
-          await this.#play();
-          await this.#createIdleHandler();
-          this.#createVoiceStateHandler();
-        }
-      })
+
+      await this.#createConnection()
+      this.queue.queueManager.skip();
+      if (!this.player) await this.#createPlayer();
+      await this.#createStream(this.queue.current.url);
+      await this.#createResource();
+      await this.#play();
+      await this.#createIdleHandler();
+      this.#createVoiceStateHandler();
+
     } catch (error) {
       this.emit('ERROR');
       console.log(error)
@@ -93,20 +91,18 @@ class PlayerManager extends EventEmitter {
       const connection = await joinVoiceChannel({
         channelId: this.voiceChannel.id,
         guildId: this.guild.id,
-        adapterCreator: this.guild.voiceAdapterCreator
+        adapterCreator: this.guild.voiceAdapterCreator,
       });
       let promise = new Promise((resolve, reject) => {
         if (connection.state.status == 'ready') {
           this.connection = connection;
           resolve(connection.state.status)
         };
-        connection.on('stateChange', (oldState, newState) => {
-          if (newState.status == 'ready') {
-            this.connection = connection, resolve(newState.status);
-            this.emit('CONNECTION_CREATED', this.queue);
-            this.connection.removeAllListeners('stateChange')
-          }
-        })
+        connection.on(VoiceConnectionStatus.Ready, () => {
+          this.connection = connection;
+          resolve(true);
+          this.emit('CONNECTION_CREATED', this.queue);
+        });
       })
       return await promise;
     } catch (err) { this.emit('ERROR', '[ERROR] [PL] createConnection function error'); console.log(err); return 0 }
