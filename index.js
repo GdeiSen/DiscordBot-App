@@ -5,7 +5,6 @@ const { MusicPlayer } = require("./include/music_engine/musicPlayer");
 const fs = require("fs");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const config = require("./config.json");
-const package = require("./package.json");
 client.musicPlayer = new MusicPlayer(client);
 client.commands = new Collection();
 client.aliases = new Collection();
@@ -14,17 +13,8 @@ client.queue = new Map();
 client.prefix = config.PREFIX;
 client.login(process.env?.TOKEN || config.TOKEN);
 console.clear();
-process.on("multipleResolves", (type, promise, reason) => {
-  if (reason.toLocaleString() === "Error: Cannot perform IP discovery - socket closed") return;
-});
 client.once("ready", async () => {
   console.log(`⬜ Main Manager Is Enable`);
-  let flag = true;
-  setInterval(() => {
-    if (flag == true) client.user.setActivity(`VERSION: ${package.version}`, { type: "PLAYING" });
-    else client.user.setActivity(`BETA`, { type: "PLAYING" });
-    flag = !flag;
-  }, 2000);
   if (config.USE_EXTERNAL_SERVER == true) {
     client.extServerManager = new ExtServerEngine(client);
     client.extServerManager.connect();

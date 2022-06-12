@@ -1,4 +1,8 @@
 const EventEmitter = require('events');
+const embedManager = require("./embedManager.js")
+const { PlayerManager } = require("./playerManager");
+const { QueryResolver } = require("./queryResolver");
+const { Queue } = require("../objects/queue");
 class QueueManager extends EventEmitter {
 
   constructor(client, queue, guild) {
@@ -12,9 +16,7 @@ class QueueManager extends EventEmitter {
 
   skip() {
     try {
-      if (this.queue.current && ((this.queue.config.loop == true && this.queue.songs.length == 0) || this.queue.current.loop == true)) {
-        return 0;
-      }
+      if (this.queue.current && ((this.queue.config.loop == true && this.queue.songs.length == 0) || this.queue.current.loop == true)) return 0;
       else if (this.queue.config.loop == true) {
         let buffer = this.queue.current;
         this.queue.current = this.queue.songs[0];
@@ -30,12 +32,27 @@ class QueueManager extends EventEmitter {
 
   async clearQueue() {
     try {
-      this.queue = this.client.musicPlayer.getQueue(this.guild);
+      this.queue = QueueManager.getQueue(this.client, this.guild)
       if (this.queue == null) return 0;
       this.queue.songs = [];
       this.queue.current = null;
       this.queue.config.loop = false;
     } catch (err) { this.emit('ERROR', "[ERROR] [QM] clearQueue function error!"); console.log(err); }
+  }
+
+  static createQueue(client, guild) {
+    let queue = QueueManager.getQueue(client, guild);
+    if (!queue) { queue = new Queue(); client.queue.set(guild.id, queue) }
+    queue.guild = guild;
+    queue.playerManager ??= new PlayerManager(client, queue, guild);
+    queue.queryResolver ??= new QueryResolver();
+    queue.queueManager ??= new QueueManager(client, queue, guild);
+    queue.embedManager ??= embedManager;
+    return queue;
+  }
+
+  static getQueue(client, guild) {
+    return client.queue.get(guild.id);
   }
 
   async addSongToBuffer(song, option) {
@@ -62,7 +79,6 @@ class QueueManager extends EventEmitter {
 
   async pushSongsToQueue(songs) {
     try {
-      if(!songs && songs?.length == 0) return 0;
       this.queue.songs = this.queue.songs.concat(songs);
     } catch (error) { console.log(error)}
   }

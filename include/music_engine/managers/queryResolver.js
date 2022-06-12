@@ -110,15 +110,15 @@ class QueryResolver extends EventEmitter {
     let buffer = []
     let yt_playlist;
     let queryUrl;
-    if (play.validate(query) !== 'yt_playlist') {
-      queryUrl = await play.search(query, {
-        source: { youtube: "playlist" },
-        limit: 1,
-      }); queryUrl = queryUrl[0].url
-    }
-    else queryUrl = query;
-    let promise = new Promise(async (resolve, reject) => {
-      try {
+    try {
+      if (play.validate(query) !== 'yt_playlist') {
+        queryUrl = await play.search(query, {
+          source: { youtube: "playlist" },
+          limit: 1,
+        }); queryUrl = queryUrl[0].url
+      }
+      else queryUrl = query;
+      let promise = new Promise(async (resolve, reject) => {
         yt_playlist = await play.playlist_info(queryUrl, {
           source: { youtube: "playlist" },
         });
@@ -128,13 +128,13 @@ class QueryResolver extends EventEmitter {
         buffer = yt_playlist.videos.slice();
         this.emit("YT_PLAYLIST_RESOLVED", yt_playlist);
         resolve(buffer);
-      } catch (error) {
-        this.emit("ERROR", "YT_PLAYLIST_NOT_FOUND");
-        console.log(error);
-        return 0;
-      }
-    });
-    return promise;
+      });
+      return promise;
+    } catch (error) {
+      this.emit("ERROR", "YT_PLAYLIST_NOT_FOUND");
+      console.log(error);
+      return 0;
+    }
   }
 
   async SP_TrackSolver(query) {
@@ -176,10 +176,9 @@ class QueryResolver extends EventEmitter {
             { source: { youtube: "video" }, limit: 1 }
           );
           if (!yt_video) {
-            this.emit("ERROR", "SP_TRACK_NOT_FOUND");
-            continue;
+            this.emit("ERROR", "SP_TRACK_NOT_FOUND", sp_track);
           }
-          buffer.push(this.songConstructor(yt_video[0]));
+          else buffer.push(this.songConstructor(yt_video[0]));
           if (index == sp_playlist.tracksCount - 1) {
             this.emit("SP_PLAYLIST_RESOLVED", sp_playlist);
             resolve(buffer);
@@ -195,7 +194,7 @@ class QueryResolver extends EventEmitter {
   }
 
   songConstructor(video) {
-    if(!video) return 0;
+    if (!video) return 0;
     try {
       let song = video;
       song["author"] = this.message.author.username;

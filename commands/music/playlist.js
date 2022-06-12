@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, args) => {
-  client.musicPlayer.play(message, args, {searchType: 'playlist'});
+  client.musicPlayer.playlist(message, args);
 };
 
 module.exports.config = {

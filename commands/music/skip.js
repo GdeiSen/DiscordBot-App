@@ -1,7 +1,7 @@
 module.exports.run = async (client, message, args) => {
   let queue = client.queue.get(message.guild.id);
   queue.playerManager.skip();
-  queue.embedManager.sendSkipEmbed(message.channel)
+  queue.embedManager.sendSkipEmbed(message.channel, {embedTimeout: queue.config.embedTimeout})
 };
 
 module.exports.config = {

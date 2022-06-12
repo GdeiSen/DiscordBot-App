@@ -1,6 +1,6 @@
 module.exports.run = async (client, message, args) => {
   let queue = client.queue.get(message.guild.id);
-  queue.embedManager.sendPausedEmbed(message.channel, {queueStatus: queue.status});
+  queue.embedManager.sendPausedEmbed(message.channel, {queueStatus: queue.status, embedTimeout: queue.config.embedTimeout});
   queue.playerManager.pause();
 };
 

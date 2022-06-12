@@ -1,6 +1,6 @@
 module.exports.run = async (client, message, args) => {
   const queue = message.client.queue.get(message.guild.id);
-  queue.embedManager.sendQueueEmbed(message.channel, queue);
+  queue.embedManager.sendQueueEmbed(message.channel, queue, {embedTimeout: queue.config.embedTimeout});
 }
 
 module.exports.config = {

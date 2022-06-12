@@ -19,6 +19,8 @@ class Queue {
         volume: config.DEFAULT_VOLUME,
         stayPermission: config.STAY_TIME,
         maxSize: config.MAX_PLAYLIST_SIZE,
+        embedTimeout: 4000,
+        deletePlaybackEmbed: true,
     }
 }
 exports.Queue = Queue;

@@ -1,6 +1,7 @@
 module.exports.run = async (client, message, args) => {
     let queue = await message.client.queue.get(message.guild.id);
     if (queue?.playerManager) {
+        queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { });
         queue.playerManager.disconnect();
     }
 };

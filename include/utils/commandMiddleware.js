@@ -103,9 +103,6 @@ class AccessTester extends EventEmitter {
   }
 
   async testUserId(author) {
-    // let embed = await embedGenerator.run("warnings.error_02");
-    // if (author.id === "614819288506695697" || author.id === "596967380089962496" || author.id === "468380034273509376" && !author.bot) return { state: true };
-    // else return { state: false, errorEmbed: embed };
     return { state: true };
   }
   async testUserVoiceChannelAvailability(member) {

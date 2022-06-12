@@ -1,7 +1,7 @@
 module.exports.run = async (client, message, args) => {
   let queue = message.client.queue.get(message.guild.id);
   if (queue.playerManager.skipTo(args) == false) queue.embedManager.sendSkipToEmbed(message.channel, { warning: 'incorrect_args' })
-  else queue.embedManager.sendSkipToEmbed(message.channel)
+  else queue.embedManager.sendSkipToEmbed(message.channel, { embedTimeout: queue.config.embedTimeout })
 };
 
 module.exports.config = {

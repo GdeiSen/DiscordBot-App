@@ -2,22 +2,22 @@ module.exports.run = async (client, message, args) => {
   let queue = await message.client.queue.get(message.guild.id);
   if (!args) {
     if (queue.config.loop == false) {
-      queue.embedManager.sendQueueLoopEmbed(message.channel, { state: false })
+      queue.embedManager.sendQueueLoopEmbed(message.channel, { state: false, embedTimeout: queue.config.embedTimeout })
     }
     else {
-      queue.embedManager.sendQueueLoopEmbed(message.channel, { state: true })
+      queue.embedManager.sendQueueLoopEmbed(message.channel, { state: true, embedTimeout: queue.config.embedTimeout })
     }
   }
   else if (args == 'off' || args == 'false') {
     queue.playerManager.queueLoop(false);
-    queue.embedManager.sendQueueLoopEmbed(message.channel, { state: false })
+    queue.embedManager.sendQueueLoopEmbed(message.channel, { state: false, embedTimeout: queue.config.embedTimeout })
   }
   else if (args == 'on' || args == 'true') {
     queue.playerManager.queueLoop(true);
-    queue.embedManager.sendQueueLoopEmbed(message.channel, { state: true })
+    queue.embedManager.sendQueueLoopEmbed(message.channel, { state: true, embedTimeout: queue.config.embedTimeout })
   }
   else {
-    queue.embedManager.sendQueueLoopEmbed(message.channel, { warning: 'incorrect_args' })
+    queue.embedManager.sendQueueLoopEmbed(message.channel, { warning: 'incorrect_args', embedTimeout: queue.config.embedTimeout })
   }
 };
 
