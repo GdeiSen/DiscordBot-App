@@ -225,7 +225,7 @@ module.exports.sendNowPlayingEmbed = async (queue, channel, params) => {
     if (queue.status == 'playing' && current) nowPlaying.addField(`${toHHMMSS(current)} [${progressbar.splitBar(total, current, 20)[0]}] ${toHHMMSS(song.durationInSec)}`, `Next: ${next}`, true);
     else if (queue.status == 'playing' && !current) nowPlaying.addField(`LIVE!`, `Next: ${next}`, true);
     else if (queue.status !== 'playing') nowPlaying.addField(`Paused!`, `Next: ${next}`, true);
-    let activeNowPlayingEmbed = channel.send({ embeds: [nowPlaying] }).then(msg => { setTimeout(() => msg.delete(), params?.embedTimeout || 5000) }).catch(() => { });;
+    let activeNowPlayingEmbed = await channel.send({ embeds: [nowPlaying] }).then(msg => { setTimeout(() => msg.delete(), params?.embedTimeout || 5000) }).catch(() => { });;
     channel.activeNowPlayingEmbed = activeNowPlayingEmbed;
 }
 
