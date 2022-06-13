@@ -12,6 +12,7 @@ class PlayerManager extends EventEmitter {
     this.client = client;
     this.queue = queue;
     this.guild = guild;
+    this.params = client.guildParams.get(guild.id);
   }
 
   async startPlayback(voiceChannel, textChannel) {
@@ -42,11 +43,12 @@ class PlayerManager extends EventEmitter {
       if (this.queue.songs?.length == 0 && this.queue.status !== 'stopped' && this.queue.config?.loop !== true && this.queue?.current?.loop !== true) {
         this.emit('QUEUE_ENDED', this.queue);
         this.emit('PLAYBACK_STOPPED', this.queue);
+        this.stop();
       } else if ((this.queue.songs?.length >= 1 && this.queue.status !== 'stopped') || (this.queue.config?.loop == true || this.queue.current?.loop == true)) {
         this.queue.status = 'pending';
         this.startPlayback()
       }
-      else this.emit('PLAYBACK_STOPPED', this.queue);
+      else { this.emit('PLAYBACK_STOPPED', this.queue); this.stop(); }
     })
   }
 
@@ -81,10 +83,13 @@ class PlayerManager extends EventEmitter {
           this.connection = connection;
           resolve(connection.state.status)
         };
-        connection.on(VoiceConnectionStatus.Ready, () => {
-          this.connection = connection;
-          resolve(true);
-          this.emit('CONNECTION_CREATED', this.queue);
+        connection.on("stateChange", (oldState, newState) => {
+          if (newState.status == "ready") {
+            this.connection = connection;
+            resolve(true);
+            this.emit('CONNECTION_CREATED', this.queue);
+            connection.removeAllListeners("stateChange");
+          }
         });
       })
       return await promise;
@@ -172,6 +177,16 @@ class PlayerManager extends EventEmitter {
 
   skip() {
     try {
+      if (this.queue.status == 'paused') this.resume();
+      this.queue.status = 'pending';
+      this.player.stop();
+      return { executionResult: true, currentState: this.queue.status };
+    } catch (err) { return 0 }
+  }
+
+  prev() {
+    try {
+      if (this.queue.queueManager.prev() == false) return 0;
       if (this.queue.status == 'paused') this.resume();
       this.queue.status = 'pending';
       this.player.stop();

@@ -17,7 +17,7 @@
   "DATA_SERVICE_QUEUE":"",
 
   "MAX_PLAYLIST_SIZE": 25,
-  "PREFIX": "1",
+  "PREFIX": "bav!",
   "PRUNING": false,
   "STAY_PERMISSION": "always",
   "DEFAULT_VOLUME": 30,

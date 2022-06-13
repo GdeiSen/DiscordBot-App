@@ -8,6 +8,7 @@ const config = require("./config.json");
 client.musicPlayer = new MusicPlayer(client);
 client.commands = new Collection();
 client.aliases = new Collection();
+client.guildParams = new Collection();
 client.categories = new Collection();
 client.queue = new Map();
 client.prefix = config.PREFIX;
@@ -15,6 +16,9 @@ client.login(process.env?.TOKEN || config.TOKEN);
 console.clear();
 client.once("ready", async () => {
   console.log(`⬜ Main Manager Is Enable`);
+  client.user.setActivity("Type bav!help", {
+    type: "STREAMING",
+  });
   if (config.USE_EXTERNAL_SERVER == true) {
     client.extServerManager = new ExtServerEngine(client);
     client.extServerManager.connect();
@@ -60,8 +64,9 @@ client.on('messageCreate', async message => {
   let messageArray = message.content.split(" ");
   let cmd = messageArray[0];
   let args = message.content.split(' ').slice(1).join();
-  if (!message.content.startsWith(client.prefix)) return;
-  let commandfile = client.commands.get(cmd.slice(client.prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(client.prefix.length)))
+  let params = client.guildParams.get(message.guild.id);
+  if (!message.content.startsWith(client.prefix) && !message.content.startsWith(params?.prefix)) return;
+  let commandfile = client.commands.get(cmd.slice(params?.prefix?.length || client.prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(params?.prefix?.length || client.prefix.length)))
   try {
     let tester = new AccessTester(client, message.guild)
     tester.test(message, args, commandfile.config.accesTest);

@@ -4,6 +4,7 @@ class Queue {
     channel
     voiceChannel
     songs = []
+    prevSongs = []
     current
     isPlaying = false
     isPaused = false

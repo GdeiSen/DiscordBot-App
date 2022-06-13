@@ -64,6 +64,11 @@ module.exports.sendSkipEmbed = (channel, params) => {
     channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
 }
 
+module.exports.sendPrevEmbed = (channel, params) => {
+    let embed = embedGenerator.run('music.prev.info_01');
+    channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
+}
+
 module.exports.sendSkipToEmbed = (channel, params) => {
     let embed
     if (params?.warning == 'incorrect_args') { embed = embedGenerator.run("music.skipto.error_01") }
@@ -83,9 +88,25 @@ module.exports.sendVolumeEmbed = (channel, params) => {
     channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
 }
 
+module.exports.updateSongEmbed = (channel, values) => {
+    let activeEmbed = channel.activeSongEmbed.embeds[0];
+    let activeFields = activeEmbed.fields.slice(0)
+    let bufFields = activeFields;
+
+    activeEmbed.spliceFields(0, 4);
+    activeEmbed.addField(bufFields[0].name, values.durationRaw ? `⏱ ${values.durationRaw}` : bufFields[0].value, true)
+    activeEmbed.addField(`requested by`, values.author ? `🗿 ${values.author}` : bufFields[1].value, true)
+    activeEmbed.addField(`song loop`, values.songLoop !== undefined ? `🔁 ${values.songLoop}` : bufFields[2].value, true)
+    activeEmbed.addField(`next in queue`, values.durationRaw ? `📢 ${values.durationRaw}` : bufFields[3].value, false)
+    if (values.description) activeEmbed.setDescription(values.description);
+    if (values.thumbnail) activeEmbed.setThumbnail(values.thumbnail);
+    if (values.thumbnail) activeEmbed.setTitle(values.title);
+    channel.activeSongEmbed.edit({ embeds: [activeEmbed] })
+}
+
 module.exports.sendSongEmbed = async (queue, channel) => {
     if (channel?.activeCollector) channel.activeCollector.stop();
-    let filter = item => item.customId === "next" || item.customId === "last" || item.customId === "pause" || item.customId === "stop" || item.customId === "queueLoop";
+    let filter = item => item.customId === "next" || item.customId === "last" || item.customId === "pause" || item.customId === "stop" || item.customId === "queueLoop" || item.customId === "prev";
     let collector = channel.createMessageComponentCollector({ filter, time: 300000, });
     channel.activeCollector = collector;
     let song = queue.current;
@@ -101,7 +122,7 @@ module.exports.sendSongEmbed = async (queue, channel) => {
             .setEmoji("⏹️")
             .setStyle("DANGER"),
         new MessageButton()
-            .setCustomId("last")
+            .setCustomId("prev")
             .setEmoji("⏮️")
             .setLabel("prev")
             .setStyle("SECONDARY"),
@@ -113,22 +134,25 @@ module.exports.sendSongEmbed = async (queue, channel) => {
         new MessageButton()
             .setCustomId("queueLoop")
             .setEmoji("🔂")
-            .setLabel("queueLoop")
+            .setLabel("song loop")
             .setStyle("SECONDARY")
     );
     let addedEmbed = new MessageEmbed()
         .setColor("BLACK")
         .setTitle(`📢   Now Playing:\n${song.title} \n`)
         .setImage(song.thumbnail)
-        .addField(`⠀`, `⏱   Duration: \`${song.durationRaw}\` \n🗿   By User: \`${song.author}\` \n🔁   Queue Loop: \`${queue.config.loop}\` \n📢   Next: \`${queue.songs[0] ? queue.songs[0].title : "nothing"}\``, true)
+        .addField(`duration`, `⏱ ${song.durationRaw}`, true)
+        .addField(`requested by`, `🗿 ${song.author}`, true)
+        .addField(`song loop`, `🔁 ${song.loop || false}`, true)
+        .addField(`next in queue`, `📢 ${queue.songs[0] ? queue.songs[0].title : "nothing"}`, false)
         .setDescription(song.description ? song.description : "no description for this song!")
         .setURL(song.url);
     try {
         collector.on("collect", async (item) => {
             if (item.customId === "next") {
                 queue.playerManager.skip();
-            } else if (item.customId === "last") {
-                queue.playerManager.skip();
+            } else if (item.customId === "prev") {
+                queue.playerManager.prev();
             } else if (item.customId === "pause") {
                 queue.playerManager.togglePause();
             } else if (item.customId === "stop") {
@@ -136,6 +160,7 @@ module.exports.sendSongEmbed = async (queue, channel) => {
                 queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { });
             } else if (item.customId === "queueLoop") {
                 queue.playerManager.toggleSongLoop();
+                this.updateSongEmbed(channel, { songLoop: song.loop })
             }
             item.deferUpdate();
         });
@@ -225,7 +250,7 @@ module.exports.sendNowPlayingEmbed = async (queue, channel, params) => {
     if (queue.status == 'playing' && current) nowPlaying.addField(`${toHHMMSS(current)} [${progressbar.splitBar(total, current, 20)[0]}] ${toHHMMSS(song.durationInSec)}`, `Next: ${next}`, true);
     else if (queue.status == 'playing' && !current) nowPlaying.addField(`LIVE!`, `Next: ${next}`, true);
     else if (queue.status !== 'playing') nowPlaying.addField(`Paused!`, `Next: ${next}`, true);
-    let activeNowPlayingEmbed = channel.send({ embeds: [nowPlaying] }).then(msg => { setTimeout(() => msg.delete(), params?.embedTimeout || 5000) }).catch(() => { });;
+    let activeNowPlayingEmbed = await channel.send({ embeds: [nowPlaying] }).then(msg => { setTimeout(() => msg.delete(), params?.embedTimeout || 5000) }).catch(() => { });;
     channel.activeNowPlayingEmbed = activeNowPlayingEmbed;
 }
 

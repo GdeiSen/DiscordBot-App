@@ -99,6 +99,23 @@
             "embedDescription": "**Usage of command was complete without errors or bugs**\n**Caution** The operability of this command cannot indicate the correct operation of other components of this system! ",
             "embedColor": "BLACK"
         },
+        "prefix": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops Prefix could not be so long!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_02":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Prefix for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
         "help": {
             "music": {
                 "embedTitle": "   🎵   Music Commands Menu   🎵",
@@ -376,6 +393,13 @@
         "skip":{
             "info_01":{
                 "embedTitle": "⏭   song skipped",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
+        },
+        "prev":{
+            "info_01":{
+                "embedTitle": "⏭   song skipped to previous one",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }

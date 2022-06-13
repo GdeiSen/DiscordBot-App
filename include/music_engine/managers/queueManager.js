@@ -11,6 +11,7 @@ class QueueManager extends EventEmitter {
     this.queue = queue;
     this.guild = guild;
     this.status = 'pending';
+    this.params = client.guildParams.get(guild.id)
     this.buffer = [];
   }
 
@@ -19,14 +20,28 @@ class QueueManager extends EventEmitter {
       if (this.queue.current && ((this.queue.config.loop == true && this.queue.songs.length == 0) || this.queue.current.loop == true)) return 0;
       else if (this.queue.config.loop == true) {
         let buffer = this.queue.current;
+        this.addSongToPrevQueue(buffer);
         this.queue.current = this.queue.songs[0];
         this.queue.songs.splice(0, 1);
-        this.queue.songs.push(buffer)
+        this.queue.songs.push(buffer);
       }
       else {
+        if (this.queue.current) this.addSongToPrevQueue(this.queue.current);
         this.queue.current = this.queue.songs[0];
         this.queue.songs.splice(0, 1);
       }
+    } catch (err) { this.emit('ERROR', '[ERROR] [PL] queueSongsChanger function error'); console.log(err); return 0 }
+  }
+
+  prev() {
+    try {
+      let prevSong = this.queue.prevSongs[0];
+      if (!prevSong) return false;
+      this.queue.songs.unshift(this.queue.current);
+      this.queue.songs.unshift(prevSong);
+      this.queue.current = null;
+      this.queue.prevSongs.splice(0, 1);
+      return true;
     } catch (err) { this.emit('ERROR', '[ERROR] [PL] queueSongsChanger function error'); return 0 }
   }
 
@@ -63,6 +78,11 @@ class QueueManager extends EventEmitter {
     }
   }
 
+  addSongToPrevQueue(song) {
+    this.queue.prevSongs.unshift(song);
+    delete this.queue.prevSongs[this.params?.prevSongsLength || 4]
+  }
+
   async pushBufferToQueue(buffer, option) {
     try {
       this.queue.songs = this.queue.songs.concat(buffer);
@@ -80,7 +100,7 @@ class QueueManager extends EventEmitter {
   async pushSongsToQueue(songs) {
     try {
       this.queue.songs = this.queue.songs.concat(songs);
-    } catch (error) { console.log(error)}
+    } catch (error) { console.log(error) }
   }
 
 
