@@ -106,7 +106,7 @@ class PlayerManager extends EventEmitter {
 
   async #createStream(source) {
     try {
-      const stream = await play.stream(source)
+      const stream = await play.stream(source);
       this.stream = stream;
       this.emit('STREAM_CREATED', this.queue);
     } catch (err) { this.emit('ERROR', '[ERROR] [PL] createStream function error'); console.log(err); return 0 }

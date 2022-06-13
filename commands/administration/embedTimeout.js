@@ -1,19 +1,26 @@
 const embedGenerator = require("../../include/utils/embedGenerator")
 module.exports.run = async (client, message, args) => {
     try {
-        if (!args) {
-            let embed = await embedGenerator.run('info.prefix.error_02');
+        if (!args && typeof args !== "number") {
+            let embed = await embedGenerator.run('info.embedTimeout.error_03');
             message.channel.send({ embeds: [embed] }).catch(() => { })
+            return 0;
         }
-        if (args?.length > 10) {
-            let embed = await embedGenerator.run('info.prefix.error_01');
+        if (args > 10000000) {
+            let embed = await embedGenerator.run('info.embedTimeout.error_01');
             message.channel.send({ embeds: [embed] }).catch(() => { })
+            return 0;
+        }
+        if (args <= 1000) {
+            let embed = await embedGenerator.run('info.embedTimeout.error_02');
+            message.channel.send({ embeds: [embed] }).catch(() => { });
+            return 0;
         }
         else {
             let params = client.guildParams.get(message.guild.id) || {};
-            params.prefix = args;
+            params.embedTimeout = args;
             client.guildParams.set(message.guild.id, params);
-            let embed = await embedGenerator.run('info.prefix.info_01');
+            let embed = await embedGenerator.run('info.embedTimeout.info_01');
             embed.setTitle(`${embed.title} ${args}`);
             message.channel.send({ embeds: [embed] }).catch(() => { })
         }
@@ -21,10 +28,10 @@ module.exports.run = async (client, message, args) => {
 };
 
 module.exports.config = {
-    name: "prefix",
+    name: "embedTimeout",
     cooldown: 3,
     aliases: [],
-    description: "Changes the prefix of the bot to activate the command",
+    description: "Changes the embed timeout",
     category: "admin",
     accesTest: "none"
 };

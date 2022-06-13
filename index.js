@@ -66,7 +66,7 @@ client.on('messageCreate', async message => {
   let args = message.content.split(' ').slice(1).join();
   let params = client.guildParams.get(message.guild.id);
   if (!message.content.startsWith(client.prefix) && !message.content.startsWith(params?.prefix)) return;
-  let commandfile = client.commands.get(cmd.slice(params?.prefix?.length || client.prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(params?.prefix?.length || client.prefix.length)))
+  let commandfile = client.commands.get(cmd.slice(message.content.startsWith(client.prefix) ? client.prefix.length : params.prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(message.content.startsWith(client.prefix) ? client.prefix.length : params.prefix.length)))
   try {
     let tester = new AccessTester(client, message.guild)
     tester.test(message, args, commandfile.config.accesTest);

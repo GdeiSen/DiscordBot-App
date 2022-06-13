@@ -9,37 +9,37 @@ class MusicPlayer extends EventEmitter {
 
   async createListeners(queue) {
     queue.queryResolver.on("ERROR", () => {
-      embedManager.sendNotFoundEmbed(queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout }); this.emit('ERROR')
+      embedManager.sendNotFoundEmbed(queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id)); this.emit('ERROR')
     });
     queue.playerManager.on("ERROR", (err) => {
       queue.playerManager.textChannel.send(err)
     });
     queue.queryResolver.on("SP_PLAYLIST_RESOLVE_START", () => {
-      embedManager.sendPlaylistLoadingEmbed(queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout });
+      embedManager.sendPlaylistLoadingEmbed(queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
     });
     queue.queryResolver.on("SP_PLAYLIST_RESOLVED", (playlist) => {
-      embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout });
+      embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
       this.emit('SP_PLAYLIST_RESOLVED', queue);
     });
     queue.queryResolver.on("YT_PLAYLIST_RESOLVED", (playlist) => {
       this.emit('YT_PLAYLIST_RESOLVED', queue);
-      embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout });
+      embedManager.sendPlaylistAddedEmbed(playlist, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
     });
     queue.queryResolver.on("YT_VIDEO_RESOLVED", (song) => {
       this.emit('YT_VIDEO_RESOLVED', queue);
-      embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout });
+      embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
     });
     queue.queryResolver.on("SP_TRACK_RESOLVED", (song) => {
       this.emit('SP_TRACK_RESOLVED', queue);
-      embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout });
+      embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
     });
     queue.playerManager.on("QUEUE_ENDED", (queue) => {
       this.emit('QUEUE_ENDED', queue);
-      embedManager.sendPlaybackStoppedEmbed(queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout });
+      embedManager.sendPlaybackStoppedEmbed(queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
     });
     queue.playerManager.on("PLAYBACK_STARTED", (queue) => {
       this.emit('PLAYBACK_STARTED', queue);
-      embedManager.sendSongEmbed(queue, queue.playerManager.textChannel, { embedTimeout: queue.config.embedTimeout }); this.emit('PLAYBACK_CHANGE', queue);
+      embedManager.sendSongEmbed(queue, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id)); this.emit('PLAYBACK_CHANGE', queue);
     });
     queue.playerManager.on("PLAYBACK_STARTING", (queue) => {
       queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { })
@@ -55,7 +55,7 @@ class MusicPlayer extends EventEmitter {
       queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { });
       queue.playerManager?.textChannel?.activeQueueEmbed?.delete().catch(() => { });
       queue.playerManager?.textChannel?.activeNowPlayingEmbed?.delete().catch(() => { });
-      embedManager.sendDisconnectedEmbed(queue.playerManager?.textChannel, { embedTimeout: queue.config.embedTimeout });
+      embedManager.sendDisconnectedEmbed(queue.playerManager?.textChannel, this.client.guildParams.get(queue.guild.id));
     });
   }
 

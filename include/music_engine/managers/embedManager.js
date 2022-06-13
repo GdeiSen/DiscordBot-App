@@ -89,27 +89,35 @@ module.exports.sendVolumeEmbed = (channel, params) => {
 }
 
 module.exports.updateSongEmbed = (channel, values) => {
-    let activeEmbed = channel.activeSongEmbed.embeds[0];
-    let activeFields = activeEmbed.fields.slice(0)
-    let bufFields = activeFields;
-
-    activeEmbed.spliceFields(0, 4);
-    activeEmbed.addField(bufFields[0].name, values.durationRaw ? `⏱ ${values.durationRaw}` : bufFields[0].value, true)
-    activeEmbed.addField(`requested by`, values.author ? `🗿 ${values.author}` : bufFields[1].value, true)
-    activeEmbed.addField(`song loop`, values.songLoop !== undefined ? `🔁 ${values.songLoop}` : bufFields[2].value, true)
-    activeEmbed.addField(`next in queue`, values.durationRaw ? `📢 ${values.durationRaw}` : bufFields[3].value, false)
-    if (values.description) activeEmbed.setDescription(values.description);
-    if (values.thumbnail) activeEmbed.setThumbnail(values.thumbnail);
-    if (values.thumbnail) activeEmbed.setTitle(values.title);
-    channel.activeSongEmbed.edit({ embeds: [activeEmbed] })
+    try {
+        let activeEmbed = channel.activeSongEmbed.embeds[0];
+        let activeFields = activeEmbed.fields.slice(0)
+        let bufFields = activeFields;
+        activeEmbed.spliceFields(0, 5);
+        activeEmbed.addField(values.currentPlaybackTime ? `${toHHMMSS(values.currentPlaybackTime)} [${progressbar.splitBar(values.totalPlaybackTime, values.currentPlaybackTime, 20)[0]}] ${toHHMMSS(values.totalPlaybackTime)}` : bufFields[0].value, '⠀', false)
+        activeEmbed.addField(bufFields[1].name, values.durationRaw ? `⏱ ${values.durationRaw}` : bufFields[1].value, true)
+        activeEmbed.addField(bufFields[2].name, values.author ? `🗿 ${values.author}` : bufFields[2].value, true)
+        activeEmbed.addField(bufFields[3].name, values.songLoop !== undefined ? `🔁 ${values.songLoop}` : bufFields[3].value, true)
+        activeEmbed.addField(bufFields[4].name, values.durationRaw ? `📢 ${values.durationRaw}` : bufFields[4].value, false)
+        if (values.description) activeEmbed.setDescription(values.description);
+        if (values.thumbnail) activeEmbed.setThumbnail(values.thumbnail);
+        if (values.thumbnail) activeEmbed.setTitle(values.title);
+        channel.activeSongEmbed.edit({ embeds: [activeEmbed] }).catch(() => { })
+    } catch (err) { }
 }
 
-module.exports.sendSongEmbed = async (queue, channel) => {
+module.exports.sendSongEmbed = async (queue, channel, params) => {
     if (channel?.activeCollector) channel.activeCollector.stop();
+    if (channel?.activeTimestampInterval) clearInterval(channel?.activeTimestampInterval);
     let filter = item => item.customId === "next" || item.customId === "last" || item.customId === "pause" || item.customId === "stop" || item.customId === "queueLoop" || item.customId === "prev";
     let collector = channel.createMessageComponentCollector({ filter, time: 300000, });
     channel.activeCollector = collector;
     let song = queue.current;
+    let total = song.durationInSec;
+    let current = getCurrentTimestamp(song);
+    if (params?.liveTimestamp == true) channel.activeTimestampInterval = setInterval(() => {
+        this.updateSongEmbed(channel, { currentPlaybackTime: getCurrentTimestamp(song), totalPlaybackTime: song.durationInSec })
+    }, 5000);
     let row = new MessageActionRow().addComponents(
         new MessageButton()
             .setCustomId("pause")
@@ -140,7 +148,8 @@ module.exports.sendSongEmbed = async (queue, channel) => {
     let addedEmbed = new MessageEmbed()
         .setColor("BLACK")
         .setTitle(`📢   Now Playing:\n${song.title} \n`)
-        .setImage(song.thumbnail)
+        .setThumbnail(song.thumbnail)
+        .addField(params?.liveTimestamp == true ? `${toHHMMSS(current)} [${progressbar.splitBar(total, current, 20)[0]}] ${toHHMMSS(song.durationInSec)}` : '⠀', params?.liveTimestamp == true ? `⠀` : 'live timestamp is not enabled!', false)
         .addField(`duration`, `⏱ ${song.durationRaw}`, true)
         .addField(`requested by`, `🗿 ${song.author}`, true)
         .addField(`song loop`, `🔁 ${song.loop || false}`, true)

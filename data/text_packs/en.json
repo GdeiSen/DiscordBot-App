@@ -99,6 +99,23 @@
             "embedDescription": "**Usage of command was complete without errors or bugs**\n**Caution** The operability of this command cannot indicate the correct operation of other components of this system! ",
             "embedColor": "BLACK"
         },
+        "settings":{
+            "prefix_info":{
+                "embedTitle": "🔧   Enter your new custom prefix in chat!",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            },
+            "embedTimeout_info":{
+                "embedTitle": "🔧   Enter new embed timeout in chat!",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            },
+            "stayTimeout_info":{
+                "embedTitle": "🔧   Enter stay timeout in chat!",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
         "prefix": {
             "error_01":{
                 "embedTitle": "⚠️   Oooops Prefix could not be so long!",
@@ -112,6 +129,50 @@
             },
             "info_01":{
                 "embedTitle": "✅   Prefix for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
+        "embedTimeout": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops Timeout could not be so long!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_02":{
+                "embedTitle": "⚠️   Oooops Timeout could not be so short!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_03":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Embed Timeout for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
+        "stayTimeout": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops Timeout could not be so long!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_02":{
+                "embedTitle": "⚠️   Oooops Timeout could not be so short!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_03":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Stay Timeout for this server set to: ",
                 "embedDescription": "",
                 "embedColor": "BLACK" 
             }
