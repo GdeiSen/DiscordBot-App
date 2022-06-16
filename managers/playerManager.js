@@ -33,16 +33,14 @@ class PlayerManager extends EventEmitter {
   }
 
   async #createIdleHandler() {
-    let params = this.client.guildParams.get(this.guild.id);
     if (this.player.listeners(AudioPlayerStatus.Idle).length !== 0) this.player.removeAllListeners(AudioPlayerStatus.Idle);
     this.player.on(AudioPlayerStatus.Idle, () => {
-      if (this.queue.songs?.length == 0 && this.queue.loop !== true && this.queue?.current?.loop !== true) {
-        if (this.queue.stopReason == 'stopped') return 0;
+      let params = this.client.guildParams.get(this.guild.id);
+      if (!this.queue.current && this.queue.stopReason !== 'stopped') {
         this.emit('QUEUE_ENDED', this.queue);
         this.emit('PLAYBACK_STOPPED', this.queue);
         this.stop();
-      } else if (this.queue.songs?.length >= 1 || (this.queue.loop == true || this.queue.current?.loop == true)) {
-        if (params?.autoPlay !== true) return 0;
+      } else if (this.queue.songs.length > 0 && params?.autoPlay == true) {
         if (this.queue.stopReason == "skipped" || this.queue.stopReason == 'stopped') return 0;
         this.queue.status = 'pending';
         this.queue.queueManager.setNextCurrentSong();
@@ -58,7 +56,8 @@ class PlayerManager extends EventEmitter {
       if (oldState.member.user.id == this.client.user.id) {
         if (newState.channelId == null) {
           try {
-            this.emit('DISCONNECTED', this.queue);
+            if (this.queue.disconnectReason == "inactivity") this.emit('INACTIVITY_DISCONNECTED');
+            else this.emit('DISCONNECTED')
             this.connection.destroy();
             this.queue?.textChannel?.activeCollector?.stop();
             this.stop();
@@ -93,7 +92,7 @@ class PlayerManager extends EventEmitter {
         });
       })
       return await promise;
-    } catch (err) { this.emit('ERROR', '[ERROR] [PL] createConnection function error'); console.log(err); return 0 }
+    } catch (err) { console.log(err); return 0 }
   }
 
   async #createPlayer() {
@@ -101,7 +100,7 @@ class PlayerManager extends EventEmitter {
       const player = createAudioPlayer();
       this.player = player;
       this.emit('PLAYER_CREATED', this.queue);
-    } catch (err) { this.emit('ERROR', '[ERROR] [PL] createPlayer function error'); console.log(err); return 0 }
+    } catch (err) { console.log(err); return 0 }
   }
 
   async #createStream(source) {
@@ -109,7 +108,7 @@ class PlayerManager extends EventEmitter {
       const stream = await play.stream(source);
       this.stream = stream;
       this.emit('STREAM_CREATED', this.queue);
-    } catch (err) { this.emit('ERROR', '[ERROR] [PL] createStream function error'); console.log(err); return 0 }
+    } catch (err) { console.log(err); return 0 }
   }
 
   async #createResource() {
@@ -119,7 +118,7 @@ class PlayerManager extends EventEmitter {
       resource.volume.setVolume(params.volume / 100);
       this.resource = resource;
       this.emit('RESOURCE_CREATED', this.queue);
-    } catch (err) { this.emit('ERROR', '[ERROR] [PL] createResource function error'); console.log(err); return 0 }
+    } catch (err) { console.log(err); return 0 }
   }
 
   async #play() {
@@ -129,7 +128,7 @@ class PlayerManager extends EventEmitter {
       this.connection.subscribe(this.player);
       this.queue.status = 'playing';
       this.emit('PLAYBACK_STARTED', this.queue);
-    } catch (err) { this.emit('ERROR', '[ERROR] [PL] play function error'); console.log(err); return 0 }
+    } catch (err) { console.log(err); return 0 }
   }
 
   pause() {
@@ -234,6 +233,34 @@ class PlayerManager extends EventEmitter {
       if (this.connection) { this.connection.disconnect(); return { executionResult: true } }
       else return { executionResult: false, error: 'no_connection' }
     } catch (err) { return 0 }
+  }
+
+  setStayTimeout() {
+    let params = this.client.guildParams.get(this.guild.id);
+    try {
+      this.queue.stayTimeout = setTimeout(() => {
+        this.queue.disconnectReason = "inactivity"
+        this.disconnect();
+      }, params.stayTimeout);
+    } catch (err) { return 0 }
+  }
+
+  clearStayTimeout() {
+    clearTimeout(this.queue?.stayTimeout);
+  }
+
+  setPlaybackTimeout() {
+    let params = this.client.guildParams.get(this.guild.id);
+    try {
+      this.queue.playbackTimeout = setTimeout(() => {
+        if(this.queue.status == "playing") this.queue.queueManager.skip();
+        this.emit("PLAYBACK_MAX_LIMIT");
+      }, params.maxPlaybackDuration);
+    } catch (err) { return 0 }
+  }
+
+  clearPlaybackTimeout() {
+    clearTimeout(this.queue?.playbackTimeout);
   }
 
 }

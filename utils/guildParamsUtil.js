@@ -19,7 +19,8 @@ module.exports.createParams = async (client) => {
             maxPlaylistSize: config.MAX_PLAYLIST_SIZE,
             maxPlaybackDuration: config.MAX_PLAYBACK_DURATION,
             maxQueueSize: config.MAX_QUEUE_SIZE,
-            maxPrevQueueSize: config.MAX_PREV_QUEUE_SIZE
+            maxPrevQueueSize: config.MAX_PREV_QUEUE_SIZE,
+            strictLimits: config.STRICT_LIMITS,
         }
         client.guildParams.set(guild.id, guildParams);
     })

@@ -2,10 +2,12 @@ const play = require("play-dl");
 const config = require("../config.json");
 const EventEmitter = require("events");
 class QueryResolver extends EventEmitter {
-  constructor() {
+  constructor(client, guild) {
     super();
     this.status = "pending";
     this.buffer = [];
+    this.client = client;
+    this.guild = guild;
     play.setToken({
       spotify: {
         client_id: config.SPOTIFY_CLIENT_ID,
@@ -110,6 +112,7 @@ class QueryResolver extends EventEmitter {
     let buffer = []
     let yt_playlist;
     let queryUrl;
+    let params = this.client.guildParams.get(this.guild.id);
     try {
       if (play.validate(query) !== 'yt_playlist') {
         queryUrl = await play.search(query, {
@@ -122,10 +125,15 @@ class QueryResolver extends EventEmitter {
         yt_playlist = await play.playlist_info(queryUrl, {
           source: { youtube: "playlist" },
         });
+        if (yt_playlist.videos?.length > params.maxPlaylistSize) {
+          this.emit("PLAYLIST_MAX_LIMIT");
+          if (params.strictLimits == true) return 0;
+        }
         await yt_playlist.videos.map((yt_video) => {
           yt_video = this.songConstructor(yt_video);
         });
         buffer = yt_playlist.videos.slice();
+        buffer.splice(params.maxPlaylistSize, buffer.length)
         this.emit("YT_PLAYLIST_RESOLVED", yt_playlist);
         resolve(buffer);
       });
@@ -169,6 +177,10 @@ class QueryResolver extends EventEmitter {
       try {
         sp_playlist = await play.spotify(query);
         await sp_playlist.fetch();
+        if (sp_playlist.tracksCount > params.maxPlaylistSize) {
+          this.emit("PLAYLIST_MAX_LIMIT");
+          if (params.strictLimits == true) return 0;
+        }
         for (let index = 0; index < sp_playlist.tracksCount; index++) {
           sp_track = await sp_playlist.page(1)[index];
           yt_video = await play.search(
@@ -179,7 +191,7 @@ class QueryResolver extends EventEmitter {
             this.emit("ERROR", "SP_TRACK_NOT_FOUND", sp_track);
           }
           else buffer.push(this.songConstructor(yt_video[0]));
-          if (index == sp_playlist.tracksCount - 1) {
+          if (index > params.maxPlaylistSize || index == sp_playlist.tracksCount - 1) {
             this.emit("SP_PLAYLIST_RESOLVED", sp_playlist);
             resolve(buffer);
           }

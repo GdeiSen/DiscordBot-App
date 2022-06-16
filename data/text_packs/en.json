@@ -40,6 +40,21 @@
             "embedDescription": "",
             "embedColor": "BLACK"
         },
+        "queue_limit":{
+            "embedTitle": "⚠️   Maximum Queue Limit Reached!",
+            "embedDescription": "",
+            "embedColor": "BLACK"
+        },
+        "playlist_limit":{
+            "embedTitle": "⚠️    Maximum Playlist Limit Reached!",
+            "embedDescription": "",
+            "embedColor": "BLACK"
+        },
+        "playback_limit":{
+            "embedTitle": "⚠️   Maximum Playback Limit Reached!",
+            "embedDescription": "",
+            "embedColor": "BLACK"
+        },
         "clear": {
             "error_01": {
                 "embedTitle": "⚠️   Syntax Error",
@@ -110,8 +125,28 @@
                 "embedDescription": "",
                 "embedColor": "BLACK" 
             },
+            "maxQueueSize_info":{
+                "embedTitle": "🔧   Enter max queue size value in chat!",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            },
             "stayTimeout_info":{
-                "embedTitle": "🔧   Enter stay timeout in chat!",
+                "embedTitle": "🔧   Enter bot stay timeout value in chat!",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            },
+            "maxPrevQueueSize_info":{
+                "embedTitle": "🔧   Enter max prev queue size value in chat!",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            },
+            "maxPlaylistSize_info":{
+                "embedTitle": "🔧   Enter max playlist size value in chat!",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            },
+            "maxPlaybackDuration_info":{
+                "embedTitle": "🔧   Enter max playback duration value in chat!",
                 "embedDescription": "",
                 "embedColor": "BLACK" 
             }
@@ -151,6 +186,106 @@
             },
             "info_01":{
                 "embedTitle": "✅   Embed Timeout for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
+        "maxQueueSize": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops Queue Size could not be so long!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_02":{
+                "embedTitle": "⚠️   Oooops Queue Size could not be so short!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_03":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Max Queue Size for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
+        "maxPrevQueueSize": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops Prev Queue Size could not be so long!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_02":{
+                "embedTitle": "⚠️   Oooops Prev Queue Size could not be so short!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_03":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Max Prev Queue Size for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
+        "maxPlaylistSize": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops Playlist Size could not be so long!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_02":{
+                "embedTitle": "⚠️   Oooops Playlist Size could not be so short!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_03":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Max Playlist Size for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
+        "maxPlaybackDuration": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops Playback Duration could not be so long!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_02":{
+                "embedTitle": "⚠️   Oooops Playback Duration could not be so short!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_03":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Max Playback Duration for this server set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK" 
+            }
+        },
+        "liveTimestamp": {
+            "error_01":{
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01":{
+                "embedTitle": "✅   Live Timestamps set to: ",
                 "embedDescription": "",
                 "embedColor": "BLACK" 
             }
@@ -367,7 +502,7 @@
                 "embedColor": "BLACK"
             },
             "info_05":{
-                "embedTitle": "✅   Track successfully Added!",
+                "embedTitle": "✅   Track was found successfully!",
                 "embedDescription": " ",
                 "embedColor": "BLACK"
             },
@@ -379,7 +514,7 @@
         },
         "playlist": {
             "info_01":{
-                "embedTitle": "✅   Playlist successfully Added!",
+                "embedTitle": "✅   Playlist was found successfully!",
                 "embedDescription": " ",
                 "embedColor": "BLACK"
             },

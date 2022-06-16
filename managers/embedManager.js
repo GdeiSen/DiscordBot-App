@@ -273,6 +273,26 @@ module.exports.sendShuffleEmbed = (channel, params) => {
     channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
 }
 
+module.exports.sendPlaylistLimitEmbed = (channel, params) => {
+    let embed = embedGenerator.run("warnings.playlist_limit");
+    channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
+}
+
+module.exports.sendQueueLimitEmbed = (channel, params) => {
+    let embed = embedGenerator.run("warnings.queue_limit");
+    channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
+}
+
+module.exports.sendPlaybackLimitEmbed = (channel, params) => {
+    let embed = embedGenerator.run("warnings.playback_limit");
+    channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
+}
+
+module.exports.sendInactivityDisconnectEmbed = (channel, params) => {
+    let embed = embedGenerator.run("music.shuffle.info_01");
+    channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });
+}
+
 module.exports.sendPlaylistLoadingEmbed = (channel, params) => {
     let embed = embedGenerator.run("music.playlist.info_02");
     channel.send({ embeds: [embed] }).then(msg => { setTimeout(() => msg.delete().catch(() => { }), params?.embedTimeout || 5000) }).catch(() => { });

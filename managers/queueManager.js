@@ -108,17 +108,19 @@ class QueueManager extends EventEmitter {
       this.queue.current = null;
       this.queue.loop = false;
       this.queue.stopReason = "";
+      this.queue.disconnectReason = "";
       this.queue.status = "pending";
     } catch (err) { console.log(err); }
   }
 
   static createQueue(client, guild, textChannel) {
-    let params = client.guildParams.get(guild.id) || {};
     let queue = client.queue.get(guild.id);
     if (queue) return queue;
     queue = {
       loop: false,
       status: "pending",
+      stopReason: "",
+      disconnectReason: "",
       songs: [],
       prevSongs: [],
       current: null,
@@ -128,7 +130,7 @@ class QueueManager extends EventEmitter {
       embedManager: embedManager,
     };
     queue.playerManager = new PlayerManager(client, queue, guild);
-    queue.queryResolver = new QueryResolver();
+    queue.queryResolver = new QueryResolver(client, guild);
     queue.queueManager = new QueueManager(client, queue, guild);
     client.queue.set(guild.id, queue)
     return queue;
@@ -142,14 +144,14 @@ class QueueManager extends EventEmitter {
     try {
       let params = this.client.guildParams.get(this.guild.id) || {};
       this.queue.prevSongs.unshift(song);
-      delete this.queue.prevSongs[params?.prevQueueLength || 4];
+      delete this.queue.prevSongs[params?.maxPrevQueueSize || 4];
     } catch (err) { }
   }
 
   async pushSongsToQueue(songs) {
     try {
       let params = this.client.guildParams.get(this.guild.id) || {};
-      if (params.maxQueueSize < this.queue.songs?.length) { this.emit("QUEUE_MAX_LIMIT"); return 0 }
+      if (params.maxQueueSize <= this.queue.songs?.length) { this.emit("QUEUE_MAX_LIMIT"); return 0 }
       this.queue.songs = this.queue.songs.concat(songs);
     } catch (error) { console.log(error) }
   }

@@ -1,8 +1,14 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require("discord.js");
 const embedGenerator = require("../../utils/embedGenerator")
+
 const prefixCommand = require("./prefix.js");
 const embedTimeoutCommand = require("./embedTimeout.js");
-const stayTimeoutCommand = require("./stayTimeout.js")
+const stayTimeoutCommand = require("./stayTimeout.js");
+const maxPlaybackDurationCommand = require("./maxPlaybackDuration.js");
+const maxPlaylistSizeCommand = require('./maxPlaylistSize');
+const maxPrevQueueSizeCommand = require('./maxPrevQueueSize');
+const maxQueueSizeCommand = require('./maxQueueSize');
+
 module.exports.run = async (client, message, args) => {
     try {
         if (message.channel?.activeCollector) message.channel.activeCollector.stop();
@@ -55,53 +61,43 @@ module.exports.run = async (client, message, args) => {
                 } else if (item?.customId === "select") {
                     switch (index) {
                         case 0: {
-                            if (message.channel?.activeCollector) message.channel.activeCollector.stop();
                             let infoEmbed = embedGenerator.run("info.settings.prefix_info");
-                            let infoMessage = await message.channel.send({ embeds: [infoEmbed] });
-                            let collector = message.channel.createMessageCollector({ time: 300000 });
-                            message.channel.activeCollector = collector;
-                            collector.on("collect", async (item) => {
-                                item.delete().catch(() => { });
-                                infoMessage.delete().catch(() => { });
-                                prefixCommand.run(client, message, item.content)
-                                collector.stop();
-                                embedMessage.delete().catch(() => { });
-                                this.run(client, message, args)
-                            });
+                            createCollector(infoEmbed, embedMessage, prefixCommand, this);
                             break
                         }
-                        case 1: { guildParams.liveTimestamp ??= false; guildParams.liveTimestamp = !guildParams?.liveTimestamp; break; }
+                        case 1: {
+                            guildParams.liveTimestamp ??= false; guildParams.liveTimestamp = !guildParams?.liveTimestamp;
+                            break;
+                        }
                         case 2: {
-                            if (message.channel?.activeCollector) message.channel.activeCollector.stop();
                             let infoEmbed = embedGenerator.run("info.settings.embedTimeout_info");
-                            let infoMessage = await message.channel.send({ embeds: [infoEmbed] });
-                            let collector = message.channel.createMessageCollector({ time: 300000 });
-                            message.channel.activeCollector = collector;
-                            collector.on("collect", async (item) => {
-                                item.delete().catch(() => { });
-                                infoMessage.delete().catch(() => { });
-                                embedTimeoutCommand.run(client, message, item.content)
-                                collector.stop();
-                                embedMessage.delete().catch(() => { });
-                                this.run(client, message, args)
-                            });
-                            break
+                            createCollector(infoEmbed, embedMessage, embedTimeoutCommand, this);
+                            break;
                         }
                         case 3: { guildParams.voteToSkip ??= false; guildParams.voteToSkip = !guildParams.voteToSkip; break; }
                         case 4: {
-                            if (message.channel?.activeCollector) message.channel.activeCollector.stop();
                             let infoEmbed = embedGenerator.run("info.settings.stayTimeout_info");
-                            let infoMessage = await message.channel.send({ embeds: [infoEmbed] });
-                            let collector = message.channel.createMessageCollector({ time: 300000 });
-                            message.channel.activeCollector = collector;
-                            collector.on("collect", async (item) => {
-                                item.delete().catch(() => { });
-                                infoMessage.delete().catch(() => { });
-                                stayTimeoutCommand.run(client, message, item.content)
-                                collector.stop();
-                                embedMessage.delete().catch(() => { });
-                                this.run(client, message, args)
-                            });
+                            createCollector(infoEmbed, embedMessage, stayTimeoutCommand, this);
+                            break;
+                        };
+                        case 5: {
+                            let infoEmbed = embedGenerator.run("info.settings.maxQueueSize_info");
+                            createCollector(infoEmbed, embedMessage, maxQueueSizeCommand, this);
+                            break;
+                        };
+                        case 6: {
+                            let infoEmbed = embedGenerator.run("info.settings.maxPlaylistSize_info");
+                            createCollector(infoEmbed, embedMessage, maxPlaylistSizeCommand, this);
+                            break;
+                        };
+                        case 7: {
+                            let infoEmbed = embedGenerator.run("info.settings.maxPrevQueueSize_info");
+                            createCollector(infoEmbed, embedMessage, maxPrevQueueSizeCommand, this);
+                            break;
+                        };
+                        case 8: {
+                            let infoEmbed = embedGenerator.run("info.settings.maxPlaybackDuration_info");
+                            createCollector(infoEmbed, embedMessage, maxPlaybackDurationCommand, this);
                             break;
                         };
                         default: break;
@@ -119,6 +115,21 @@ module.exports.run = async (client, message, args) => {
             }).catch((err) => { });
         });
     } catch (err) { console.log(err) }
+
+    async function createCollector(infoEmbed, embedMessage, func, self) {
+        if (message.channel?.activeCollector) message.channel.activeCollector.stop();
+        let infoMessage = await message.channel.send({ embeds: [infoEmbed] });
+        let collector = message.channel.createMessageCollector({ time: 300000 });
+        message.channel.activeCollector = collector;
+        collector.on("collect", async (item) => {
+            item.delete().catch(() => { });
+            infoMessage.delete().catch(() => { });
+            func.run(client, message, item.content)
+            collector.stop();
+            embedMessage.delete().catch(() => { });
+            self.run(client, message, args)
+        });
+    }
 };
 
 function createEmbed(client, id, active) {
@@ -126,16 +137,17 @@ function createEmbed(client, id, active) {
     let embed = new MessageEmbed()
         .setColor("BLACK")
         .setTitle(`🔧   Current Server Settings\n`)
-        .addField(active == 0 ? "`>⚙️ CUSTOM BOT PREFIX<`" : "⚙️ custom bot prefix", guildParams?.prefix?.toString() || "none")
-        .addField(active == 1 ? "`>⚙️ ENABLE LIVE DURATION<`" : "⚙️ enable live timestamp", guildParams?.liveTimestamp?.toString() || "false")
-        .addField(active == 2 ? "`>⚙️ SONGS EMBED TIMEOUT<`" : "⚙️ songs embed timeout", guildParams?.embedTimeout?.toString() || "undefined")
-        .addField(active == 3 ? "`>⚙️ ENABLE VOTE TO SKIP<`" : "⚙️ enable vote to skip", guildParams?.voteToSkip?.toString() || "false")
-        .addField(active == 4 ? "`>⚙️ STAY BOT TIMEOUT<`" : "⚙️ stay bot timeout", guildParams?.stayTimeout?.toString() || "undefined")
-        .addField(active == 5 ? "`>⚙️ MAX QUEUE SIZE<`" : "⚙️ max queue size", guildParams?.stayTimeout?.toString() || "undefined")
-        .addField(active == 6 ? "`>⚙️ MAX PLAYLIST SIZE<`" : "⚙️ max playlist size", guildParams?.stayTimeout?.toString() || "undefined")
-        .addField(active == 7 ? "`>⚙️ MAX PREV QUEUE SIZE<`" : "⚙️ max prev queue size", guildParams?.stayTimeout?.toString() || "undefined")
-        .addField(active == 8 ? "`>⚙️ MAX PLAYBACK DURATION<`" : "⚙️ max playback duration", guildParams?.stayTimeout?.toString() || "undefined")
-        .setDescription("Use buttons below to navigate in menu")
+        .addField("⠀", "⠀")
+        .addField(active == 0 ? "`> 🈳 CUSTOM BOT PREFIX <` \n`> or use via -> bav!prefix ...`" : "🈳 custom bot prefix", `CURRENT STATE : ${guildParams?.prefix?.toString() || "none"}`)
+        .addField(active == 1 ? "`> 📶 ENABLE LIVE DURATION <`\n`> or use via -> bav!liveTimestamp ...`" : "📶 enable live timestamp", `CURRENT STATE : ${guildParams?.liveTimestamp?.toString() || "false"}`)
+        .addField(active == 2 ? "`> ⌛ SONGS EMBED TIMEOUT <`\n`> or use via -> bav!embedTimeout ...`" : "⌛ songs embed timeout", `CURRENT STATE : ${guildParams?.embedTimeout?.toString() || "undefined"}`)
+        .addField(active == 3 ? "`> ❌ ENABLE VOTE TO SKIP <`\n" : "❌ enable vote to skip", `CURRENT STATE : ${guildParams?.voteToSkip?.toString() || "false"}`)
+        .addField(active == 4 ? "`> ⌛ STAY BOT TIMEOUT <`\n`> or use via -> bav!stayTimeout ...`" : "⌛ stay bot timeout", `CURRENT STATE : ${guildParams?.stayTimeout?.toString() || "undefined"}`)
+        .addField(active == 5 ? "`> ⏱️ MAX QUEUE SIZE <`\n`> or use via -> bav!maxQueueSize ...`" : "⏱️ max queue size", `CURRENT STATE : ${guildParams?.maxQueueSize?.toString() || "undefined"}`)
+        .addField(active == 6 ? "`> ⏱️ MAX PLAYLIST SIZE <`\n`> or use via -> bav!maxPlaylistSize ...`" : "⏱️ max playlist size", `CURRENT STATE : ${guildParams?.maxPlaylistSize?.toString() || "undefined"}`)
+        .addField(active == 7 ? "`> ⏱️ MAX PREV QUEUE SIZE <`\n`> or use via -> bav!maxPrevQueueSize ...`" : "⏱️ max prev queue size", `CURRENT STATE : ${guildParams?.maxPrevQueueSize?.toString() || "undefined"}`)
+        .addField(active == 8 ? "`> ⏱️ MAX PLAYBACK DURATION <`\n`> or use via -> bav!maxPlaybackDuration ...`" : "⏱️ max playback duration", `CURRENT STATE : ${guildParams?.maxPlaybackDuration?.toString() || "undefined"}`)
+        .setDescription("use the buttons to navigate through the settings menu. When you press the center button, additional actions may be required from you, such as entering values. If navigation is very slow, refer to using a separate command")
     return embed;
 }
 

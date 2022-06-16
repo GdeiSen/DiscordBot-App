@@ -1,7 +1,7 @@
 const embedGenerator = require("../../utils/embedGenerator")
 module.exports.run = async (client, message, args) => {
     try {
-        if (!args && typeof args !== "number") {
+        if (!args || typeof Number(args) !== "number") {
             let embed = await embedGenerator.run('info.embedTimeout.error_03');
             message.channel.send({ embeds: [embed] }).catch(() => { })
             return 0;

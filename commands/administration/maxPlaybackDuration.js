@@ -2,26 +2,26 @@ const embedGenerator = require("../../utils/embedGenerator")
 module.exports.run = async (client, message, _args) => {
     try {
         let args = Number(_args);
-        if (!args || typeof Number(args) !== "number") {
-            let embed = await embedGenerator.run('info.stayTimeout.error_03');
+        if (!args || typeof args !== "number") {
+            let embed = await embedGenerator.run('info.maxPlaybackDuration.error_03');
             message.channel.send({ embeds: [embed] }).catch(() => { })
             return 0;
         }
-        if (args > 10000000) {
-            let embed = await embedGenerator.run('info.stayTimeout.error_01');
+        if (args > 4000000) {
+            let embed = await embedGenerator.run('info.maxPlaybackDuration.error_01');
             message.channel.send({ embeds: [embed] }).catch(() => { })
             return 0;
         }
-        if (args <= 1000) {
-            let embed = await embedGenerator.run('info.stayTimeout.error_02');
+        if (args <= 5000) {
+            let embed = await embedGenerator.run('info.maxPlaybackDuration.error_02');
             message.channel.send({ embeds: [embed] }).catch(() => { });
             return 0;
         }
         else {
             let params = client.guildParams.get(message.guild.id) || {};
-            params.stayTimeout = args;
+            params.maxPlaybackDuration = args;
             client.guildParams.set(message.guild.id, params);
-            let embed = await embedGenerator.run('info.stayTimeout.info_01');
+            let embed = await embedGenerator.run('info.maxPlaybackDuration.info_01');
             embed.setTitle(`${embed.title} ${args}`);
             message.channel.send({ embeds: [embed] }).catch(() => { })
         }
@@ -29,10 +29,10 @@ module.exports.run = async (client, message, _args) => {
 };
 
 module.exports.config = {
-    name: "stayTimeout",
+    name: "maxPlaybackDuration",
     cooldown: 3,
     aliases: [],
-    description: "Changes the stay timeout",
+    description: "Changes max playlist size",
     category: "admin",
     accesTest: "none"
 };
