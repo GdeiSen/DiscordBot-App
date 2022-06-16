@@ -67,18 +67,18 @@ class MusicPlayer extends EventEmitter {
     }
     queue.playerManager.textChannel = message.channel;
     queue.queueManager.pushSongsToQueue(await queue.queryResolver.search(args, message));
-    queue.playerManager.startPlayback(message.member.voice.channel);
+    if (queue.status == "pending") queue.playerManager.startPlayback(message.member.voice.channel);
   }
 
   async playlist(message, args) {
     let queue = QueueManager.getQueue(this.client, message.guild);
     if (!queue) {
-      queue = QueueManager.createQueue(this.client, message.guild);
+      queue = QueueManager.createQueue(this.client, message.guild, message.channel);
       this.createListeners(queue);
     }
     queue.playerManager.textChannel = message.channel;
     queue.queueManager.pushSongsToQueue(await queue.queryResolver.search(args, message, { searchType: 'playlist' }));
-    queue.playerManager.startPlayback(message.member.voice.channel);
+    if (queue.status == "pending") queue.playerManager.startPlayback(message.member.voice.channel);
   }
 
   async addSong(queue, query) {

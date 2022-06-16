@@ -1,7 +1,8 @@
 const { Client, Collection, Intents, VoiceRegion } = require("discord.js");
-const { AccessTester } = require("./include/utils/commandMiddleware");
-const { ExtServerEngine } = require("./include/external_server/managers/connectionManager");
-const { MusicPlayer } = require("./include/music_engine/musicPlayer");
+const { AccessTester } = require("./utils/commandMiddleware");
+const { ExtServerEngine } = require("./external_server/managers/connectionManager");
+const { MusicPlayer } = require("./musicPlayer");
+const guildParamsUtil = require('./utils/guildParamsUtil');
 const fs = require("fs");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const config = require("./config.json");
@@ -15,6 +16,7 @@ client.prefix = config.PREFIX;
 client.login(process.env?.TOKEN || config.TOKEN);
 console.clear();
 client.once("ready", async () => {
+  guildParamsUtil.createParams(client);
   console.log(`⬜ Main Manager Is Enable`);
   client.user.setActivity("Type bav!help", {
     type: "STREAMING",
@@ -74,4 +76,3 @@ client.on('messageCreate', async message => {
     tester.on('GRANTED', () => { try { commandfile.run(client, message, args) } catch (err) { return 0 } })
   } catch (error) { return }
 })
-

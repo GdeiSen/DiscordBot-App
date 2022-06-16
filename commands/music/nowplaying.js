@@ -1,6 +1,7 @@
 module.exports.run = async (client, message) => {
   let queue = await client.queue.get(message.guild.id);
-  queue.embedManager.sendNowPlayingEmbed(queue, message.channel,{embedTimeout: queue.config.embedTimeout});
+  let params = client.guildParams.get(message.guild.id);
+  queue.embedManager.sendNowPlayingEmbed(queue, message.channel, { embedTimeout: params.embedTimeout });
 };
 
 module.exports.config = {

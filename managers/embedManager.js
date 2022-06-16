@@ -1,4 +1,4 @@
-const embedGenerator = require("../../utils/embedGenerator");
+const embedGenerator = require("../utils/embedGenerator");
 const progressbar = require('string-progressbar');
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 module.exports.sendSongErrorEmbed = (channel, params) => {
@@ -159,9 +159,9 @@ module.exports.sendSongEmbed = async (queue, channel, params) => {
     try {
         collector.on("collect", async (item) => {
             if (item.customId === "next") {
-                queue.playerManager.skip();
+                queue.queueManager.skip();
             } else if (item.customId === "prev") {
-                queue.playerManager.prev();
+                queue.queueManager.prev();
             } else if (item.customId === "pause") {
                 queue.playerManager.togglePause();
             } else if (item.customId === "stop") {

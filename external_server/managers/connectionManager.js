@@ -1,10 +1,10 @@
 const EventEmitter = require('events');
 const express = require('express');
 const http = require('http');
-const config = require('../../../config.json')
+const config = require('../../config.json')
 const { ServerController } = require("../controllers/serverController");
 const { StatService } = require('../services/statService');
-if(config.USE_EXTERNAL_SERVER == true){ const { ConnectionManager } = require("../../../../RabbitMQConnectionUtil/index")}
+if(config.USE_EXTERNAL_SERVER == true){ const { ConnectionManager } = require("../../../RabbitMQConnectionUtil/index")}
 class ExtServerEngine extends EventEmitter {
 
     constructor(client) {

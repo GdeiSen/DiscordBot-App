@@ -1,8 +1,9 @@
 module.exports.run = (bot, message, args) => {
   const queue = message.client.queue.get(message.guild.id);
+  let params = client.guildParams.get(message.guild.id);
   if (!args || isNaN(args[0]) || args > queue.songs.length || args[0] == 0) queue.embedManager.sendRemoveEmbed(message.channel, { warning: "incorrect_args" })
-  queue.playerManager.remove(args - 1);
-  queue.embedManager.sendRemoveEmbed(message.channel, {embedTimeout: queue.config.embedTimeout})
+  queue.queueManager.remove(args - 1);
+  queue.embedManager.sendRemoveEmbed(message.channel, { embedTimeout: params.embedTimeout })
 };
 
 module.exports.config = {

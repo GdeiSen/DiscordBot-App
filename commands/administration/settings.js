@@ -1,5 +1,5 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require("discord.js");
-const embedGenerator = require("../../include/utils/embedGenerator")
+const embedGenerator = require("../../utils/embedGenerator")
 const prefixCommand = require("./prefix.js");
 const embedTimeoutCommand = require("./embedTimeout.js");
 const stayTimeoutCommand = require("./stayTimeout.js")
@@ -128,13 +128,13 @@ function createEmbed(client, id, active) {
         .setTitle(`🔧   Current Server Settings\n`)
         .addField(active == 0 ? "`>⚙️ CUSTOM BOT PREFIX<`" : "⚙️ custom bot prefix", guildParams?.prefix?.toString() || "none")
         .addField(active == 1 ? "`>⚙️ ENABLE LIVE DURATION<`" : "⚙️ enable live timestamp", guildParams?.liveTimestamp?.toString() || "false")
-        .addField(active == 2 ? "`>⚙️ SONGS EMBED TIMEOUT<`" : "⚙️ songs embed timeout", guildParams?.embedTimeout || "undefined")
+        .addField(active == 2 ? "`>⚙️ SONGS EMBED TIMEOUT<`" : "⚙️ songs embed timeout", guildParams?.embedTimeout?.toString() || "undefined")
         .addField(active == 3 ? "`>⚙️ ENABLE VOTE TO SKIP<`" : "⚙️ enable vote to skip", guildParams?.voteToSkip?.toString() || "false")
-        .addField(active == 4 ? "`>⚙️ STAY BOT TIMEOUT<`" : "⚙️ stay bot timeout", guildParams?.stayTimeout || "undefined")
-        .addField(active == 5 ? "`>⚙️ MAX QUEUE SIZE<`" : "⚙️ max queue size", guildParams?.stayTimeout || "undefined")
-        .addField(active == 6 ? "`>⚙️ MAX PLAYLIST SIZE<`" : "⚙️ max playlist size", guildParams?.stayTimeout || "undefined")
-        .addField(active == 7 ? "`>⚙️ MAX PREV QUEUE SIZE<`" : "⚙️ max prev queue size", guildParams?.stayTimeout || "undefined")
-        .addField(active == 8 ? "`>⚙️ MAX PLAYBACK DURATION<`" : "⚙️ max playback duration", guildParams?.stayTimeout || "undefined")
+        .addField(active == 4 ? "`>⚙️ STAY BOT TIMEOUT<`" : "⚙️ stay bot timeout", guildParams?.stayTimeout?.toString() || "undefined")
+        .addField(active == 5 ? "`>⚙️ MAX QUEUE SIZE<`" : "⚙️ max queue size", guildParams?.stayTimeout?.toString() || "undefined")
+        .addField(active == 6 ? "`>⚙️ MAX PLAYLIST SIZE<`" : "⚙️ max playlist size", guildParams?.stayTimeout?.toString() || "undefined")
+        .addField(active == 7 ? "`>⚙️ MAX PREV QUEUE SIZE<`" : "⚙️ max prev queue size", guildParams?.stayTimeout?.toString() || "undefined")
+        .addField(active == 8 ? "`>⚙️ MAX PLAYBACK DURATION<`" : "⚙️ max playback duration", guildParams?.stayTimeout?.toString() || "undefined")
         .setDescription("Use buttons below to navigate in menu")
     return embed;
 }

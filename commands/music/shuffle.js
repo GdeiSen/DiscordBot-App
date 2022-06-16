@@ -1,7 +1,8 @@
 module.exports.run = async (bot, message, args) => {
-  const queue = message.client.queue.get(message.guild.id);
-  queue.playerManager.shuffle();
-  queue.embedManager.sendShuffleEmbed(message.channel, {embedTimeout: queue.config.embedTimeout});
+  let queue = message.client.queue.get(message.guild.id);
+  let params = client.guildParams.get(message.guild.id);
+  queue.queueManager.shuffle();
+  queue.embedManager.sendShuffleEmbed(message.channel, {embedTimeout: params.embedTimeout});
 };
 
 module.exports.config = {

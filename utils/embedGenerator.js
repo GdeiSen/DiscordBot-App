@@ -1,5 +1,5 @@
 const Discord = require("discord.js")
-const text = require("../../data/text_packs/en.json")
+const text = require("../data/text_packs/en.json")
 module.exports.run = (embedId) => {
     let adressArray = []
     adressArray = embedId.split('.');

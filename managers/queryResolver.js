@@ -1,5 +1,5 @@
 const play = require("play-dl");
-const config = require("../../../config.json");
+const config = require("../config.json");
 const EventEmitter = require("events");
 class QueryResolver extends EventEmitter {
   constructor() {
@@ -8,15 +8,15 @@ class QueryResolver extends EventEmitter {
     this.buffer = [];
     play.setToken({
       spotify: {
-        client_id: process.env?.SPOTIFY_CLIENT_ID || config.SPOTIFY_CLIENT_ID,
-        client_secret: process.env?.SPOTIFY_CLIENT_SECRET || config.SPOTIFY_CLIENT_SECRET,
-        token_type: process.env?.SPOTIFY_TOKEN_TYPE || config.SPOTIFY_TOKEN_TYPE,
-        access_token: process.env?.SPOTIFY_ACCES_TOKEN || config.SPOTIFY_ACCES_TOKEN,
-        refresh_token: process.env?.SPOTIFY_REFRESH_TOKEN || config.SPOTIFY_REFRESH_TOKEN,
-        market: process.env?.SPOTIFY_MARKET || config.SPOTIFY_MARKET,
-        expires_in: process.env?.SPOTIFY_EXPIRES_IN || config.SPOTIFY_EXPIRES_IN,
-        expiry: process.env?.SPOTIFY_EXPIRY || config.SPOTIFY_EXPIRY,
-        redirect_url: process.env?.SPOTIFY_REDIRECT_URL || config.SPOTIFY_REDIRECT_URL,
+        client_id: config.SPOTIFY_CLIENT_ID,
+        client_secret: config.SPOTIFY_CLIENT_SECRET,
+        token_type: config.SPOTIFY_TOKEN_TYPE,
+        access_token: config.SPOTIFY_ACCES_TOKEN,
+        refresh_token: config.SPOTIFY_REFRESH_TOKEN,
+        market: config.SPOTIFY_MARKET,
+        expires_in: config.SPOTIFY_EXPIRES_IN,
+        expiry: config.SPOTIFY_EXPIRY,
+        redirect_url: config.SPOTIFY_REDIRECT_URL,
       },
     });
   }

@@ -1,4 +1,4 @@
-const embedGenerator = require("../../include/utils/embedGenerator")
+const embedGenerator = require("../../utils/embedGenerator")
 module.exports.run = async (bot, message, args) => {
     let embed = embedGenerator.run('entertainmet.keyboard.embed')
     embed.setDescription(changer(args.split(',').join(' ')));

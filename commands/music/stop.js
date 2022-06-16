@@ -1,8 +1,8 @@
 module.exports.run = async (client, message, args) => {
   let queue = client.queue.get(message.guild.id);
+  let params = client.guildParams.get(message.guild.id);
   queue.playerManager.stop();
-  queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { });
-  queue.embedManager.sendStopEmbed(message.channel, {embedTimeout: queue.config.embedTimeout});
+  queue.embedManager.sendStopEmbed(message.channel, { embedTimeout: params.embedTimeout });
 };
 
 module.exports.config = {

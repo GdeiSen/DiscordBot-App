@@ -1,5 +1,5 @@
 text = require("../../data/text_packs/en.json")
-const embedGenerator = require("../../include/utils/embedGenerator")
+const embedGenerator = require("../../utils/embedGenerator")
 
 module.exports.run = async (bot, message, args) => {
 

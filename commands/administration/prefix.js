@@ -1,4 +1,4 @@
-const embedGenerator = require("../../include/utils/embedGenerator")
+const embedGenerator = require("../../utils/embedGenerator")
 module.exports.run = async (client, message, args) => {
     try {
         if (!args) {
