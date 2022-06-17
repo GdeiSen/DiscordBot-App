@@ -40,27 +40,27 @@ class MusicPlayer extends EventEmitter {
       this.emit('SP_TRACK_RESOLVED', queue);
       embedManager.sendSongAddedEmbed(song, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
     });
-    queue.playerManager.on("QUEUE_ENDED", (queue) => {
+    queue.playerManager.on("QUEUE_ENDED", () => {
       this.emit('QUEUE_ENDED', queue);
     });
-    queue.playerManager.on("PLAYBACK_STARTED", (queue) => {
+    queue.playerManager.on("PLAYBACK_STARTED", () => {
       this.emit('PLAYBACK_STARTED', queue);
       embedManager.sendSongEmbed(queue, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id)); this.emit('PLAYBACK_CHANGE', queue);
     });
-    queue.playerManager.on("PLAYBACK_STARTING", (queue) => {
+    queue.playerManager.on("PLAYBACK_STARTING", () => {
       queue.playerManager.clearPlaybackTimeout();
       queue.playerManager.clearStayTimeout();
       queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { })
       queue.playerManager?.textChannel?.activeNowPlayingEmbed?.delete().catch(() => { });
     });
-    queue.playerManager.on("PLAYBACK_STOPPED", (queue) => {
+    queue.playerManager.on("PLAYBACK_STOPPED", () => {
       this.emit('PLAYBACK_STOPPED', queue);
       queue.playerManager.setStayTimeout();
       queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { });
       queue.playerManager?.textChannel?.activeQueueEmbed?.delete().catch(() => { });
       queue.playerManager?.textChannel?.activeNowPlayingEmbed?.delete().catch(() => { });
     });
-    queue.playerManager.on("DISCONNECTED", (queue) => {
+    queue.playerManager.on("DISCONNECTED", () => {
       queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { });
       queue.playerManager?.textChannel?.activeQueueEmbed?.delete().catch(() => { });
       queue.playerManager?.textChannel?.activeNowPlayingEmbed?.delete().catch(() => { });
