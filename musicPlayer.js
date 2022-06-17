@@ -42,12 +42,10 @@ class MusicPlayer extends EventEmitter {
     });
     queue.playerManager.on("QUEUE_ENDED", (queue) => {
       this.emit('QUEUE_ENDED', queue);
-      embedManager.sendPlaybackStoppedEmbed(queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id));
     });
     queue.playerManager.on("PLAYBACK_STARTED", (queue) => {
       this.emit('PLAYBACK_STARTED', queue);
       embedManager.sendSongEmbed(queue, queue.playerManager.textChannel, this.client.guildParams.get(queue.guild.id)); this.emit('PLAYBACK_CHANGE', queue);
-      queue.playerManager.setPlaybackTimeout();
     });
     queue.playerManager.on("PLAYBACK_STARTING", (queue) => {
       queue.playerManager.clearPlaybackTimeout();

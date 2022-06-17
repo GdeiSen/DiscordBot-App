@@ -16,6 +16,7 @@ class QueueManager extends EventEmitter {
   skip() {
     try {
       if (this.queue.status == 'paused') this.queue.playerManager.player.resume();
+      if (this.queue.songs == 0) return { executionResult: false, currentState: this.queue.status, error: 'no_songs' };
       this.setNextCurrentSong();
       this.queue.status = 'pending';
       this.queue.stopReason = 'skipped';

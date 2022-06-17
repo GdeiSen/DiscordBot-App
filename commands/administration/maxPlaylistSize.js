@@ -7,7 +7,7 @@ module.exports.run = async (client, message, _args) => {
             message.channel.send({ embeds: [embed] }).catch(() => { })
             return 0;
         }
-        if (args > 40) {
+        if (args > 500) {
             let embed = await embedGenerator.run('info.maxPlaylistSize.error_01');
             message.channel.send({ embeds: [embed] }).catch(() => { })
             return 0;

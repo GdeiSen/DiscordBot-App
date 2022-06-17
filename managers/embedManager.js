@@ -94,7 +94,7 @@ module.exports.updateSongEmbed = (channel, values) => {
         let activeFields = activeEmbed.fields.slice(0)
         let bufFields = activeFields;
         activeEmbed.spliceFields(0, 5);
-        activeEmbed.addField(values.currentPlaybackTime ? `${toHHMMSS(values.currentPlaybackTime)} [${progressbar.splitBar(values.totalPlaybackTime, values.currentPlaybackTime, 20)[0]}] ${toHHMMSS(values.totalPlaybackTime)}` : bufFields[0].value, '⠀', false)
+        activeEmbed.addField(values.currentPlaybackTime && values.paused !== true ? `${toHHMMSS(values.currentPlaybackTime)} [${progressbar.splitBar(values.totalPlaybackTime, values.currentPlaybackTime, 20)[0]}] ${toHHMMSS(values.totalPlaybackTime)}` : bufFields[0].value, `${values.paused == true ? "⏸️ PAUSED" : "⠀"}`, false)
         activeEmbed.addField(bufFields[1].name, values.durationRaw ? `⏱ ${values.durationRaw}` : bufFields[1].value, true)
         activeEmbed.addField(bufFields[2].name, values.author ? `🗿 ${values.author}` : bufFields[2].value, true)
         activeEmbed.addField(bufFields[3].name, values.songLoop !== undefined ? `🔁 ${values.songLoop}` : bufFields[3].value, true)
@@ -116,6 +116,7 @@ module.exports.sendSongEmbed = async (queue, channel, params) => {
     let total = song.durationInSec;
     let current = getCurrentTimestamp(song);
     if (params?.liveTimestamp == true) channel.activeTimestampInterval = setInterval(() => {
+        if (queue.status !== 'playing') return 0;
         this.updateSongEmbed(channel, { currentPlaybackTime: getCurrentTimestamp(song), totalPlaybackTime: song.durationInSec })
     }, 5000);
     let row = new MessageActionRow().addComponents(
@@ -149,8 +150,8 @@ module.exports.sendSongEmbed = async (queue, channel, params) => {
         .setColor("BLACK")
         .setTitle(`📢   Now Playing:\n${song.title} \n`)
         .setThumbnail(song.thumbnail)
-        .addField(params?.liveTimestamp == true ? `${toHHMMSS(current)} [${progressbar.splitBar(total, current, 20)[0]}] ${toHHMMSS(song.durationInSec)}` : '⠀', params?.liveTimestamp == true ? `⠀` : 'live timestamp is not enabled!', false)
-        .addField(`duration`, `⏱ ${song.durationRaw}`, true)
+        .addField(params?.liveTimestamp == true && song.durationInSec !== 0 ? `${toHHMMSS(current)} [${progressbar.splitBar(total, current, 20)[0]}] ${toHHMMSS(song.durationInSec)}` : '⠀', params?.liveTimestamp == true ? `⠀` : 'live timestamp is not enabled!', false)
+        .addField(`duration`, `⏱ ${song.durationInSec !== 0 ? song.durationRaw : "LIVE"}`, true)
         .addField(`requested by`, `🗿 ${song.author}`, true)
         .addField(`song loop`, `🔁 ${song.loop || false}`, true)
         .addField(`next in queue`, `📢 ${queue.songs[0] ? queue.songs[0].title : "nothing"}`, false)

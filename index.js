@@ -18,7 +18,7 @@ console.clear();
 client.once("ready", async () => {
   guildParamsUtil.createParams(client);
   console.log(`⬜ Main Manager Is Enable`);
-  client.user.setActivity("Type bav!help", {
+  client.user.setActivity(`Type ${config.PREFIX}help`, {
     type: "STREAMING",
   });
   if (config.USE_EXTERNAL_SERVER == true) {

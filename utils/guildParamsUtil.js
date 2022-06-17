@@ -21,6 +21,7 @@ module.exports.createParams = async (client) => {
             maxQueueSize: config.MAX_QUEUE_SIZE,
             maxPrevQueueSize: config.MAX_PREV_QUEUE_SIZE,
             strictLimits: config.STRICT_LIMITS,
+            liveTimestamp: config.LIVE_TIMESTAMP,
         }
         client.guildParams.set(guild.id, guildParams);
     })

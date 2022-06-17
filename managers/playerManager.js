@@ -36,12 +36,12 @@ class PlayerManager extends EventEmitter {
     if (this.player.listeners(AudioPlayerStatus.Idle).length !== 0) this.player.removeAllListeners(AudioPlayerStatus.Idle);
     this.player.on(AudioPlayerStatus.Idle, () => {
       let params = this.client.guildParams.get(this.guild.id);
-      if (!this.queue.current && this.queue.stopReason !== 'stopped') {
+      if (this.queue.stopReason == "skipped" || this.queue.stopReason == 'stopped') return 0;
+      if (this.queue.songs.length == 0 && this.queue.stopReason !== 'stopped') {
         this.emit('QUEUE_ENDED', this.queue);
         this.emit('PLAYBACK_STOPPED', this.queue);
         this.stop();
       } else if (this.queue.songs.length > 0 && params?.autoPlay == true) {
-        if (this.queue.stopReason == "skipped" || this.queue.stopReason == 'stopped') return 0;
         this.queue.status = 'pending';
         this.queue.queueManager.setNextCurrentSong();
         this.startPlayback()
@@ -253,7 +253,7 @@ class PlayerManager extends EventEmitter {
     let params = this.client.guildParams.get(this.guild.id);
     try {
       this.queue.playbackTimeout = setTimeout(() => {
-        if(this.queue.status == "playing") this.queue.queueManager.skip();
+        if (this.queue.status == "playing") this.queue.queueManager.skip();
         this.emit("PLAYBACK_MAX_LIMIT");
       }, params.maxPlaybackDuration);
     } catch (err) { return 0 }
