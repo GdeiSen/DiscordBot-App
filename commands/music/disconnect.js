@@ -1,16 +1,25 @@
-module.exports.run = async (client, message, args) => {
-    let queue = await message.client.queue.get(message.guild.id);
-    if (queue?.playerManager) {
-        queue.playerManager?.textChannel?.activeSongEmbed?.delete().catch(() => { });
-        queue.playerManager.disconnect();
-    }
+const { CommandBuilder } = require('../../builders/commandDataBuilder');
+const embedGenerator = require("../../utils/embedGenerator")
+
+/**
+ * Performs the bot's exit from the voice channel
+ *
+ * @param {object} data An object with the necessary data to run the function. All the following fields of this object are required to be filled in
+ * @param {object} data.guild The discord server guild object previously redesigned using guildBuilder
+ * @param {object} data.message Discord message from the user (participant in the command launch process). Specified to specify the path to send a response message from the bot
+ */
+module.exports.run = async (data) => {
+    let message = data.message;
+    let guild = data.guild;
+
+    if (!guild?.playerManager) return { result: false }
+    guild.playerManager.disconnect();
+    return { result: true }
 };
 
-module.exports.config = {
-    name: "disconnect",
-    cooldown: 3,
-    aliases: ["dis"],
-    description: "Disconnect bot from the voice channel",
-    category: "music",
-    accesTest: "connection-command"
-};
+const data = new CommandBuilder()
+data.setName('disconnect')
+data.setDescription('Outputs the bot from the current voice channel')
+data.setMiddleware([]);
+data.setCategory('music')
+module.exports.data = data;

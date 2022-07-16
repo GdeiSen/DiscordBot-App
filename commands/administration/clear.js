@@ -1,47 +1,43 @@
 text = require("../../data/text_packs/en.json")
+const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
 
-module.exports.run = async (bot, message, args) => {
+/**
+ * Deletes the specified number of messages
+ *
+ * @param {object} data An object with the necessary data to run the function. All the following fields of this object are required to be filled in
+ * @param {object} data.guild The discord server guild object previously redesigned using guildBuilder
+ * @param {object} data.message Discord message from the user (participant in the command launch process). Specified to specify the path to send a response message from the bot
+ * @param {string} data.args Additional data specified when calling the command by the user [EXAMPLE] /add <args> --> /add AC/DC Track [ (args == 'AC/DC Track') = true ]
+ */
+module.exports.run = async (data) => {
+    let message = data.message;
+    let args = data.args;
+    let guild = data.guild;
+    let num = Number(args) + 1;
 
-    let embed1 = await embedGenerator.run('warnings.clear.error_01');
-    let embed2 = await embedGenerator.run('warnings.clear.error_02');
-    let embed3 = await embedGenerator.run('warnings.clear.error_03');
-    let embed4 = await embedGenerator.run('warnings.clear.error_04');
-    let embed = await embedGenerator.run('warnings.clear.info_01');
+    if (!args) return guild.embedManager.send({ embeds: [embedGenerator.run('warnings.clear.error_01')] }, { replyTo: message })
+    if (isNaN(args)) return guild.embedManager.send({ embeds: [embedGenerator.run('warnings.clear.error_02')] }, { replyTo: message })
+    if (args > 100) return guild.embedManager.send({ embeds: [embedGenerator.run('warnings.clear.error_03')] }, { replyTo: message })
+    if (args < 1) return guild.embedManager.send({ embeds: [embedGenerator.run('warnings.clear.error_04')] }, { replyTo: message })
 
-    if (!args) return message.channel.send({ embeds: [embed1] })
-        .then(message => { setTimeout(() => message.delete(), 5000) });
-
-    if (isNaN(args)) return message.channel.send({ embeds: [embed2] })
-        .then(message => { setTimeout(() => message.delete(), 5000) });
-
-    if (args > 26) return mes = message.channel.send({ embeds: [embed3] })
-        .then(message => { setTimeout(() => message.delete(), 5000) });
-
-    if (args < 1) return mes = message.channel.send({ embeds: [embed4] })
-        .then(message => { setTimeout(() => message.delete(), 5000) });
-
-    const num = Number(args) + 1;
-    async function delete_messages() {
-
-        await message.channel.messages.fetch({
-            limit: num
-        }).then(messages => {
-            message.channel.bulkDelete(messages)
-            embed.setDescription(embed.description + `${num - 1}`)
-            message.channel.send({ embeds: [embed] })
-                .then(message => { setTimeout(() => message.delete(), 5000) })
-        })
-    };
-    delete_messages();
+    await message.channel.messages.fetch({
+        limit: num
+    }).then(messages => {
+        message.channel.bulkDelete(messages)?.catch((err) => { })
+        guild.embedManager.send({ embeds: [embedGenerator.run('warnings.clear.info_01', { add: { description: `${num - 1}` } })] }, { replyTo: message })
+    })
 }
 
-module.exports.config = {
-    name: "clear",
-    description: "Deletes the specified number of messages",
-    usage: "~clear",
-    accessableby: "Members",
-    aliases: ['c', 'cl', 'cle', 'clea', 'cler', 'cleaning', 'clean', 'clen', 'clr', 'cln'],
-    category: "admin",
-    accesTest: "none"
-}
+const data = new CommandBuilder()
+data.setName('clear')
+data.addIntegerOption(option =>
+    option.setName('number')
+        .setDescription('Messages to delete')
+        .setMaxValue(100)
+        .setMinValue(1)
+        .setRequired(true))
+data.setDescription('Deletes the specified number of messages')
+data.setMiddleware([]);
+data.setCategory('admin')
+module.exports.data = data;

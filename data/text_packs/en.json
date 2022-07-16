@@ -40,18 +40,28 @@
             "embedDescription": "",
             "embedColor": "BLACK"
         },
-        "queue_limit":{
-            "embedTitle": "⚠️   Maximum Queue Limit Reached!",
-            "embedDescription": "",
+        "queue_limit": {
+            "embedTitle": "⚠️   Maximum Queue Size Limit Reached!",
+            "embedDescription": "At the moment, the loyal limit mode is enabled, which means that the system added only that part of the media data that still fit within the established limits, and rejected the other",
             "embedColor": "BLACK"
         },
-        "playlist_limit":{
-            "embedTitle": "⚠️    Maximum Playlist Limit Reached!",
-            "embedDescription": "",
+        "queue_limit_strict": {
+            "embedTitle": "⚠️    Maximum Queue Size Limit Reached!",
+            "embedDescription": "At the moment, a strict limit mode is enabled, which means that if you want to add media data exceeding the established limits, then all of them will be rejected in the addition. Unlike strict mode, loyal mode adds the part of the data that still fits within the established limits, and rejects the other",
             "embedColor": "BLACK"
         },
-        "playback_limit":{
-            "embedTitle": "⚠️   Maximum Playback Limit Reached!",
+        "playlist_limit_strict": {
+            "embedTitle": "⚠️    Maximum Playlist Size Limit Reached!",
+            "embedDescription": "At the moment, a strict limit mode is enabled, which means that if you want to add media data exceeding the established limits, then all of them will be rejected in the addition. Unlike strict mode, loyal mode adds the part of the data that still fits within the established limits, and rejects the other",
+            "embedColor": "BLACK"
+        },
+        "playlist_limit": {
+            "embedTitle": "⚠️    Maximum Playlist Size Limit Reached!",
+            "embedDescription": "At the moment, the loyal limit mode is enabled, which means that the system added only that part of the media data that still fit within the established limits, and rejected the other",
+            "embedColor": "BLACK"
+        },
+        "playback_limit": {
+            "embedTitle": "⚠️   Maximum Playback Duration Limit Reached!",
             "embedDescription": "",
             "embedColor": "BLACK"
         },
@@ -114,202 +124,219 @@
             "embedDescription": "**Usage of command was complete without errors or bugs**\n**Caution** The operability of this command cannot indicate the correct operation of other components of this system! ",
             "embedColor": "BLACK"
         },
-        "settings":{
-            "prefix_info":{
-                "embedTitle": "🔧   Enter your new custom prefix in chat!",
-                "embedDescription": "",
-                "embedColor": "BLACK" 
+        "settings": {
+            "info_01": {
+                "embedTitle": "⚙️   Current Baverio Settings",
+                "embedDescription": "⠀\n\nThese are the current bot settings for this server. Basically, most of them initialize limits that can interfere with the full and effective use of the bot, so be careful\n\n⠀",
+                "embedColor": "BLACK"
             },
-            "embedTimeout_info":{
-                "embedTitle": "🔧   Enter new embed timeout in chat!",
-                "embedDescription": "",
-                "embedColor": "BLACK" 
-            },
-            "maxQueueSize_info":{
-                "embedTitle": "🔧   Enter max queue size value in chat!",
-                "embedDescription": "",
-                "embedColor": "BLACK" 
-            },
-            "stayTimeout_info":{
-                "embedTitle": "🔧   Enter bot stay timeout value in chat!",
-                "embedDescription": "",
-                "embedColor": "BLACK" 
-            },
-            "maxPrevQueueSize_info":{
-                "embedTitle": "🔧   Enter max prev queue size value in chat!",
-                "embedDescription": "",
-                "embedColor": "BLACK" 
-            },
-            "maxPlaylistSize_info":{
-                "embedTitle": "🔧   Enter max playlist size value in chat!",
-                "embedDescription": "",
-                "embedColor": "BLACK" 
-            },
-            "maxPlaybackDuration_info":{
-                "embedTitle": "🔧   Enter max playback duration value in chat!",
-                "embedDescription": "",
-                "embedColor": "BLACK" 
-            }
+            "prefix_info": "🔧   Custom bot prefix current state: ",
+            "embedTimeout_info": "🔧   Live timestamp option state:",
+            "maxQueueSize_info": "🔧   Max queue size current value:",
+            "stayTimeout_info": "🔧   Stay bot timeout current value:",
+            "maxPrevQueueSize_info": "🔧   Max previous songs queue size current value:",
+            "maxPlaylistSize_info": "🔧   Max playlist size current value:",
+            "maxPlaybackDuration_info": "🔧   Max playlist duration current value:",
+            "voteToSkip_info": "🔧   Vote to skip current option value:",
+            "autoPlayerSend_info": "🔧   Auto player send option value:",
+            "autoContinue_info": "🔧   Auto continue option value:",
+            "autoPlay_info": "🔧   Auto play option value:"
         },
         "prefix": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Prefix could not be so long!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Prefix for this server set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
             }
         },
         "embedTimeout": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Timeout could not be so long!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops Timeout could not be so short!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_03":{
+            "error_03": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Embed Timeout for this server set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
             }
         },
         "maxQueueSize": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Queue Size could not be so long!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops Queue Size could not be so short!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_03":{
+            "error_03": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Max Queue Size for this server set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
             }
         },
         "maxPrevQueueSize": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Prev Queue Size could not be so long!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops Prev Queue Size could not be so short!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_03":{
+            "error_03": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Max Prev Queue Size for this server set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
             }
         },
         "maxPlaylistSize": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Playlist Size could not be so long!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops Playlist Size could not be so short!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_03":{
+            "error_03": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Max Playlist Size for this server set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
             }
         },
         "maxPlaybackDuration": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Playback Duration could not be so long!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops Playback Duration could not be so short!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_03":{
+            "error_03": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Max Playback Duration for this server set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
             }
         },
         "liveTimestamp": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Live Timestamps set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
+            }
+        },
+        "autoPlayerSend": {
+            "error_01": {
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01": {
+                "embedTitle": "✅   Auto player send option state set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
+        },
+        "autoContinue": {
+            "error_01": {
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01": {
+                "embedTitle": "✅   Auto continue option state set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
+        },
+        "autoPlay": {
+            "error_01": {
+                "embedTitle": "⚠️   Oooops incorrect args!",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "info_01": {
+                "embedTitle": "✅   Auto play option state set to: ",
+                "embedDescription": "",
+                "embedColor": "BLACK"
             }
         },
         "stayTimeout": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Timeout could not be so long!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops Timeout could not be so short!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_03":{
+            "error_03": {
                 "embedTitle": "⚠️   Oooops incorrect args!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Stay Timeout for this server set to: ",
                 "embedDescription": "",
-                "embedColor": "BLACK" 
+                "embedColor": "BLACK"
             }
         },
         "help": {
@@ -335,31 +362,24 @@
             }
         },
         "ping": {
-            "info_01":{
-                "embedTitle":"Ping",
+            "info_01": {
+                "embedTitle": "Ping",
                 "embedDescription": "Average delay: ",
                 "embedColor": "BLACK"
             }
         }
     },
     "entertainmet": {
-        "keyboard":{
-            "embed": {
-                "embedTitle": "⌨️   From English layout to Russian:",
-                "embedDescription": "",
-                "embedColor": "BLACK"
-            }
-        },
         "ball": {
-            "info_01": "Definitely yes!",
-            "info_02": "No doubt about it",
-            "info_03": "It's a foregone conclusion",
-            "info_04": "You can be sure of that",
-            "info_05": "Undoubtedly",
-            "info_06": "I think-yes?",
-            "info_07": "Most likely",
-            "info_08": "Good prospects",
-            "info_09": "The signs say yes",
+            "info_1": "Definitely yes!",
+            "info_2": "No doubt about it",
+            "info_3": "It's a foregone conclusion",
+            "info_4": "You can be sure of that",
+            "info_5": "Undoubtedly",
+            "info_6": "I think-yes?",
+            "info_7": "Most likely",
+            "info_8": "Good prospects",
+            "info_9": "The signs say yes",
             "info_10": "Probably yes",
             "info_11": "It's not clear yet, try again",
             "info_13": "Don't even think about it",
@@ -378,47 +398,59 @@
         }
     },
     "music": {
+        "startPlayback": {
+            "info_01": {
+                "embedTitle": "📢   The playback is starting!",
+                "embedDescription": "I'm starting the playback. You can also turn on the automatic display of the player at the start of playback, if you have not already turned it on.",
+                "embedColor": "BLACK"
+            },
+            "error_01": {
+                "embedTitle": "⚠️   I can't start queue playback",
+                "embedDescription": "I can't start playing the queue because it's empty or it's already playing at the moment",
+                "embedColor": "BLACK"
+            }
+        },
         "loop": {
-            "info_01":{
+            "info_01": {
                 "embedTitle": "🔂   Song loop is enabled!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02":{
+            "info_02": {
                 "embedTitle": "🔂   Song loop is disabled!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   You can only use **on/true** or **off/false**",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
         "queueLoop": {
-            "info_01":{
+            "info_01": {
                 "embedTitle": "🔁   Queue loop is enabled!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02":{
+            "info_02": {
                 "embedTitle": "🔁   Queue loop is disabled!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   You can only use **on/true** or **off/false**",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
         "pause": {
-            "info_01":{
+            "info_01": {
                 "embedTitle": "⏸   Playback is paused!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02":{
+            "info_02": {
                 "embedTitle": "⏸   Playback is already paused!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
@@ -454,178 +486,189 @@
             }
         },
         "play": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Oooops Where are You?",
                 "embedDescription": "you must be in the same channel with the bot. Or **AdminMode** should be activated",
                 "embedColor": "BLACK"
             },
-            "error_02":{
+            "error_02": {
                 "embedTitle": "⚠️   Oooops Where are You?",
                 "embedDescription": "you must be in the voice channel. Or **AdminMode** should be activated",
                 "embedColor": "BLACK"
             },
-            "error_03":{
+            "error_03": {
                 "embedTitle": "⚠️   Oooops Where are My Rights?",
                 "embedDescription": "I don't have the rights to join channels",
                 "embedColor": "BLACK"
             },
-            "error_04":{
+            "error_04": {
                 "embedTitle": "⚠️   Oooops Where are My Rights?",
                 "embedDescription": "I don't have the rights to speak",
                 "embedColor": "BLACK"
             },
-            "error_05":{
-                "embedTitle": "⚠️   Oooops Nothing, Just Nothing",
-                "embedDescription": "Unfortunately i didn't find this song",
+            "error_05": {
+                "embedTitle": "⚠️   Oooops something went wrong!",
+                "embedDescription": "Unfortunately i didn't find any data by your request or the maximum number of tracks in the queue has been reached!",
                 "embedColor": "BLACK"
             },
-            "error_06":{
+            "error_06": {
                 "embedTitle": "⚠️   Oooops Something went Wrong",
                 "embedDescription": "Well... I dont actually know what's going on here",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "⚠️   Are you sure you typed everything correct?",
                 "embedDescription": "Usage of Command: prefix + play <song name>",
                 "embedColor": "BLACK"
             },
-            "info_02_01":"✅",
-            "info_02_02":"Successfully added",
-            "info_03":{
+            "info_03": {
                 "embedTitle": "⚠️   Nothing left in queue!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_04":{
+            "info_04": {
                 "embedTitle": "⚠️   I was disconnected from channel!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_05":{
+            "info_05": {
                 "embedTitle": "✅   Track was found successfully!",
                 "embedDescription": " ",
                 "embedColor": "BLACK"
             },
-            "info_06":{
+            "info_06": {
                 "embedTitle": "❌   I cannot find any data by your request!",
                 "embedDescription": " ",
+                "embedColor": "BLACK"
+            },
+            "info_07": {
+                "embedTitle": "📢   Now Playing:",
+                "embedDescription": " ",
+                "embedColor": "BLACK"
+            },
+            "info_08": {
+                "embedTitle": "📢   Nothing is playing!",
+                "embedDescription": "⠀\n❌ ⠀Nothing is playing!\nYou can start current queue playback by using command /start-playback",
                 "embedColor": "BLACK"
             }
         },
         "playlist": {
-            "info_01":{
+            "info_01": {
                 "embedTitle": "✅   Playlist was found successfully!",
                 "embedDescription": " ",
                 "embedColor": "BLACK"
             },
-            "info_02":{
+            "info_02": {
                 "embedTitle": "⌛   Playlist is loading Please wait!",
                 "embedDescription": " ",
                 "embedColor": "BLACK"
             },
-            "info_03":{
+            "info_03": {
                 "embedTitle": "❌   I cannot find the playlist!",
                 "embedDescription": " ",
                 "embedColor": "BLACK"
             }
         },
         "queue": {
-            "info_01":"Page ",
-            "info_02":{
-                "embedTitle": "Current Queue\n",
+            "info_02": {
+                "embedTitle": "📃   Current Queue\n",
                 "embedDescription": "Now Playing",
                 "embedColor": "BLACK"
             },
-            "info_03":"Current Queue ",
-            "info_04":{
-                "embedTitle": "⚠️   Queue",
-                "embedDescription": "The message collector has already been interacted in this channel!\nPlease complete previous one!",
+            "info_03": {
+                "embedTitle": "📃   Current Queue\n",
+                "embedDescription": "⠀\n❌ ⠀Nothing in Queue!\nYou can add a song using the add command",
+                "embedColor": "BLACK"
+            },
+            "info_05": {
+                "embedTitle": "📃   Current Queue\n",
+                "embedDescription": "⠀\n❌ ⠀Nothing is playing!\nYou can start current queue playback by using command /start-playback",
                 "embedColor": "BLACK"
             }
         },
         "remove": {
-            "error_01":{
+            "error_01": {
                 "embedTitle": "⚠️   Use the existing track number",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "⤴️   Track removed from the queue",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
         "resume": {
-            "info_01":{
+            "info_01": {
                 "embedTitle": "▶️   Playback is continued!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02":{
+            "info_02": {
                 "embedTitle": "▶️   Playback is already continued!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
-        "search":{
-            "error_01":{
+        "search": {
+            "error_01": {
                 "embedTitle": "⚠️   The message collector has already been interacted in this channel!\nPlease complete previous one!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02":{
+            "info_02": {
                 "embedTitle": "Enter the video number for playback",
                 "embedDescription": "Results for: ",
                 "embedColor": "BLACK"
             }
         },
-        "shuffle":{
-            "info_01":{
+        "shuffle": {
+            "info_01": {
                 "embedTitle": "🔀   Queue is shuffled!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
-        "skip":{
-            "info_01":{
+        "skip": {
+            "info_01": {
                 "embedTitle": "⏭   song skipped",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
-        "prev":{
-            "info_01":{
+        "prev": {
+            "info_01": {
                 "embedTitle": "⏭   song skipped to previous one",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
-        "skipto":{
-            "error_01":{
-                "embedTitle": "⚠️   Use the existing track number and less than 15",
+        "skipto": {
+            "error_01": {
+                "embedTitle": "⚠️   Use the existing track number and less than 100",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_01":{
+            "info_01": {
                 "embedTitle": "⏭   songs skipped",
                 "embedDescription": "",
                 "embedColor": "BLACK"
-            }  
+            }
         },
-        "stop":{
-            "info_01":{
+        "stop": {
+            "info_01": {
                 "embedTitle": "⏹   playback stopped",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }
         },
-        "volume":{
-            "info_01":{
+        "volume": {
+            "info_01": {
                 "embedTitle": "🔊   Volume set to: ",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
-            "info_02":{
+            "info_02": {
                 "embedTitle": "🔊   Volume is:  ",
                 "embedDescription": "",
                 "embedColor": "BLACK"
@@ -633,6 +676,13 @@
             "error_01": {
                 "embedTitle": "⚠️   Use a volume value from 0 to 100",
                 "embedDescription": "",
+                "embedColor": "BLACK"
+            }
+        },
+        "voteToSkip": {
+            "info_01": {
+                "embedTitle": "📢   Press skip button to vote for skipping",
+                "embedDescription": "At the moment, the voting function is enabled when skipping a song. If there are more than 2 people, the song will be skipped",
                 "embedColor": "BLACK"
             }
         }

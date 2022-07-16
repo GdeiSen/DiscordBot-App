@@ -1,23 +1,32 @@
+const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
 
-module.exports.run = async (bot, message, args) => {
+/**
+ * Test command for checking the bot's performance
+ *
+ * @param {object} data An object with the necessary data to run the function. All the following fields of this object are required to be filled in
+ * @param {object} data.client The current main client of this bot
+ * @param {object} data.message Discord message from the user (participant in the command launch process). Specified to specify the path to send a response message from the bot
+ */
+module.exports.run = async (data) => {
+    let message = data.message;
+    let client = data.client;
     let embed = embedGenerator.run('info.info_06');
     let index = 0;
-    bot.commands.forEach(command => {
+
+    client.commands.forEach(() => {
         index++;
     });
-    embed.addField(`⏳ Websocket heartbeat: ${bot?.ws?.ping || "untested!"}ms.`, "\`System is connected!\`");
+    embed.addField(`⏳ Websocket heartbeat: ${client?.ws?.ping || "untested!"}ms.`, "\`System is connected!\`");
     embed.addField(`⚙ Commands scanned: ${index}.`, "\`No errors with scanning!\`");
-    embed.addField(`📡 External Server status: ${bot?.extServerEngine?.status || "untested!"}.`, "\`No errors with server!\`");
-    message.channel.send({ embeds: [embed] })
+    embed.addField(`📡 External Server status: ${client?.extServerEngine?.status || "disconnected!"}.`, "\`No errors with server!\`");
+
+    return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }
 }
 
-module.exports.config = {
-    name: "test",
-    description: "Test command for checking the bot's performance",
-    usage: "~test",
-    accessableby: "Members",
-    aliases: [],
-    category: "admin",
-    accesTest: "none"
-}
+const data = new CommandBuilder()
+data.setName('test')
+data.setDescription("Test command for checking the bot's performance")
+data.setMiddleware([]);
+data.setCategory('admin')
+module.exports.data = data;

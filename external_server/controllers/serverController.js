@@ -1,4 +1,4 @@
-const { ServerGetterManager } = require("../../utils/serverGetters");
+const { ServerGetterManager } = require("../../managers/getterManager");
 let serverGetterManager;
 let client
 exports.ServerController = class ServerController {
