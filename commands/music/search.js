@@ -21,7 +21,8 @@ module.exports.run = async (data) => {
   let embeds = [];
 
   const promise = new Promise(async (resolve, reject) => {
-    if (channel?.activeCollector) channel.activeCollector.stop();
+    try { guild.activeCollectors.searchCollector.stop() } catch (e) { }
+    guild.embedManager.delete(guild.activeEmbeds.searchEmbed);
     let resultsEmbed = embedGenerator.run('music.search.info_02', { add: { description: ` ${args}` } });
     let videos = await play.search(args, { source: { youtube: "video" }, limit: 10 });
     videos.map((video, index) => resultsEmbed.addField(video.url, `${index + 1}. ${video.title}`));
@@ -41,8 +42,10 @@ module.exports.run = async (data) => {
       guild.embedManager.delete(resultsMessage);
       guild.embedManager.delete(item);
     });
+    guild.activeEmbeds.searchEmbed = resultsMessage;
+    guild.activeCollectors.searchCollector = collector;
   })
-  
+
   return await promise
 };
 

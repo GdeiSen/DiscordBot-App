@@ -9,7 +9,7 @@
   "SPOTIFY_EXPIRES_IN": "3600",
   "SPOTIFY_EXPIRY": "",
   "SPOTIFY_REDIRECT_URL": "http://127.0.0.1/index.html",
-  "USE_EXTERNAL_SERVER": "",
+  "USE_EXTERNAL_SERVER": "false",
   "CONSUMER_QUEUE": "",
   "GATEWAY_QUEUE": "",
   "TOKEN_SERVICE_QUEUE": "",
@@ -24,12 +24,12 @@
   "VOTE_TO_SKIP": true,
   "PREFIX": "/",
   "PRUNING": false,
-  "STAY_PERMISSION": "always",
   "STAY_TIMEOUT": 35000,
   "VOLUME": 30,
   "AUTO_PLAY": true,
   "AUTO_CONTINUE": false,
   "PLAYER_AUTO_SEND": true,
   "ACTIVE_CLEAN": true,
+  "CLIENT_ID": "",
   "TOKEN": ""
 }

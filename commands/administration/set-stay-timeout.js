@@ -26,7 +26,7 @@ module.exports.run = async (data) => {
         return guild.embedManager.send({ embeds: [embedGenerator.run('info.stayTimeout.error_02')] }, { replyTo: message })
     }
     else {
-        params.maxPlaybackDuration = args;
+        params.stayTimeout = args;
         return guild.embedManager.send({ embeds: [embedGenerator.run('info.stayTimeout.info_01', { add: { title: ` ${args}` } })] }, { replyTo: message })
     }
 };

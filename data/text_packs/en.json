@@ -485,6 +485,19 @@
                 "embedColor": "BLACK"
             }
         },
+        "player": {
+            "duration_01": "Duration",
+            "duration_02": "Live",
+            "request": "Requested by",
+            "loop": "Song Loop",
+            "next_01": "Next In Queue",
+            "next_02": "Nothing",
+            "next_button": "next",
+            "previous_button": "prev",
+            "pauseResume_button": "pause/resume",
+            "stop_button": "stop",
+            "loop_button": "loop"
+        },
         "play": {
             "error_01": {
                 "embedTitle": "⚠️   Oooops Where are You?",
@@ -639,6 +652,11 @@
         "prev": {
             "info_01": {
                 "embedTitle": "⏭   song skipped to previous one",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_01": {
+                "embedTitle": "⚠️   It is impossible to skip a track to the previous one",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }

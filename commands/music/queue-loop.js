@@ -7,32 +7,46 @@ const embedGenerator = require("../../utils/embedGenerator")
  * @param {object} data An object with the necessary data to run the function. All the following fields of this object are required to be filled in
  * @param {object} data.guild The discord server guild object previously redesigned using guildBuilder
  * @param {object} data.message Discord message from the user (participant in the command launch process). Specified to specify the path to send a response message from the bot
+ * @param {boolean} data.toggleMode This parameter is responsible for activating the switching mode. So if the current value is true, then the opposite will be set to it. No arguments required
  * @param {string} data.args Additional data specified when calling the command by the user [EXAMPLE] /add <args> --> /add AC/DC Track [ (args == 'AC/DC Track') = true ]
  */
 module.exports.run = async (data) => {
   let message = data.message;
   let args = data.args;
-  let queue = message.guild.queue;
   let embed;
-  
+
   if (!args) {
-    if (queue.loop == false) {
+    if (guild.queue.loop == false) {
       embed = embedGenerator.run("music.queueLoop.info_02");
     }
     else {
       embed = embedGenerator.run("music.queueLoop.info_01");
     }
   }
+
   else if (args == 'off' || args == 'false') {
-    message.guild?.playerManager.queueLoop(false);
+    guild.queue.loop = false;
     embed = embedGenerator.run("music.queueLoop.info_02");
   }
+
   else if (args == 'on' || args == 'true') {
-    message.guild?.playerManager.queueLoop(true);
+    guild.queue.loop = true;
     embed = embedGenerator.run("music.queueLoop.info_01");
   }
+
   else {
     embed = embedGenerator.run("music.queueLoop.error_01");
+  }
+
+  if (data?.toggleMode == true) {
+    if (guild.queue.loop == false) {
+      guild.queue.loop = true;
+      embed = embedGenerator.run("music.queueLoop.info_01");
+    }
+    else {
+      guild.queue.loop = false;
+      embed = embedGenerator.run("music.queueLoop.info_02");
+    }
   }
 
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }

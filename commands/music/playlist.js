@@ -1,6 +1,7 @@
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
-const add = require('./add')
+const add = require('./add');
+const startPlayback = require('./start-playback');
 
 /**
  * Searches for and adds a playlist to the queue for playback using YouTube services
@@ -14,6 +15,7 @@ module.exports.run = async (data) => {
   let message = data.message;
   let args = data.args;
   let queue = data.guild.queue;
+  let guild = data.guild;
   let embed;
 
   const promise = new Promise(async (resolve, reject) => {
@@ -23,6 +25,7 @@ module.exports.run = async (data) => {
       reject({ sendData: { embeds: [embed], params: { replyTo: message } }, result: false, error: error });
     });
     resolve(await add.run({ args: search.yt_playlist.url, guild: data.guild, message: data.message }))
+    if (guild.params.autoPlay == true) startPlayback.run(data)
   })
   return promise;
 };

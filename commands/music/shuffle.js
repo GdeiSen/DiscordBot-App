@@ -12,7 +12,12 @@ module.exports.run = async (data) => {
   let message = data.message;
   let guild = data.guild;
 
-  guild.queueManager.shuffle();
+  let songs = guild.queue.songs;
+  for (let i = songs.length - 1; i > 1; i--) {
+    let j = 1 + Math.floor(Math.random() * i);
+    [songs[i], songs[j]] = [songs[j], songs[i]];
+  }
+  guild.queue.songs = songs;
   let embed = embedGenerator.run('music.shuffle.info_01');
 
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }

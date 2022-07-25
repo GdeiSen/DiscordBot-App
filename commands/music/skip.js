@@ -1,4 +1,4 @@
-const { MessageButton, MessageActionRow } = require("discord.js");
+const skipTo = require('./skipto')
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
 
@@ -53,17 +53,22 @@ module.exports.run = async (data) => {
   //   });
   // }
 
-  if (!args) {
-    guild?.queueManager.skip();
+  if (!args && guild.queue.songs.length !== 0) {
+    if (guild.queue.status == 'paused') guild.playerManager.player.resume();
+    guild.queueManager.setNextCurrentSong();
+    guild.queue.status = 'pending';
+    guild.queue.isSkipped = true;
+    await guild.playerManager.player.stop();
+    guild.playerManager.startPlayback();
     embed = embedGenerator.run('music.skipto.info_01')
   }
 
-  else if (args > queue.songs.length) {
+  else if (args > guild.queue.songs.length) {
     embed = embedGenerator.run('music.skipto.error_01');
   }
 
   else if (args) {
-    guild.queueManager.skipTo(args)
+    skipTo.run(data);
     embed = embedGenerator.run('music.skipto.info_01');
   }
 

@@ -16,8 +16,6 @@ module.exports.run = async (data) => {
     let embed = embedGenerator.run('info.settings.info_01');
 
     embed
-        .addField(`${embedGenerator.run('direct.info.settings.prefix_info')}`, `${guild.params?.prefix?.toString() || "none"}`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.prefix_info')}`, `${guild.params?.liveTimestamp?.toString() || "false"}`, true)
         .addField(`${embedGenerator.run('direct.info.settings.embedTimeout_info')}`, `${guild.params?.embedTimeout?.toString() || "undefined"} ms`, true)
         .addField(`${embedGenerator.run('direct.info.settings.voteToSkip_info')}`, `${guild.params?.voteToSkip?.toString() || "false"}`, true)
         .addField(`${embedGenerator.run('direct.info.settings.stayTimeout_info')}`, `${guild.params?.stayTimeout?.toString() || "undefined"} ms`, true)

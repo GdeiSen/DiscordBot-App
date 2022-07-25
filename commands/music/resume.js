@@ -11,11 +11,15 @@ const embedGenerator = require("../../utils/embedGenerator")
 module.exports.run = async (data) => {
   let guild = data.guild;
   let message = data?.message;
-  let queue = data.guild.queue;
   let embed
 
-  guild.playerManager.resume()
-  if (queue.status == "paused") embed = embedGenerator.run("music.resume.info_01");
+  if (guild.queue.status == "paused") {
+    guild.queue.status = 'playing';
+    guild.playerManager.player.unpause();
+    guild.queue.current.resumeTime = new Date().getTime();
+    guild.queue.current.totalPausedTime += guild.queue.current.resumeTime - guild.queue.current.pauseTime;
+    embed = embedGenerator.run("music.resume.info_01");
+  }
   else embed = embedGenerator.run("music.resume.info_02")
 
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }

@@ -1,6 +1,6 @@
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
-const player = require('./player')
+const disconnect = require("./disconnect")
 
 /**
  * Starts the playback of current queue
@@ -19,22 +19,21 @@ module.exports.run = async (data) => {
     guild.playerManager.startPlayback(message.member.voice.channel, message.channel);
     embed = embedGenerator.run('music.startPlayback.info_01');
 
-    playerAutoSend = () => {
-        if (guild.params.playerAutoSend == true) player.run({ guild: guild, channel: message.channel })
-    }
-    guild.playerManager.removeAllListeners('PLAYBACK_STARTED')
-    guild.playerManager.on('PLAYBACK_STARTED', playerAutoSend);
-
-    activeClean = () => {
-        if (guild.params.activeClean == true) guild.embedManager.deleteAllActiveEmbeds();
-    }
-    guild.playerManager.removeAllListeners('PLAYBACK_STOPPED');
-    console.log(guild.playerManager.listenerCount('PLAYBACK_STARTED'));
-    guild.playerManager.on('PLAYBACK_STOPPED', activeClean);
+    guild.info.isPlayed = true;
 
     return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }
 };
 
+module.exports.addListeners = (guild) => {
+    guild.playerManager.on('PLAYBACK_STOPPED', () => {
+        guild.activeTimeouts.stayTimeout = setTimeout(() => {
+            disconnect.run({ guild: guild })
+        }, guild.params.stayTimeout);
+    })
+    guild.playerManager.on('PLAYBACK_STARTED', () => {
+        clearTimeout(guild.activeTimeouts.stayTimeout)
+    })
+}
 
 const data = new CommandBuilder()
 data.setName('start-playback')

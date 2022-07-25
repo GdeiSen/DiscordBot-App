@@ -13,12 +13,12 @@ module.exports.run = (data) => {
   let args = data.args;
   let guild = data.guild;
   let message = data.message;
-  let queue = data.guild.queue;
   let embed;
+  args = Number(args);
 
-  if (!args || args > queue.songs.length) embed = embedGenerator.run("music.remove.error_01")
+  if (!args || args > guild.queue.songs.length || typeof args !== "number") embed = embedGenerator.run("music.remove.error_01")
   else {
-    guild.queueManager.remove(args)
+    let song = guild.queue.songs.splice(args - 1, 1);
     embed = embedGenerator.run("music.remove.info_01")
   }
 

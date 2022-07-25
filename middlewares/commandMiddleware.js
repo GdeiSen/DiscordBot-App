@@ -90,7 +90,7 @@ class CommandMiddleware extends EventEmitter {
 
   testQueueStatus(data) {
     let embed = embedGenerator.run("warnings.error_03");
-    if (data.queue == null || (data.queue.status !== 'playing' && data.queue.status !== 'paused')) return { state: false, errorEmbed: embed };
+    if (data.queue == null || (data.queue.status !== 'playing' && data.queue.status !== 'paused' && data.queue.status !== 'loading')) return { state: false, errorEmbed: embed };
     else return { state: true };
   }
 

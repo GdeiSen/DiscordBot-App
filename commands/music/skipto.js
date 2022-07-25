@@ -15,8 +15,23 @@ module.exports.run = async (data) => {
   let message = data?.message;
   let embed;
 
-  if (guild?.queueManager.skipTo(args).error) embed = embedGenerator.run("music.skipto.error_01")
-  else embed = embedGenerator.run('music.skipto.info_01')
+  if (args > guild.queue.songs.length || !args || args == 0) {
+    embed = embedGenerator.run('music.skipto.error_01');
+  }
+
+  else {
+    embed = embedGenerator.run('music.skipto.info_01');
+    if (guild.queue.loop == true) {
+      for (let i = 0; i < args - 1; i++) {
+        guild.queue.songs.push(guild.queue.songs.shift());
+      }
+    } else { guild.queue.songs = guild.queue.songs.slice(args - 1); }
+    guild.queueManager.setNextCurrentSong();
+    guild.queue.status = 'pending';
+    guild.queue.isSkipped = true;
+    guild.playerManager.player.stop();
+    guild.playerManager.startPlayback();
+  }
 
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }
 };

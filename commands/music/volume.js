@@ -16,18 +16,19 @@ module.exports.run = (data) => {
   args = Number(args);
 
   if (!args || typeof Number(args) !== "number") {
-    return { sendData: { embeds: [embedGenerator.run('info.volume.error_01')], params: { replyTo: message } }, result: false }
+    return { sendData: { embeds: [embedGenerator.run('music.volume.error_01')], params: { replyTo: message } }, result: false }
   }
   if (args > 100) {
-    return { sendData: { embeds: [embedGenerator.run('info.volume.error_01')], params: { replyTo: message } }, result: false }
+    return { sendData: { embeds: [embedGenerator.run('music.volume.error_01')], params: { replyTo: message } }, result: false }
   }
   if (args < 0) {
-    return { sendData: { embeds: [embedGenerator.run('info.volume.error_01')], params: { replyTo: message } }, result: false }
+    return { sendData: { embeds: [embedGenerator.run('music.volume.error_01')], params: { replyTo: message } }, result: false }
   }
 
-  guild.playerManager.setVolume(args);
+  guild.params.volume = args;
+  guild.playerManager.resource.volume.setVolume(args / 100);
 
-  return { sendData: { embeds: [embedGenerator.run('info.volume.error_01', { add: { description: ` ${args}` } })], params: { replyTo: message } }, result: true }
+  return { sendData: { embeds: [embedGenerator.run('music.volume.info_01', { add: { title: ` ${args}` } })], params: { replyTo: message } }, result: true }
 };
 
 const data = new CommandBuilder()

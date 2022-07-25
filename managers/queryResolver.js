@@ -190,8 +190,9 @@ class QueryResolver extends EventEmitter {
 
   songConstructor(videos, options) {
     videos.map((video) => {
-      video.author = options?.author,
-        video.thumbnail = video.thumbnails[0];
+      video.author = options?.author;
+      video.thumbnail = video.thumbnails[0];
+      video.loop = false;
     })
     return videos;
   }

@@ -11,7 +11,7 @@ const { CommandBuilder } = require("../../builders/commandDataBuilder");
  */
 module.exports.run = (data) => {
   let message = data.message;
-  let commands = data?.client || message.client.commands;
+  let commands = data?.client.commands || message.client.commands;
 
   message.client.categories.forEach(category => {
     let embed = new MessageEmbed()
@@ -26,7 +26,7 @@ module.exports.run = (data) => {
           true)
       }
     })
-    data.guild.embedManager.send({ embeds: [embed] }, { replyTo: data.message });
+    data.guild.embedManager.send({ embeds: [embed] }, { replyTo: data.message, embedTimeout: 'none' });
   })
 };
 

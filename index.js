@@ -4,27 +4,38 @@ const { ExtServerEngine } = require("./external_server/managers/connectionManage
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { GuildBuilder } = require('./builders/guildBuilder');
-const fs = require("fs");
+const { CommandsBuilder } = require('./builders/commandsBuilder')
+
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const config = require("./config.json");
 const rest = new REST({ version: '9' }).setToken(config.TOKEN);
+
+client.info = {
+  commandsCount: 0,
+  status: 'offline',
+  commandsCategories: 0,
+  slashCommandsStatus: 'not updated'
+}
+
 process.on('uncaughtException', (err) => {
   console.log(err);
 });
-
 client.login(config.TOKEN);
-client.aliases = new Collection();
+
 client.categories = new Collection();
 client.guildBuilder = new GuildBuilder();
+client.commandsBuilder = new CommandsBuilder(client);
 client.queue = new Map();
 client.commands = [];
 client.prefix = config.PREFIX;
-console.clear();
+
 
 client.once("ready", async () => {
+  client.info.status = 'ready';
   client.guildBuilder.build(client);
-  console.log(`⬜ Main Manager Is Enable`);
-  client.user.setActivity(`Type ${config.PREFIX}help`, {
+  console.log(`[INFO] Main Manager Is Enable`);
+  client.commandsBuilder.executeCommandListeners();
+  client.user.setActivity(`Type 👉 /help 👈`, {
     type: "STREAMING",
   });
   if (config.USE_EXTERNAL_SERVER == true) {
@@ -34,46 +45,28 @@ client.once("ready", async () => {
   }
 });
 
+client.commandsBuilder.scanCommands('./commands/music');
+client.commandsBuilder.scanCommands('./commands/entertainment');
+client.commandsBuilder.scanCommands('./commands/administration');
+client.commandsBuilder.scanCategories();
 
-scanCommands('./commands/music');
-scanCommands('./commands/entertainment');
-scanCommands('./commands/administration');
-scanCategories();
-
-function scanCommands(path) {
-  const commandFiles = fs.readdirSync(`${path}`).filter(file => file.endsWith('.js'));
-  for (const file of commandFiles) {
-    const command = require(`${path}/${file}`);
-    command.data.run = command.run;
-    if (command?.data) client.commands.push(command.data);
-  }
-}
-
-function scanCategories() {
-  let buf = new Array();
-  let index = 0;
-  client.commands.forEach(command => {
-    if (index == 0) { buf[0] = command.category; index++ }
-    else {
-      if (!buf.find(el => el == command.category)) { buf.push(command.category); index++ }
-    }
-  })
-  client.categories = buf;
-}
-
-const clientId = '985276045701828628';
 (async () => {
   try {
-    console.log('Started refreshing application (/) commands.');
+    console.log('[INFO] Started refreshing application (/) commands');
     await rest.put(
-      Routes.applicationCommands(clientId),
+      Routes.applicationCommands(config.CLIENT_ID),
       { body: client.commands },
     );
-    console.log('Successfully reloaded application (/) commands.');
+    console.log('[INFO] Successfully reloaded application (/) commands');
   } catch (error) {
     console.error(error);
   }
 })();
+
+client.on('guildCreate', (guild) => {
+  client.guildBuilder.build(client, guild);
+  client.commandsBuilder.executeCommandListeners(guild);
+})
 
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand()) return;
@@ -81,11 +74,12 @@ client.on('interactionCreate', async interaction => {
   const command = client.commands.find(command => command.name == interaction.commandName);
   const test = commandMiddleware.test(interaction, interaction?.options?.data[0]?.value, command.middleware);
   interaction.guild.activeInteraction = interaction;
-  
+
   let execData = {
     guild: interaction.guild,
     message: interaction,
     client: client,
+    channel: interaction.channel,
     queue: interaction.guild?.queue,
     params: interaction.guild?.params,
     args: interaction?.options?.data[0]?.value.toString(),

@@ -12,8 +12,8 @@ module.exports.run = async (data) => {
     let message = data.message;
     let guild = data.guild;
 
-    if (!guild?.playerManager) return { result: false }
-    guild.playerManager.disconnect();
+    guild.playerManager.connection.disconnect()
+    
     return { result: true }
 };
 

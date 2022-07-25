@@ -36,7 +36,6 @@ class EmbedManager {
         else if (message?.deleteReply) message.deleteReply().catch(() => { });
     }
 
-
     edit(message, data) {
         if (message?.edit) message.edit(data).catch(() => { })
         else if (message?.editReply) message.editReply(data).catch(() => { })

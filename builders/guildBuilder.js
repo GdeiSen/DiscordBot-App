@@ -6,22 +6,31 @@ const { EmbedManager } = require("../managers/embedManager");
 
 module.exports.GuildBuilder = class GuildBuilder {
 
-    build(client) {
-        let guilds = client.guilds.cache;
-        guilds.map(guild => {
+    build(client, guild) {
+        if (guild) {
             QueueManager.createQueue(guild);
             this.createParams(guild);
             this.createManagers(client, guild);
             this.createActiveBuffers(guild);
-        })
+            this.createInfo(guild);
+        }
+        else {
+            let guilds = client.guilds.cache;
+            guilds.map(guild => {
+                QueueManager.createQueue(guild);
+                this.createParams(guild);
+                this.createManagers(client, guild);
+                this.createActiveBuffers(guild);
+                this.createInfo(guild);
+            })
+        }
     }
 
     createParams(guild) {
-        let guildParams = {
+        guild.params = {
             stayTimeout: config.STAY_TIMEOUT,
             prefix: config.PREFIX,
             volume: config.VOLUME,
-            autoPlay: config.AUTOPLAY,
             embedTimeout: config.EMBED_TIMEOUT,
             voteToSkip: config.VOTE_TO_SKIP,
             maxPlaylistSize: config.MAX_PLAYLIST_SIZE,
@@ -35,12 +44,20 @@ module.exports.GuildBuilder = class GuildBuilder {
             autoContinue: config.AUTO_CONTINUE,
             activeClean: config.ACTIVE_CLEAN,
         }
-        guild.params = guildParams;
+    }
+
+    createInfo(guild) {
+        guild.info = {
+            isPlayed: false,
+            isPremium: false
+        }
     }
 
     createActiveBuffers(guild) {
-        guild.activeEmbeds = { playbackEmbed: null, queueEmbed: null, playerEmbed: null }
-        guild.activeCollectors = { queueCollector: null, playerCollector: null }
+        guild.activeEmbeds = { playbackEmbed: undefined, queueEmbed: undefined, playerEmbed: undefined, searchEmbed: undefined };
+        guild.activeCollectors = { queueCollector: undefined, playerCollector: undefined, searchCollector: undefined };
+        guild.activeIntervals = { timestampInterval: undefined }
+        guild.activeTimeouts = { stayTimeout: undefined }
     }
 
     createManagers(client, guild) {

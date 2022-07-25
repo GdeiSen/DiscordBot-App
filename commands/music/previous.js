@@ -11,8 +11,20 @@ const embedGenerator = require("../../utils/embedGenerator")
 module.exports.run = async (data) => {
     let message = data.message;
     let guild = data.guild;
-    
-    guild.queueManager.prev();
+    let prevSong = guild.queue.prevSongs[0];
+
+    if (guild.queue?.current?.loop == true) return { sendData: { embeds: [embedGenerator.run('music.prev.error_01')], params: { replyTo: message } }, result: false }
+    if (!prevSong) return { sendData: { embeds: [embedGenerator.run('music.prev.error_01')], params: { replyTo: message } }, result: false }
+    if (guild.queue.status == 'paused') guild.guild.playerManager.player.resume();
+
+    guild.queue.songs.unshift(guild.queue.current);
+    guild.queue.songs.unshift(prevSong);
+    guild.queue.prevSongs.splice(0, 1);
+    guild.queueManager.setNextCurrentSong({ addSongToPrevQueue: false });
+    guild.queue.status = 'pending';
+    guild.queue.isSkipped = true;
+    guild.playerManager.player.stop();
+    guild.playerManager.startPlayback();
 
     return { sendData: { embeds: [embedGenerator.run('music.prev.info_01')], params: { replyTo: message } }, result: true }
 };

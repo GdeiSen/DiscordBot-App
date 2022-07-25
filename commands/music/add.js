@@ -1,5 +1,6 @@
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
+const startPlayback = require("./start-playback")
 
 /**
  * Searches for and adds a track to the queue for playback using Spotify and YouTube services
@@ -26,7 +27,7 @@ module.exports.run = async (data) => {
         });
 
         let songs = search?.yt_videos || search?.sp_tracks || search?.yt_playlist.videos || search?.sp_playlist.videos;
-        
+
         if (search?.yt_videos) {
             embed = embedGenerator.run("music.play.info_05", {
                 url: search.yt_videos[0]?.url,
@@ -67,14 +68,17 @@ module.exports.run = async (data) => {
 
         if (search?.limit_reached == true) {
             resolve({ sendData: { embeds: [embed, embedGenerator.run('warnings.playlist_limit')], params: { replyTo: message } }, result: true });
+            if (guild.params.autoPlay == true) startPlayback.run(data)
         }
 
         if (add?.limit_reached == true) {
             resolve({ sendData: { embeds: [embed, embedGenerator.run('warnings.queue_limit')], params: { replyTo: message } }, result: true });
+            if (guild.params.autoPlay == true) startPlayback.run(data)
         }
-        
+
         else {
-            resolve({ sendData: { embeds: [embed], params: { replyTo: message} }, result: true });
+            resolve({ sendData: { embeds: [embed], params: { replyTo: message } }, result: true });
+            if (guild.params.autoPlay == true) startPlayback.run(data)
         }
 
     })

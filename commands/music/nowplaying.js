@@ -20,7 +20,8 @@ module.exports.run = async (data) => {
   let total = song.durationInSec;
 
   if (queue.songs[0]) { next = queue.songs[0].title } else next = 'nothing!'
-  if (!song.live) current = getCurrentTimestamp(song);
+  if (!song.live) current = getCurrentTimestamp(guild);
+  guild.embedManager.delete(guild.activeEmbeds.nowPlayingEmbed);
   let nowPlaying = embedGenerator.run('music.nowPlaying.info_01', { description: `**${song.title || ''}**\n${song.url || ''}`, thumbnail: song?.thumbnail?.url || '' });
   if (queue.status == 'playing' && current) nowPlaying.addField(`${toHHMMSS(current)} [${progressbar.splitBar(total, current, 20)[0]}] ${toHHMMSS(song.durationInSec)}`, `Next: ${next}`, true);
   else if (queue.status == 'playing' && !current) nowPlaying.addField(`LIVE!`, `Next: ${next}`, true);
@@ -44,9 +45,10 @@ function toHHMMSS(timestamp) {
   else { return hours + ':' + minutes + ':' + seconds }
 }
 
-function getCurrentTimestamp(song) {
-  if (song.totalPausedTime) { current = ((new Date().getTime() - song.startTime) / 1000) - (song.totalPausedTime / 1000) } else current = (new Date().getTime() - song.startTime) / 1000;
-  return current;
+function getCurrentTimestamp(guild) {
+  let playbackDuration = new Date(guild.playerManager.player._state.resource.playbackDuration);
+  let seconds = (playbackDuration.getSeconds() + (playbackDuration.getMinutes() * 60) + ((playbackDuration.getHours() - 3) * 360))
+  return seconds;
 }
 
 const data = new CommandBuilder()

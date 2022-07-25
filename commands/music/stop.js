@@ -12,7 +12,10 @@ module.exports.run = async (data) => {
   let message = data.message;
   let guild = data.guild;
 
-  guild.playerManager.stop();
+  guild.queueManager.clearQueue();
+  guild.playerManager.player.stop();
+  guild.queue.isStopped = true;
+
   let embed = embedGenerator.run('music.stop.info_01');
 
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }

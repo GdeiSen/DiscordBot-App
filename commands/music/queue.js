@@ -14,8 +14,8 @@ module.exports.run = async (data) => {
   let queue = data.queue;
   let message = data.message;
 
-  if (guild.activeCollectors?.queueCollector) guild.activeCollectors.queueCollector.stop();
-  if (guild.activeEmbeds?.queueEmbed) guild.embedManager.delete(guild.activeEmbeds.queueEmbed);
+  try { guild.activeCollectors.queueCollector.stop() } catch (e) { }
+  guild.embedManager.delete(guild.activeEmbeds.queueEmbed);
   let currentPage = 0;
 
   const row = new MessageActionRow()
