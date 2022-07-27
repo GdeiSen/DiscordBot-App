@@ -1,6 +1,7 @@
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
 const startPlayback = require("./start-playback")
+const play = require('play-dl');
 
 /**
  * Searches for and adds a track to the queue for playback using Spotify and YouTube services
@@ -16,17 +17,21 @@ module.exports.run = async (data) => {
     let message = data.message;
     let args = data.args;
     let guild = data.guild;
-    let queue = data.guild?.queue;
     let embed;
 
     const promise = new Promise(async (resolve, reject) => {
-        if (!queue) return false;
+        let type = await play.validate(args);
+
+        if (type == 'sp_playlist' || type == 'sp_album') {
+            if (message) guild.embedManager.send({ embeds: [embedGenerator.run('music.playlist.info_02')] }, { replyTo: message });
+        }
+
         let search = await guild.queryResolver.search(args, { author: `${message?.member?.user?.username || 'Someone'}` }).catch((error) => {
             if (error == 'STRICT_PLAYLIST_SIZE_MAXIMUM') resolve({ sendData: { embeds: [embedGenerator.run("warnings.playlist_limit_strict")], params: { replyTo: message } }, result: false });
             else resolve({ sendData: { embeds: [embedGenerator.run("music.play.error_05")], params: { replyTo: message } }, result: false });
         });
 
-        let songs = search?.yt_videos || search?.sp_tracks || search?.yt_playlist.videos || search?.sp_playlist.videos;
+        let songs = search?.yt_videos || search?.sp_tracks || search?.yt_playlist?.videos || search?.sp_playlist?.videos;
 
         if (search?.yt_videos) {
             embed = embedGenerator.run("music.play.info_05", {

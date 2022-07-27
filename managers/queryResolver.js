@@ -171,14 +171,12 @@ class QueryResolver extends EventEmitter {
       await sp_playlist.fetch();
       if (sp_playlist.tracksCount > params.maxPlaylistSize) limit_reached = true;
       if (sp_playlist.tracksCount > params.maxPlaylistSize && params.strictLimits == true) reject('STRICT_PLAYLIST_SIZE_MAXIMUM')
+      let sp_page = await sp_playlist.page(1);
       for (let index = 0; index < sp_playlist.tracksCount; index++) {
-        sp_track = await sp_playlist.page(1)[index];
-        yt_video = await play.search(
-          `${sp_track.name} ${sp_track.artists[0].name}`,
-          { source: { youtube: "video" }, limit: 1 }
-        );
+        sp_track = sp_page[index];
+        yt_video = await play.search(`${sp_track.name} ${sp_track.artists[0].name}`, { source: { youtube: "video" }, limit: 1 });
         if (!yt_video) { not_resolved.push(sp_playlist.page(1)[index]) }
-        else sp_playlist.videos.push(yt_video);
+        else sp_playlist.videos.push(yt_video[0]);
         if (index > params.maxPlaylistSize || index == sp_playlist.tracksCount - 1) {
           sp_playlist.videos = this.songConstructor(sp_playlist.videos, options)
           resolve({ sp_playlist, not_resolved, limit_reached });
@@ -191,7 +189,7 @@ class QueryResolver extends EventEmitter {
   songConstructor(videos, options) {
     videos.map((video) => {
       video.author = options?.author;
-      video.thumbnail = video.thumbnails[0];
+      if (video?.thumbnails?.length > 0) video.thumbnail = video?.thumbnails[0];
       video.loop = false;
     })
     return videos;
