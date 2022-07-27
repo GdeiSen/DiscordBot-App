@@ -13,6 +13,7 @@ const embedGenerator = require("../../utils/embedGenerator")
 module.exports.run = async (data) => {
   let message = data.message;
   let args = data.args;
+  let guild = data.guild;
   let embed;
 
   if (!args) {
@@ -27,11 +28,13 @@ module.exports.run = async (data) => {
   else if (args == 'off' || args == 'false') {
     guild.queue.loop = false;
     embed = embedGenerator.run("music.queueLoop.info_02");
+    guild.playerManager.emit('QUEUE_LOOP_DISABLED');
   }
 
   else if (args == 'on' || args == 'true') {
     guild.queue.loop = true;
     embed = embedGenerator.run("music.queueLoop.info_01");
+    guild.playerManager.emit('QUEUE_LOOP_ENABLED');
   }
 
   else {
@@ -42,12 +45,16 @@ module.exports.run = async (data) => {
     if (guild.queue.loop == false) {
       guild.queue.loop = true;
       embed = embedGenerator.run("music.queueLoop.info_01");
+      guild.playerManager.emit('QUEUE_LOOP_ENABLED');
     }
     else {
       guild.queue.loop = false;
       embed = embedGenerator.run("music.queueLoop.info_02");
+      guild.playerManager.emit('QUEUE_LOOP_DISABLED');
     }
   }
+
+  if (guild.queue.current) guild.queue.current.loop = false;
 
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }
 };

@@ -45,7 +45,7 @@ class PlayerManager extends EventEmitter {
         this.guild.queueManager.setNextCurrentSong();
         this.emit('PLAYBACK_STOPPED');
       }
-      else { this.emit('PLAYBACK_STOPPED', this.queue); stop.run({ guild: this.guild }) }
+      else { this.emit('PLAYBACK_STOPPED', this.queue); }
     })
   }
 
@@ -109,8 +109,8 @@ class PlayerManager extends EventEmitter {
   }
 
   async #play() {
-    await this.player.play(this.resource);
-    await this.connection.subscribe(this.player);
+    this.player.play(this.resource);
+    this.connection.subscribe(this.player);
     this.queue.status = 'playing';
     this.emit('PLAYBACK_STARTED', this.queue);
     this.queue.current.startTime = new Date().getTime()

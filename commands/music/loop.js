@@ -14,28 +14,29 @@ module.exports.run = async (data) => {
   let message = data.message;
   let args = data.args;
   let guild = data.guild;
-  let channel = data?.message?.channel || data.channel;
   let embed;
 
-  if (args == 'off' || args == 'false') {
-    guild.queue.current.loop = false;
-    embed = embedGenerator.run("music.loop.info_02");
-  }
-
-  else if (args == 'on' || args == 'true') {
-    guild.queue.current.loop = true;
-    embed = embedGenerator.run("music.loop.info_01");
-  }
-
-  else if (!args) {
+  if (!args) {
     if (guild.queue.current.loop == false) embed = embedGenerator.run("music.loop.info_02");
     else embed = embedGenerator.run("music.loop.info_01");
     return { sendData: { embeds: [embed], params: { replyTo: message } }, result: false }
   }
 
-  else embed = embedGenerator.run("music.loop.error_01");
+  else if (args == 'off' || args == 'false') {
+    guild.queue.current.loop = false;
+    embed = embedGenerator.run("music.loop.info_02");
+    guild.playerManager.emit('SONG_LOOP_DISABLED');
+    guild.queue.loop = false;
+  }
 
-  if (data?.forceSend == true) guild.embedManager.send({ embeds: [embed] }, { channel: channel })
+  else if (args == 'on' || args == 'true') {
+    guild.queue.current.loop = true;
+    embed = embedGenerator.run("music.loop.info_01");
+    guild.playerManager.emit('SONG_LOOP_ENABLED');
+    guild.queue.loop = false;
+  }
+
+  else embed = embedGenerator.run("music.loop.error_01");
 
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }
 };

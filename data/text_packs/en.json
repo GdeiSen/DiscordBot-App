@@ -489,14 +489,19 @@
             "duration_01": "Duration",
             "duration_02": "Live",
             "request": "Requested by",
-            "loop": "Song Loop",
+            "songLoop": "Song loop",
+            "queueLoop": "Queue loop",
             "next_01": "Next In Queue",
             "next_02": "Nothing",
             "next_button": "next",
             "previous_button": "prev",
-            "pauseResume_button": "pause/resume",
+            "pause_button": "pause",
+            "resume_button": "resume",
             "stop_button": "stop",
-            "loop_button": "loop"
+            "loop_button": "loop",
+            "resumed": "▶️ Resumed!",
+            "paused": "⏸️ Paused!",
+            "currentPlayback": "Current playback:"
         },
         "play": {
             "error_01": {

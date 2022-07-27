@@ -14,9 +14,9 @@ module.exports.run = async (data) => {
 
   if (guild.queue.status == "playing") {
     guild.playerManager.player.pause();
-    guild.queue.status = 'paused'
-    guild.queue.current.pauseTime = new Date().getTime();
+    guild.queue.status = 'paused';
     embed = embedGenerator.run("music.pause.info_01")
+    guild.playerManager.emit('PLAYBACK_PAUSED');
   }
   else embed = embedGenerator.run("music.pause.info_02");
   return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }

@@ -32,15 +32,15 @@ module.exports.run = async (data) => {
     if (queue.current && queue.status == 'playing') {
         row = new MessageActionRow().addComponents(
             new MessageButton()
-                .setCustomId("pause")
-                .setEmoji("⏯️")
-                .setLabel(embedGenerator.run('direct.music.player.pauseResume_button'))
-                .setStyle("SUCCESS"),
-            new MessageButton()
                 .setCustomId("stop")
                 .setLabel(embedGenerator.run('direct.music.player.stop_button'))
                 .setEmoji("⏹️")
                 .setStyle("DANGER"),
+            new MessageButton()
+                .setCustomId("pause")
+                .setEmoji("⏯️")
+                .setLabel(embedGenerator.run('direct.music.player.pause_button'))
+                .setStyle("SECONDARY"),
             new MessageButton()
                 .setCustomId("prev")
                 .setEmoji("⏮️")
@@ -64,13 +64,13 @@ module.exports.run = async (data) => {
 
         collector.on('collect', async item => {
             switch (item.customId) {
+                case "stop":
+                    stop.run(data);
+                    item.deferUpdate();
+                    break;
                 case "pause":
                     if (queue.status == 'paused') resume.run(data);
                     else pause.run(data);
-                    item.deferUpdate();
-                    break;
-                case "stop":
-                    stop.run(data);
                     item.deferUpdate();
                     break;
                 case "prev":
@@ -97,7 +97,7 @@ module.exports.run = async (data) => {
     playerEmbed
         .addField(embedGenerator.run('direct.music.player.duration_01'), `⏱ ${song.durationInSec !== 0 ? song.durationRaw : embedGenerator.run('direct.music.player.duration_02')}`, true)
         .addField(embedGenerator.run('direct.music.player.request'), `🗿 ${song.author}`, true)
-        .addField(embedGenerator.run('direct.music.player.loop'), `🔁 ${song.loop || false}`, true)
+        .addField(embedGenerator.run('direct.music.player.songLoop'), `🔁 ${song.loop || false}`, true)
         .addField(embedGenerator.run('direct.music.player.next_01'), `📢 ${queue.songs[0] ? queue.songs[0].title : embedGenerator.run('direct.music.player.next_02')}`, false)
     activePlayerEmbed = await guild.embedManager.send({ embeds: [playerEmbed], components: [row] }, { replyTo: message, channel: channel, embedTimeout: 'none' });
     if (guild.params.liveTimestamp == true) {
@@ -121,9 +121,56 @@ module.exports.addListeners = (guild) => {
     guild.playerManager.on('PLAYBACK_STARTED', () => {
         if (guild.params.playerAutoSend == true) this.run({ guild: guild, channel: guild.textChannel })
     })
+
     guild.playerManager.on('PLAYBACK_STOPPED', () => {
         clearInterval(guild.activeIntervals.timestampInterval);
         guild.embedManager.deleteAllActiveEmbeds();
+    })
+
+    guild.playerManager.on('PLAYBACK_PAUSED', () => {
+        let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
+        let activeRow = guild.activeEmbeds.playerEmbed.components[0];
+        activeRow.components[1].label = embedGenerator.run('direct.music.player.resume_button');
+        activeRow.components[1].style = "SUCCESS";
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { components: [activeRow] });
+        if (!activeEmbed.fields[4]) return 0;
+        activeEmbed.fields[4] = { value: embedGenerator.run('direct.music.player.paused'), name: embedGenerator.run('direct.music.player.currentPlayback'), inline: false };
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { embeds: [activeEmbed] })
+    })
+
+    guild.playerManager.on('PLAYBACK_RESUMED', () => {
+        let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
+        let activeRow = guild.activeEmbeds.playerEmbed.components[0];
+        activeRow.components[1].label = embedGenerator.run('direct.music.player.pause_button');
+        activeRow.components[1].style = "SECONDARY";
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { components: [activeRow] });
+        if (!activeEmbed.fields[4]) return 0;
+        activeEmbed.fields[4] = { value: embedGenerator.run('direct.music.player.resumed'), name: embedGenerator.run('direct.music.player.currentPlayback'), inline: false };
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { embeds: [activeEmbed] })
+    })
+
+    guild.playerManager.on('SONG_LOOP_ENABLED', () => {
+        let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
+        activeEmbed.fields[2] = { value: '🔂 ' + "true", name: embedGenerator.run('direct.music.player.songLoop'), inline: true };
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { embeds: [activeEmbed] })
+    })
+
+    guild.playerManager.on('SONG_LOOP_DISABLED', () => {
+        let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
+        activeEmbed.fields[2] = { value: '🔂 ' + 'false', name: embedGenerator.run('direct.music.player.songLoop'), inline: true };
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { embeds: [activeEmbed] })
+    })
+
+    guild.playerManager.on('QUEUE_LOOP_ENABLED', () => {
+        let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
+        activeEmbed.fields[2] = { value: '🔁 ' + 'true', name: embedGenerator.run('direct.music.player.queueLoop'), inline: true };
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { embeds: [activeEmbed] })
+    })
+
+    guild.playerManager.on('QUEUE_LOOP_DISABLED', () => {
+        let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
+        activeEmbed.fields[2] = { value: '🔁 ' + 'false', name: embedGenerator.run('direct.music.player.queueLoop'), inline: true };
+        guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { embeds: [activeEmbed] })
     })
 }
 

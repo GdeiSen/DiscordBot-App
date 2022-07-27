@@ -16,9 +16,8 @@ module.exports.run = async (data) => {
   if (guild.queue.status == "paused") {
     guild.queue.status = 'playing';
     guild.playerManager.player.unpause();
-    guild.queue.current.resumeTime = new Date().getTime();
-    guild.queue.current.totalPausedTime += guild.queue.current.resumeTime - guild.queue.current.pauseTime;
     embed = embedGenerator.run("music.resume.info_01");
+    guild.playerManager.emit('PLAYBACK_RESUMED');
   }
   else embed = embedGenerator.run("music.resume.info_02")
 
