@@ -199,6 +199,6 @@ function toHHMMSS(timestamp) {
 
 function getCurrentTimestamp(guild) {
     let playbackDuration = new Date(guild.playerManager.player._state.resource.playbackDuration);
-    let seconds = (playbackDuration.getSeconds() + (playbackDuration.getMinutes() * 60) + ((playbackDuration.getHours() - 3) * 360) + guild?.playerManager?.player?.seekPoint || 0)
+    let seconds = (playbackDuration.getSeconds() + (playbackDuration.getMinutes() * 60) + ((playbackDuration.getHours()) * 360) + guild?.playerManager?.player?.seekPoint || 0)
     return seconds;
 }
