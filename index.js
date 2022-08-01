@@ -1,4 +1,4 @@
-const { Client, Collection, Intents } = require("discord.js");
+const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const { CommandMiddleware } = require("./middlewares/commandMiddleware");
 const { ExtServerEngine } = require("./external_server/managers/connectionManager");
 const { REST } = require('@discordjs/rest');
@@ -6,7 +6,7 @@ const { Routes } = require('discord-api-types/v9');
 const { GuildBuilder } = require('./builders/guildBuilder');
 const { CommandsBuilder } = require('./builders/commandsBuilder')
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates] });
 const config = require("./config.json");
 const rest = new REST({ version: '9' }).setToken(config.TOKEN);
 

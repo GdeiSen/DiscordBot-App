@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js")
 const MessageEmbed = Discord.MessageEmbed
 const text = require("../data/text_packs/en.json")
 /**
@@ -13,6 +14,7 @@ const text = require("../data/text_packs/en.json")
  * @param {string} params.title Sets the title value for the embed and takes precedence over the data from the file
  * @param {string} params.thumbnail Sets the thumbnail url for the embed and takes precedence over the data from the file
  * @param {string} params.image Sets the image url for the embed and takes precedence over the data from the file
+ * @param {string} params.fields Sets the fields for the embed and takes precedence over the data from the file
  * @param {object} params.add Parameter field for changing additional parameters of message lines
  * @param {string} params.add.description Value of additional information to the description line. After specifying this parameter, the specified value in the add field will be added to the constructed line from the json file
  * @param {string} params.add.title Value of additional information to the title line. After specifying this parameter, the specified value in the add field will be added to the constructed line from the json file
@@ -25,14 +27,15 @@ module.exports.run = (path, params) => {
         return search();
     } else {
         let data = search();
-        let embedMessage = new Discord.MessageEmbed()
-        embedMessage.setTitle(params?.title || ((data?.embedTitle?.toString() || '') + (params?.add?.title?.toString() || '')) || '')
-        embedMessage.setDescription(params?.description || ((data?.embedDescription?.toString() || '') + (params?.add?.description?.toString() || '')) || '')
+        let embedMessage = new EmbedBuilder();
+        embedMessage.setTitle(params?.title || ((data?.embedTitle?.toString() || '') + (params?.add?.title?.toString() || '')) || null)
+        embedMessage.setDescription(params?.description || ((data?.embedDescription?.toString() || '') + (params?.add?.description?.toString() || '')) || null)
         embedMessage.setColor(params?.color || data?.embedColor || null)
         embedMessage.setURL(params?.url || data?.embedUrl || null)
         embedMessage.setAuthor(params?.author || null);
-        embedMessage.setThumbnail(params?.thumbnail || data?.thumbnail || null)
-        embedMessage.setImage(params?.image || data?.image || null)
+        embedMessage.setThumbnail(params?.thumbnail || data?.thumbnail || null);
+        embedMessage.setImage(params?.image || data?.image || null);
+        if (params?.fields || data?.fields) embedMessage.addFields(params?.fields || data?.fields || null)
         return embedMessage;
     }
 

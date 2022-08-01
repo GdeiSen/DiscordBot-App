@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder } = require("discord.js");
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const embedGenerator = require("../../utils/embedGenerator")
 
@@ -18,18 +18,18 @@ module.exports.run = async (data) => {
   guild.embedManager.delete(guild.activeEmbeds.queueEmbed);
   let currentPage = 0;
 
-  const row = new MessageActionRow()
+  const row = new ActionRowBuilder()
     .addComponents(
-      new MessageButton()
+      new ButtonBuilder()
         .setCustomId('backPage')
         .setEmoji('◀️')
         .setLabel("prev page")
-        .setStyle('SECONDARY'),
-      new MessageButton()
+        .setStyle(2),
+      new ButtonBuilder()
         .setCustomId('nextPage')
         .setEmoji('▶️')
         .setLabel("next page")
-        .setStyle('SECONDARY'),
+        .setStyle(2),
     );
 
   const embeds = await generateQueueEmbed(queue.songs, queue.current);

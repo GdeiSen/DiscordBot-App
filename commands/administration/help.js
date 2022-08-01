@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const text = require("../../data/text_packs/en.json");
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 
@@ -12,22 +12,25 @@ const { CommandBuilder } = require("../../builders/commandDataBuilder");
 module.exports.run = (data) => {
   let message = data.message;
   let commands = data?.client.commands || message.client.commands;
+  let embeds = [];
 
   message.client.categories.forEach(category => {
-    let embed = new MessageEmbed()
+    let embed = new EmbedBuilder()
       .setTitle(`${message.client.user.username}` + text.info.help[category].embedTitle)
       .setDescription(text.info.help[category].embedDescription)
       .setColor(text.info.help[category].embedColor);
     commands.forEach(cmd => {
       if (cmd.category == category) {
-        embed.addField(
-          `**${message.client.prefix}${cmd.name}**`,
-          `${cmd.description}`,
-          true)
+        embed.addFields({
+          name: `**${message.client.prefix}${cmd.name}**`,
+          value: `${cmd.description}`,
+          inline: true
+        })
       }
     })
-    data.guild.embedManager.send({ embeds: [embed] }, { replyTo: data.message, embedTimeout: 'none' });
+    embeds.push(embed);
   })
+  data.guild.embedManager.send({ embeds: embeds }, { replyTo: data.message, embedTimeout: 'none' });
 };
 
 const data = new CommandBuilder()

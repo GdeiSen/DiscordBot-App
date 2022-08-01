@@ -17,9 +17,10 @@ module.exports.run = async (data) => {
     client.commands.forEach(() => {
         index++;
     });
-    embed.addField(`⏳ Websocket heartbeat: ${client?.ws?.ping || "untested!"}ms.`, "\`System is connected!\`");
-    embed.addField(`⚙ Commands scanned: ${index}.`, "\`No errors with scanning!\`");
-    embed.addField(`📡 External Server status: ${client?.extServerEngine?.status || "disconnected!"}.`, "\`No errors with server!\`");
+
+    embed.addFields({ name: `⏳ Websocket heartbeat: ${client?.ws?.ping || "untested!"}ms.`, value: "\`System is connected!\`" });
+    embed.addFields({ name: `⚙ Commands scanned: ${index}.`, value: "\`No errors with scanning!\`" });
+    embed.addFields({ name: `📡 External Server status: ${client?.extServerEngine?.status || "disconnected!"}.`, value: "\`No errors with server!\`" });
 
     return { sendData: { embeds: [embed], params: { replyTo: message } }, result: true }
 }

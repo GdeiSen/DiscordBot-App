@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageEmbed, MessageButton } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, MessageButton } = require("discord.js");
 const { CommandBuilder } = require("../../builders/commandDataBuilder");
 const progressbar = require("string-progressbar")
 const embedGenerator = require("../../utils/embedGenerator")
@@ -30,32 +30,32 @@ module.exports.run = async (data) => {
     let activePlayerEmbed
 
     if (queue.current && queue.status == 'playing') {
-        row = new MessageActionRow().addComponents(
-            new MessageButton()
+        row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId("stop")
                 .setLabel(embedGenerator.run('direct.music.player.stop_button'))
                 .setEmoji("⏹️")
-                .setStyle("DANGER"),
-            new MessageButton()
+                .setStyle(4),
+            new ButtonBuilder()
                 .setCustomId("pause")
                 .setEmoji("⏯️")
                 .setLabel(embedGenerator.run('direct.music.player.pause_button'))
-                .setStyle("SECONDARY"),
-            new MessageButton()
+                .setStyle(2),
+            new ButtonBuilder()
                 .setCustomId("prev")
                 .setEmoji("⏮️")
                 .setLabel(embedGenerator.run('direct.music.player.previous_button'))
-                .setStyle("SECONDARY"),
-            new MessageButton()
+                .setStyle(2),
+            new ButtonBuilder()
                 .setCustomId("next")
                 .setEmoji("⏭️")
                 .setLabel(embedGenerator.run('direct.music.player.next_button'))
-                .setStyle("SECONDARY"),
-            new MessageButton()
+                .setStyle(2),
+            new ButtonBuilder()
                 .setCustomId("loop")
                 .setEmoji("🔂")
                 .setLabel(embedGenerator.run('direct.music.player.loop_button'))
-                .setStyle("SECONDARY")
+                .setStyle(2)
         );
 
         let filter = item => item.customId === "next" || item.customId === "last" || item.customId === "pause" || item.customId === "stop" || item.customId === "loop" || item.customId === "prev";
@@ -93,12 +93,15 @@ module.exports.run = async (data) => {
     }
 
     if (!queue.current && queue.status !== 'playing') return 0;
-    playerEmbed = embedGenerator.run('music.play.info_07', { url: song.url, description: song.description ? song.description : "no description for this song!", image: song.thumbnail.url, add: { title: `\n${song.title} \n` } });
-    playerEmbed
-        .addField(embedGenerator.run('direct.music.player.duration_01'), `⏱ ${song.durationInSec !== 0 ? song.durationRaw : embedGenerator.run('direct.music.player.duration_02')}`, true)
-        .addField(embedGenerator.run('direct.music.player.request'), `🗿 ${song.author}`, true)
-        .addField(embedGenerator.run('direct.music.player.songLoop'), `🔁 ${song.loop || false}`, true)
-        .addField(embedGenerator.run('direct.music.player.next_01'), `📢 ${queue.songs[0] ? queue.songs[0].title : embedGenerator.run('direct.music.player.next_02')}`, false)
+    playerEmbed = embedGenerator.run('music.play.info_07', {
+        url: song.url, description: song.description ? song.description : "no description for this song!", image: song.thumbnail.url, add: { title: `\n${song.title} \n` }, fields: [
+            { name: embedGenerator.run('direct.music.player.duration_01'), value: `⏱ ${song.durationInSec !== 0 ? song.durationRaw : embedGenerator.run('direct.music.player.duration_02')}`, inline: true },
+            { name: embedGenerator.run('direct.music.player.request'), value: `🗿 ${song.author}`, inline: true },
+            { name: embedGenerator.run('direct.music.player.songLoop'), value: `🔁 ${song.loop || false}`, inline: true },
+            { name: embedGenerator.run('direct.music.player.next_01'), value: `📢 ${queue.songs[0] ? queue.songs[0].title : embedGenerator.run('direct.music.player.next_02')}`, inline: false },
+        ]
+    });
+
     activePlayerEmbed = await guild.embedManager.send({ embeds: [playerEmbed], components: [row] }, { replyTo: message, channel: channel, embedTimeout: 'none' });
     if (guild.params.liveTimestamp == true) {
         guild.activeIntervals.timestampInterval = setInterval(() => {
@@ -130,8 +133,8 @@ module.exports.addListeners = (guild) => {
     guild.playerManager.on('PLAYBACK_PAUSED', () => {
         let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
         let activeRow = guild.activeEmbeds.playerEmbed.components[0];
-        activeRow.components[1].label = embedGenerator.run('direct.music.player.resume_button');
-        activeRow.components[1].style = "SUCCESS";
+        activeRow.components[1].data.label = embedGenerator.run('direct.music.player.resume_button');
+        activeRow.components[1].data.style = 3;
         guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { components: [activeRow] });
         if (!activeEmbed.fields[4]) return 0;
         activeEmbed.fields[4] = { value: embedGenerator.run('direct.music.player.paused'), name: embedGenerator.run('direct.music.player.currentPlayback'), inline: false };
@@ -141,8 +144,8 @@ module.exports.addListeners = (guild) => {
     guild.playerManager.on('PLAYBACK_RESUMED', () => {
         let activeEmbed = guild.activeEmbeds.playerEmbed.embeds[0];
         let activeRow = guild.activeEmbeds.playerEmbed.components[0];
-        activeRow.components[1].label = embedGenerator.run('direct.music.player.pause_button');
-        activeRow.components[1].style = "SECONDARY";
+        activeRow.components[1].data.label = embedGenerator.run('direct.music.player.pause_button');
+        activeRow.components[1].data.style = 2;
         guild.embedManager.edit(guild.activeEmbeds.playerEmbed, { components: [activeRow] });
         if (!activeEmbed.fields[4]) return 0;
         activeEmbed.fields[4] = { value: embedGenerator.run('direct.music.player.resumed'), name: embedGenerator.run('direct.music.player.currentPlayback'), inline: false };
@@ -196,6 +199,6 @@ function toHHMMSS(timestamp) {
 
 function getCurrentTimestamp(guild) {
     let playbackDuration = new Date(guild.playerManager.player._state.resource.playbackDuration);
-    let seconds = (playbackDuration.getSeconds() + (playbackDuration.getMinutes() * 60) + ((playbackDuration.getHours() - 3) * 360))
+    let seconds = (playbackDuration.getSeconds() + (playbackDuration.getMinutes() * 60) + ((playbackDuration.getHours() - 3) * 360) + guild?.playerManager?.player?.seekPoint || 0)
     return seconds;
 }

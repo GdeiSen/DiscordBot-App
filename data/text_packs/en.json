@@ -130,17 +130,17 @@
                 "embedDescription": "⠀\n\nThese are the current bot settings for this server. Basically, most of them initialize limits that can interfere with the full and effective use of the bot, so be careful\n\n⠀",
                 "embedColor": "BLACK"
             },
-            "prefix_info": "🔧   Custom bot prefix current state: ",
-            "embedTimeout_info": "🔧   Live timestamp option state:",
-            "maxQueueSize_info": "🔧   Max queue size current value:",
-            "stayTimeout_info": "🔧   Stay bot timeout current value:",
-            "maxPrevQueueSize_info": "🔧   Max previous songs queue size current value:",
-            "maxPlaylistSize_info": "🔧   Max playlist size current value:",
-            "maxPlaybackDuration_info": "🔧   Max playlist duration current value:",
-            "voteToSkip_info": "🔧   Vote to skip current option value:",
-            "autoPlayerSend_info": "🔧   Auto player send option value:",
-            "autoContinue_info": "🔧   Auto continue option value:",
-            "autoPlay_info": "🔧   Auto play option value:"
+            "embedTimeout_info": "Embed timeout duration current value:",
+            "maxQueueSize_info": "Max queue size current value:",
+            "stayTimeout_info": "Stay bot timeout current value:",
+            "maxPrevQueueSize_info": "Max previous songs queue size current value:",
+            "maxPlaylistSize_info": "Max playlist size current value:",
+            "maxPlaybackDuration_info": "Max playback duration current value:",
+            "voteToSkip_info": "Vote to skip current option value:",
+            "autoPlayerSend_info": "Auto player send option value:",
+            "autoContinue_info": "Auto continue option value:",
+            "autoPlay_info": "Auto play option value:",
+            "liveTimestamp_info": "Live timestamp option value:"
         },
         "prefix": {
             "error_01": {
@@ -503,6 +503,18 @@
             "paused": "⏸️ Paused!",
             "currentPlayback": "Current playback:"
         },
+        "seek": {
+            "info_01": {
+                "embedTitle": "⏩   The playback was set for a certain point",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_01": {
+                "embedTitle": "⚠️   Oooops I Cannot Set The Current Playback For a Certain Point",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            }
+        },
         "play": {
             "error_01": {
                 "embedTitle": "⚠️   Oooops Where are You?",
@@ -629,14 +641,14 @@
             }
         },
         "search": {
-            "error_01": {
+            "info_01": {
                 "embedTitle": "⚠️   The message collector has already been interacted in this channel!\nPlease complete previous one!",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             },
             "info_02": {
-                "embedTitle": "Enter the video number for playback",
-                "embedDescription": "Results for: ",
+                "embedTitle": "🔎   Search results",
+                "embedDescription": "✅ Searching is finished! \n\nIt seems we have found something on your request. Below is a list of found songs. To add a song to the queue, select it from the list and click.\n\nResults by request: ",
                 "embedColor": "BLACK"
             }
         },
@@ -650,6 +662,11 @@
         "skip": {
             "info_01": {
                 "embedTitle": "⏭   song skipped",
+                "embedDescription": "",
+                "embedColor": "BLACK"
+            },
+            "error_01": {
+                "embedTitle": "⚠️   It is impossible to skip a track",
                 "embedDescription": "",
                 "embedColor": "BLACK"
             }

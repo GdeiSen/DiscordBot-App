@@ -16,7 +16,7 @@ module.exports.run = async (data) => {
     let embed = embedGenerator.run('music.startPlayback.error_01');
 
     if (queue.status !== "pending" || queue?.songs?.length == 0) return { sendData: { embeds: [embed], params: { replyTo: message } }, result: false }
-    guild.playerManager.startPlayback(message.member.voice.channel, message.channel);
+    guild.playerManager.startPlayback({ voiceChannel: message.member.voice.channel, textChannel: message.channel });
     embed = embedGenerator.run('music.startPlayback.info_01');
 
     guild.info.isPlayed = true;

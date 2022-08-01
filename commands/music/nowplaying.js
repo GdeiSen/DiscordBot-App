@@ -23,10 +23,9 @@ module.exports.run = async (data) => {
   if (!song.live) current = getCurrentTimestamp(guild);
   guild.embedManager.delete(guild.activeEmbeds.nowPlayingEmbed);
   let nowPlaying = embedGenerator.run('music.nowPlaying.info_01', { description: `**${song.title || ''}**\n${song.url || ''}`, thumbnail: song?.thumbnail?.url || '' });
-  if (queue.status == 'playing' && current) nowPlaying.addField(`${toHHMMSS(current)} [${progressbar.splitBar(total, current, 20)[0]}] ${toHHMMSS(song.durationInSec)}`, `Next: ${next}`, true);
-  else if (queue.status == 'playing' && !current) nowPlaying.addField(`LIVE!`, `Next: ${next}`, true);
-  else if (queue.status == 'paused') nowPlaying.addField(`Paused!`, `Next: ${next}`, true);
-  else if (queue.status !== 'paused' && queue.status !== 'stopped') nowPlaying.addField(`Ready to start!`, `Next: Nothing!`, true);
+  if (queue.status == 'playing' && current) nowPlaying.addFields([{ name: `${toHHMMSS(current)} [${progressbar.splitBar(total, current, 17)[0]}] ${toHHMMSS(song.durationInSec)}`, value: `${embedGenerator.run('direct.music.player.next_01')}: ${next}`, inline: true }]);
+  else if (queue.status == 'playing' && !current) nowPlaying.addFields([{ name: embedGenerator.run('direct.music.player.duration_02'), value: `${embedGenerator.run('direct.music.player.next_01')}: ${next}`, inline: true }]);
+  else if (queue.status == 'paused') nowPlaying.addFields([{ name: embedGenerator.run('direct.music.player.paused'), value: `${embedGenerator.run('direct.music.player.next_01')}: ${next}`, inline: true }]);
   let activeNowPlayingEmbed = await guild.embedManager.send({ embeds: [nowPlaying] }, { replyTo: message });
   guild.activeEmbeds.nowPlayingEmbed = activeNowPlayingEmbed;
   return { result: true, activeEmbeds: { nowPlayingEmbed: activeNowPlayingEmbed } }
@@ -47,7 +46,7 @@ function toHHMMSS(timestamp) {
 
 function getCurrentTimestamp(guild) {
   let playbackDuration = new Date(guild.playerManager.player._state.resource.playbackDuration);
-  let seconds = (playbackDuration.getSeconds() + (playbackDuration.getMinutes() * 60) + ((playbackDuration.getHours() - 3) * 360))
+  let seconds = (playbackDuration.getSeconds() + (playbackDuration.getMinutes() * 60) + ((playbackDuration.getHours() - 3) * 360) + guild?.playerManager?.player?.seekPoint || 0)
   return seconds;
 }
 

@@ -11,27 +11,28 @@ class PlayerManager extends EventEmitter {
     this.guild = guild;
   }
 
-  async startPlayback(voiceChannel, textChannel) {
-    if (voiceChannel) this.guild.voiceChannel = voiceChannel;
-    if (textChannel) this.guild.textChannel = textChannel;
+  async startPlayback(params) {
+    if (params?.voiceChannel) this.guild.voiceChannel = params.voiceChannel;
+    if (params?.textChannel) this.guild.textChannel = params.textChannel;
     if (!this.queue.current) this.guild.queueManager.setNextCurrentSong();
     this.emit("PLAYBACK_STARTING", this.queue);
     this.queue.status = 'loading';
-    await this.#createConnection()
+    await this.createConnection()
     if (!this.queue?.current?.url) return 0;
-    if (!this.player) await this.#createPlayer();
-    await this.#createStream(this.queue?.current?.url);
-    await this.#createResource();
-    await this.#play();
-    await this.#createIdleHandler();
+    if (!this.player) await this.createPlayer();
+    await this.createStream(this.queue?.current?.url, params?.seek);
+    await this.createResource();
+    await this.play();
+    await this.createIdleHandler();
     this.guild.queueManager.clearStates();
-    this.#createVoiceStateHandler();
+    this.createVoiceStateHandler();
   }
 
-  async #createIdleHandler() {
+  async createIdleHandler() {
     if (this.player.listeners(AudioPlayerStatus.Idle).length !== 0) this.player.removeAllListeners(AudioPlayerStatus.Idle);
     this.player.on(AudioPlayerStatus.Idle, () => {
       this.queue.status = 'pending';
+      if (this.queue.isSeek == true) return 0;
       if (this.queue.isSkipped == true || this.queue.isStopped == true) { this.emit('PLAYBACK_STOPPED'); return 0 };
       if (this.queue.songs.length == 0 && this.queue.isStopped !== true && this.queue.loop !== true && this.queue.current.loop !== true) {
         this.emit('QUEUE_ENDED', this.queue);
@@ -49,7 +50,7 @@ class PlayerManager extends EventEmitter {
     })
   }
 
-  async #createVoiceStateHandler() {
+  async createVoiceStateHandler() {
     if (this.client.listeners('voiceStateUpdate').length !== 0) this.client.removeAllListeners('voiceStateUpdate');
     this.client.on('voiceStateUpdate', (oldState, newState) => {
       if (oldState.member.user.id == this.client.user.id) {
@@ -66,7 +67,7 @@ class PlayerManager extends EventEmitter {
     })
   }
 
-  async #createConnection() {
+  async createConnection() {
     const connection = await joinVoiceChannel({
       channelId: this.guild?.voiceChannel.id,
       guildId: this.guild.id,
@@ -89,26 +90,27 @@ class PlayerManager extends EventEmitter {
     return await promise;
   }
 
-  async #createPlayer() {
+  async createPlayer() {
     const player = createAudioPlayer();
     this.player = player;
+    this.player.seekPoint = 0;
     this.emit('PLAYER_CREATED', this.queue);
   }
 
-  async #createStream(source) {
-    const stream = await play.stream(source);
+  async createStream(source, seek) {
+    const stream = await play.stream(source, { seek: seek || null });
     this.stream = stream;
     this.emit('STREAM_CREATED', this.queue);
   }
 
-  async #createResource() {
+  async createResource() {
     const resource = createAudioResource(this.stream.stream, { inlineVolume: true, inputType: this.stream.type });
     resource.volume.setVolume(this.guild.params.volume / 100);
     this.resource = resource;
     this.emit('RESOURCE_CREATED', this.queue);
   }
 
-  async #play() {
+  async play() {
     this.player.play(this.resource);
     this.connection.subscribe(this.player);
     this.queue.status = 'playing';
@@ -119,7 +121,7 @@ class PlayerManager extends EventEmitter {
   connect(voiceChannel, guild) {
     this.guild.voiceChannel = voiceChannel;
     this.guild = guild;
-    this.#createConnection();
+    this.createConnection();
     return { executionResult: true }
   }
 

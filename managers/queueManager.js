@@ -40,6 +40,7 @@ class QueueManager extends EventEmitter {
     this.queue.isSkipped = false;
     this.queue.isStopped = false;
     this.queue.isDestroyed = false;
+    this.queue.isSeek = false;
   }
 
   static createQueue(guild, textChannel) {
@@ -51,6 +52,7 @@ class QueueManager extends EventEmitter {
       isSkipped: false,
       isStopped: false,
       isDestroyed: false,
+      isSeek: false,
       disconnectReason: "",
       songs: [],
       prevSongs: [],

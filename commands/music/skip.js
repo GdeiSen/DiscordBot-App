@@ -14,44 +14,7 @@ module.exports.run = async (data) => {
   let args = data.args;
   let guild = data.guild;
   let message = data.message;
-  let queue = data.queue;
-  let client = data.client;
   let embed;
-
-  // if (guild.params.voteToSkip == true) {
-  //   let voteToSkipEmbed = embedGenerator.run('music.voteToSkip');
-  //   let votedUsers = new Map;
-
-  //   let row = new MessageActionRow().addComponents(
-  //     new MessageButton()
-  //       .setCustomId("voteSkip")
-  //       .setEmoji("✅")
-  //       .setLabel("skip")
-  //       .setStyle("SUCCESS"),
-  //     new MessageButton()
-  //       .setCustomId("voteNope")
-  //       .setLabel("nope")
-  //       .setEmoji("🅾️")
-  //       .setStyle("DANGER")
-  //   )
-
-  //   let collector = message.channel.createMessageComponentCollector({ filter, time: 120000 });
-
-  //   collector.on('collect', async item => {
-  //     switch (item.customId) {
-  //       case 'voteSkip': {
-  //         if (item.user.voice.channel !== guild.me.voice.channel) return 0;
-  //         let votedUser = votedUsers.get(item.user.id)
-  //         if (votedUser) return 0;
-  //         votedUsers.set(item.user.id, item.user);
-  //         guild.embedManager.edit()
-  //         break;
-  //       }
-  //       case 'voteNope': break;
-  //       default: break;
-  //     }
-  //   });
-  // }
 
   if (!args && guild.queue.songs.length !== 0) {
     if (guild.queue.status == 'paused') guild.playerManager.player.resume();
@@ -61,6 +24,10 @@ module.exports.run = async (data) => {
     await guild.playerManager.player.stop();
     guild.playerManager.startPlayback();
     embed = embedGenerator.run('music.skipto.info_01')
+  }
+
+  else if (guild.queue.songs.length == 0) {
+    embed = embedGenerator.run('music.skip.error_01');
   }
 
   else if (args > guild.queue.songs.length) {

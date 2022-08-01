@@ -13,19 +13,30 @@ const { CommandBuilder } = require("../../builders/commandDataBuilder");
 module.exports.run = async (data) => {
     let message = data.message;
     let guild = data.guild;
-    let embed = embedGenerator.run('info.settings.info_01');
+    let embed = embedGenerator.run('info.settings.info_01', {
+        fields: [
+            { name: '⏱️   ***Intervals ============================***', value: 'ᅠ', inline: false },
 
-    embed
-        .addField(`${embedGenerator.run('direct.info.settings.embedTimeout_info')}`, `${guild.params?.embedTimeout?.toString() || "undefined"} ms`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.voteToSkip_info')}`, `${guild.params?.voteToSkip?.toString() || "false"}`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.stayTimeout_info')}`, `${guild.params?.stayTimeout?.toString() || "undefined"} ms`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.maxQueueSize_info')}`, `${guild.params?.maxQueueSize?.toString() || "undefined"}`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.maxPlaylistSize_info')}`, `${guild.params?.maxPlaylistSize?.toString() || "undefined"}`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.maxPrevQueueSize_info')}`, `${guild.params?.maxPrevQueueSize?.toString() || "undefined"}`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.maxPlaybackDuration_info')}`, `${guild.params?.maxPlaybackDuration?.toString() || "undefined"} ms`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.autoPlayerSend_info')}`, `${guild.params?.playerAutoSend?.toString() || "undefined"}`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.autoContinue_info')}`, `${guild.params?.autoContinue?.toString() || "undefined"}`, true)
-        .addField(`${embedGenerator.run('direct.info.settings.autoPlay_info')}`, `${guild.params?.autoPlay?.toString() || "undefined"}`, true)
+            { name: `${embedGenerator.run('direct.info.settings.embedTimeout_info')}`, value: `[ ${guild.params?.embedTimeout?.toString() || "undefined"} ms ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.stayTimeout_info')}`, value: `[ ${guild.params?.stayTimeout?.toString() || "undefined"} ms ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.maxPlaybackDuration_info')}`, value: `[ ${guild.params?.maxPlaybackDuration?.toString() || "undefined"} ms ]`, inline: false },
+
+            { name: 'ᅠ\n\n🕹️   ***Options ============================***', value: 'ᅠ', inline: false },
+
+            { name: `${embedGenerator.run('direct.info.settings.voteToSkip_info')}`, value: `[ ${guild.params?.voteToSkip?.toString() || "false"} ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.autoPlayerSend_info')}`, value: `[ ${guild.params?.playerAutoSend?.toString() || "undefined"} ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.autoContinue_info')}`, value: `[ ${guild.params?.autoContinue?.toString() || "undefined"} ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.autoPlay_info')}`, value: `[ ${guild.params?.autoPlay?.toString() || "undefined"} ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.liveTimestamp_info')}`, value: `[ ${guild.params?.liveTimestamp?.toString() || "undefined"} ]`, inline: false },
+
+            { name: 'ᅠ\n\n📢   ***Limits ============================***', value: 'ᅠ', inline: false },
+
+            { name: `${embedGenerator.run('direct.info.settings.maxQueueSize_info')}`, value: `[ ${guild.params?.maxQueueSize?.toString() || "undefined"} ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.maxPlaylistSize_info')}`, value: `[ ${guild.params?.maxPlaylistSize?.toString() || "undefined"} ]`, inline: false },
+            { name: `${embedGenerator.run('direct.info.settings.maxPrevQueueSize_info')}`, value: `[ ${guild.params?.maxPrevQueueSize?.toString() || "undefined"} ]`, inline: false },
+
+        ]
+    });
 
     return { sendData: { embeds: [embed], params: { replyTo: message, embedTimeout: 'none' } }, result: true }
 };
